@@ -1,10 +1,14 @@
 
+export const StageDefaults = {
+  BG_COLOR: "#ffffff",
+}
+
 export const ImageName = {
   CIRCLE_BLANK: "blank-circle.png",
   CIRCLE_POINT_LEFT: "circle-left-arrow.png",
   CIRCLE_POINT_RIGHT: "circle-right-arrow.png",
   CIRCLE_CURVE_LEFT: "circle-left-curve.png",
-  CIRCLE_CURVE_RIGHT: "circle-right-curve",
+  CIRCLE_CURVE_RIGHT: "circle-right-curve.png",
 
   STRAND_LEFT: "strand-left.png",
   STRAND_RIGHT: "strand-right.png",

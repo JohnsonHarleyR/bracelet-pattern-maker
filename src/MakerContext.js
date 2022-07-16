@@ -6,6 +6,7 @@ const MakerProvider = ({children}) => {
 
   const [nodesAcross, setNodesAcross] = useState(4);
   const [strandsAcross, setStrandsAcross] = useState(0);
+  const [rowCount, setRowCount] = useState(3);
 
   useEffect(() => {
     if (nodesAcross) {
@@ -16,8 +17,9 @@ const MakerProvider = ({children}) => {
 
     return (
         <MakerContext.Provider value={{
-          nodesAcross, strandsAcross,
-          setNodesAcross, setStrandsAcross,
+          nodesAcross, setNodesAcross,
+          strandsAcross, setStrandsAcross,
+          rowCount, setRowCount,
         }}>
             {children}
         </MakerContext.Provider>
