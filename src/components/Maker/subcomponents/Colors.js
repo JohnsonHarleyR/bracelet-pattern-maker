@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { MakerContext } from '../../../MakerContext';
+import { getSelectedColor } from '../resources/logic/controlLogic';
 import '../resources/styling/colors.css';
 import ColorSquare from './ColorSquare';
 
@@ -13,9 +14,11 @@ const Colors = () => {
 
   const [displayArray, setDisplayArray] = useState([]);
 
+  //#region  effects
+
   useEffect(() => {
     if (colors) {
-      console.log(`colors changed`);
+      setSelectedColor(getSelectedColor(colors));
       setDisplayArray(createColorsDisplay());
     }
   }, [colors]);
@@ -26,6 +29,10 @@ const Colors = () => {
     }
   }, [displayArray]);
 
+  //#endregion
+
+  //#region normal methods
+  
   const createColorsDisplay = () => {
     let array = [];
     colors.forEach(c => {
@@ -39,6 +46,9 @@ const Colors = () => {
     });
     return array;
   }
+
+  //#endregion
+
 
   return (
     <div className="colors-area">
