@@ -121,3 +121,55 @@ const getCorrespondingLetter = (index) => {
 }
 
 //#endregion
+
+//#region strands
+
+// this is for when page first loads or the number of strands changes at the beginning
+export const createNewDefaultStrandInfosArray = (strandsAcross, selectedColor, colors, strandInfos = []) => {
+  // first create copy of current array
+  let copy = [...strandInfos];
+
+  // Now, to make it easy, first see if strandsAcross is less than current strandInfos.
+  // If so, simply remove the ones from the end that are greater than the count
+  if (strandsAcross < strandInfos.length) {
+    copy = copy.splice(0, strandsAcross);
+  } // otherwise, see if the count is great. If so, add defaults to copy by selected color
+  else if (strandsAcross > strandInfos.length) {
+    let startIndex = strandInfos.length;
+    for (let i = startIndex; i < strandsAcross; i++) {
+      copy.push({
+        startIndex: i,
+        currentIndex: i,
+        letter: selectedColor.letter,
+        color: selectedColor.color,
+      });
+    }
+  }
+
+  // now, if the strands array has values already, update those values
+  // according to any changes in color. If a letter/id value no longer exists,
+  // set that strand to the selected color values
+  if (strandInfos.length === 0) {
+    return copy;
+  }
+
+  copy.forEach(c => {
+    if (!doesIdExist(c.letter, colors)) {
+      if (doesIdExist(selectedColor.letter, colors)) {
+        c.letter = selectedColor.letter;
+        c.color = selectedColor.color;
+      } else {
+        c.letter = colors[0].letter;
+        c.color = colors[0].color;
+      }
+    } else {
+      let cIndex = getColorIndexById(c.letter, colors);
+      c.color = colors[cIndex].color;
+    }
+  });
+
+  return copy;
+
+}
+
+//#endregion

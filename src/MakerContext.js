@@ -10,19 +10,21 @@ const MakerProvider = ({children}) => {
   const [strandsAcross, setStrandsAcross] = useState(6);
   const [rowCount, setRowCount] = useState(1);
 
+  const [strandInfos, setStrandInfos] = useState([]);
+
   const [selectedColor, setSelectedColor] = useState({
     letter: "A",
-    color: "#000000"
+    color: "#ffffff"
   });
   const [colors, setColors] = useState([
     {
       letter: "A",
-      color: "#000000",
+      color: "#ffffff",
       isSelected: true
     },
     {
       letter: "B",
-      color: "#ffffff",
+      color: "#000000",
       isSelected: false
     },
   ]);
@@ -34,6 +36,7 @@ const MakerProvider = ({children}) => {
           nodesAcross, setNodesAcross,
           strandsAcross, setStrandsAcross,
           rowCount, setRowCount,
+          strandInfos, setStrandInfos,
           selectedColor, setSelectedColor,
           colors, setColors,
         }}>

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { MakerContext } from '../../../MakerContext';
+import { createNewDefaultStrandInfosArray } from '../resources/logic/controlLogic';
 import '../resources/styling/controls.css';
 import Colors from './Colors';
 
@@ -12,6 +13,8 @@ const Controls = () => {
     isSetupDecided, setIsSetupDecided,
     strandsAcross, setStrandsAcross,
     setNodesAcross,
+    strandInfos, setStrandInfos,
+    selectedColor,
     colors,
   } = useContext(MakerContext);
 
@@ -19,6 +22,16 @@ const Controls = () => {
   useEffect(() => {
     strandCountRef.current.value = strandsAcross;
   }, []);
+
+  useEffect(() => {
+    if (colors) {
+      if (strandInfos !== undefined) {
+        let newStrandInfos = createNewDefaultStrandInfosArray(strandsAcross, selectedColor, colors, strandInfos);
+        console.log(`new strand infos: ${JSON.stringify(newStrandInfos)}`);
+        setStrandInfos(newStrandInfos);
+      }
+    }
+  }, [colors, strandsAcross]);
 
   useEffect(() => {
     if (isSetupDecided) {
