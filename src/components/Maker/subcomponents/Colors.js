@@ -1,33 +1,43 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { MakerContext } from '../../../MakerContext';
-import { getSelectedColor } from '../resources/logic/controlLogic';
+import { alterColorHex, getSelectedColor } from '../resources/logic/controlLogic';
 import '../resources/styling/colors.css';
 import ColorSquare from './ColorSquare';
 
 const Colors = () => {
+
+  const selectorRef = useRef();
 
   const {
     colors, setColors,
     selectedColor, setSelectedColor,
   } = useContext(MakerContext);
 
-
-  const [displayArray, setDisplayArray] = useState([]);
+  const [inputColor, setInputColor] = useState(selectedColor);
+  const [colorsDisplayArray, setColorsDisplayArray] = useState([]);
 
   //#region  effects
 
   useEffect(() => {
+    if (selectedColor) {
+      setInputColor(selectedColor);
+      selectorRef.current.value = selectedColor.color;
+    }
+  }, [selectedColor]);
+
+  useEffect(() => {
     if (colors) {
-      setSelectedColor(getSelectedColor(colors));
-      setDisplayArray(createColorsDisplay());
+      let newSelected = getSelectedColor(colors);
+      setSelectedColor(newSelected);
+      setColorsDisplayArray(createColorsDisplay());
     }
   }, [colors]);
 
   useEffect(() => {
-    if (displayArray) {
+    if (colorsDisplayArray) {
       console.log(`display changed`);
     }
-  }, [displayArray]);
+  }, [colorsDisplayArray]);
 
   //#endregion
 
@@ -47,13 +57,31 @@ const Colors = () => {
     return array;
   }
 
+  const changeSelectedColorHex = () => {
+    let newColors = alterColorHex(selectedColor.letter, [...colors], inputColor);
+    setColors(newColors);
+  }
+
   //#endregion
 
+  //#region event methods
+  
+  const changeInputColor = () => {
+    setInputColor(selectorRef.current.value);
+  }
+
+  //#endregion
 
   return (
     <div className="colors-area">
-      hi?
-      {displayArray}
+
+      <div className="colors-display">
+        {colorsDisplayArray}
+      </div>
+      <div className="changer">
+        <input type="color" ref={selectorRef} onChange={changeInputColor} />
+        <button onClick={changeSelectedColorHex}>Change</button>
+      </div>
     </div>
   );
 }

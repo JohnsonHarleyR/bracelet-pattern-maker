@@ -6,8 +6,10 @@ import Colors from './Colors';
 const Controls = () => {
 
   const strandCountRef = useRef();
+  const strandCountDivRef = useRef();
 
   const {
+    isSetupDecided, setIsSetupDecided,
     strandsAcross, setStrandsAcross,
     setNodesAcross,
   } = useContext(MakerContext);
@@ -16,6 +18,14 @@ const Controls = () => {
   useEffect(() => {
     strandCountRef.current.value = strandsAcross;
   }, []);
+
+  useEffect(() => {
+    if (isSetupDecided) {
+      strandCountDivRef.current.style.display = "none";
+    } else {
+      strandCountDivRef.current.style.display = "block";
+    }
+  }, [isSetupDecided]);
   //#endregion
 
   //#region methods
@@ -30,7 +40,7 @@ const Controls = () => {
 
   return (
     <div className="controls">
-      <div className="strand-count">
+      <div className="strand-count" ref={strandCountDivRef}>
         Strands: 
         <select ref={strandCountRef} onChange={changeStrandCount}>
           <option value={4}>4</option>

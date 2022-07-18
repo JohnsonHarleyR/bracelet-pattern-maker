@@ -10,7 +10,7 @@ const ColorSquare = ({id}) => {
 
   const {colors, setColors} = useContext(MakerContext);
 
-  const [index, setIndex] = useState(getColorIndexById(id, colors));
+  const [index, setIndex] = useState(0);
   const [color, setColor] = useState(null);
   const [isSelected, setIsSelected] = useState(null);
 

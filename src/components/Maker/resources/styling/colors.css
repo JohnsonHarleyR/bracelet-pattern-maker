@@ -1,5 +1,10 @@
 .colors-area {
   display: flex;
+  flex-direction: column;
+}
+
+.colors-display {
+  display: flex;
 }
 
 .color-square {
