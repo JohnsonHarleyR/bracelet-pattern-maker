@@ -19,7 +19,7 @@ const Stage = () => {
   } = useContext(MakerContext);
   const [totalBgImages, setTotalBgImages] = useState(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
   let loadedBgImageCount = 0;
-  const [loadCount, setLoadCount] = useState(0);
+  const [bgLoadCount, setBgLoadCount] = useState(0);
 
   //#region Effect Area
 
@@ -38,20 +38,20 @@ const Stage = () => {
   }, [rowCount]);
 
   useEffect(() => {
-    if (loadCount && loadCount !== 0) {
-      console.log(`loaded: ${loadCount}/${totalBgImages}`);
-      if (loadCount === totalBgImages) {
+    if (bgLoadCount && bgLoadCount !== 0) {
+      console.log(`loaded: ${bgLoadCount}/${totalBgImages}`);
+      if (bgLoadCount === totalBgImages) {
         renderCircleFill(canvasRef.current, "#ffff00", 5, 5);
       }
     }
-  }, [loadCount]);
+  }, [bgLoadCount]);
 
   useEffect(() => {
     if (canvasWidth) {
       canvasRef.current.width = canvasWidth;
       
       if (canvasHeight) {
-        renderBackground(canvasRef.current, nodesAcross, rowCount, clearLoadedCount, addToLoadedCount);
+        renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
       }
     }
   }, [canvasWidth]);
@@ -61,24 +61,24 @@ const Stage = () => {
       canvasRef.current.height = canvasHeight;
       
       if (canvasWidth) {
-        renderBackground(canvasRef.current, nodesAcross, rowCount, clearLoadedCount, addToLoadedCount);
+        renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
       }
     }
   }, [canvasHeight]);
 
   //#endregion
 
-  const clearLoadedCount = () => {
+  const clearBgLoadCount = () => {
     console.log(`clearing loaded image count.`);
     loadedBgImageCount = 0;
-    setLoadCount(0);
+    setBgLoadCount(0);
   }
 
-  const addToLoadedCount = () => {
+  const addToBgLoadCount = () => {
     loadedBgImageCount++;
     console.log(`adding to loaded count: ${loadedBgImageCount}`);
     if (loadedBgImageCount === totalBgImages) {
-      setLoadCount(loadedBgImageCount);
+      setBgLoadCount(loadedBgImageCount);
     }
   }
 

@@ -1,0 +1,14 @@
+.colors-area {
+  display: flex;
+}
+
+.color-square {
+  width: 20px;
+  height: 20px;
+  border: 2px solid black;
+  margin-left: 2px;
+}
+
+.select {
+  border: 2px solid cyan;
+}
