@@ -23,6 +23,24 @@ export const getSelectedColor = (colors) => {
   throw `Error finding a selected color. (getSelectedColor: controlLogic.js)`;
 }
 
+export const doesSelectedColorExist = (colors) => {
+  for (let i = 0; i < colors.length; i++) {
+    if (colors[i].isSelected) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export const doesIdExist = (id, colors) => {
+  for (let i = 0; i < colors.length; i++) {
+    if (colors[i].letter === id) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export const alterColorHex = (id, colorsCopy, newHex) => {
   for (let i = 0; i < colorsCopy.length; i++) {
     if (colorsCopy[i].letter === id) {
@@ -52,6 +70,34 @@ const canAddColor = (colors, strandsAcross) => {
       colors.length >= 26) {
         return false;
   }
+  return true;
+}
+
+export const removeColorReturnSuccess = (id, colorsCopy) => {
+  if (!canRemoveColor(colorsCopy)) {
+    return false;
+  }
+
+  let index = null;
+  for (let i = 0; i < colorsCopy.length; i++) {
+    if (colorsCopy[i].letter === id) {
+      index = i;
+      break;
+    }
+  }
+
+  if (index === null) {
+    return false;
+  }
+
+  colorsCopy.splice(index, 1);
+  colorsCopy[0].isSelected = true;
+
+  // now change the letters according to new indexes
+  colorsCopy.forEach((c, i) => {
+    c.letter = getCorrespondingLetter(i);
+  });
+  
   return true;
 }
 

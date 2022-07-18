@@ -12,6 +12,7 @@ const Controls = () => {
     isSetupDecided, setIsSetupDecided,
     strandsAcross, setStrandsAcross,
     setNodesAcross,
+    colors,
   } = useContext(MakerContext);
 
   //#region effects
@@ -32,8 +33,15 @@ const Controls = () => {
 
   const changeStrandCount = () => {
     let count = parseInt(strandCountRef.current.value);
-    setStrandsAcross(count);
-    setNodesAcross(count / 2);
+
+    if (count < colors.length) {
+      let dif = colors.length - count;
+      strandCountRef.current.value = strandsAcross;
+      alert(`Cannot have more colors than strands. Please remove ${dif} colors to decrease number of strands.`);
+    } else {
+      setStrandsAcross(count);
+      setNodesAcross(count / 2);
+    }
   }
 
   //#endregion

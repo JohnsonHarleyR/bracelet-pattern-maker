@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { MakerContext } from '../../../MakerContext';
-import { getColorIndexById } from '../resources/logic/controlLogic';
+import { doesIdExist, getColorIndexById } from '../resources/logic/controlLogic';
 import '../resources/styling/colors.css';
 
 const ColorSquare = ({id}) => {
@@ -18,6 +18,10 @@ const ColorSquare = ({id}) => {
 
   useEffect(() => {
     if (index !== undefined && colors) {
+      if (!doesIdExist(id, colors)) {
+        return;
+      }
+      
       let ind = getColorIndexById(id, colors);
       if (ind !== index) {
         setIndex(ind);

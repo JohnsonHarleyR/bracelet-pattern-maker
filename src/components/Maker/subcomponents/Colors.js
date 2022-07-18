@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { MakerContext } from '../../../MakerContext';
-import { addNewColorReturnSuccess, alterColorHex, getSelectedColor } from '../resources/logic/controlLogic';
+import { addNewColorReturnSuccess, alterColorHex, doesSelectedColorExist, getSelectedColor, removeColorReturnSuccess } from '../resources/logic/controlLogic';
 import '../resources/styling/colors.css';
 import ColorSquare from './ColorSquare';
 
@@ -36,13 +36,14 @@ const Colors = () => {
     if (selectedColor) {
       setInputColor(selectedColor.color);
       selectorRef.current.value = selectedColor.color;
-      console.log(`selected: ${selectedColor.color}, ref: ${selectorRef.current.value}`)
     }
   }, [selectedColor]);
 
   useEffect(() => {
     if (colors) {
-      let newSelected = getSelectedColor(colors);
+      let newSelected = doesSelectedColorExist(colors)
+        ? getSelectedColor(colors)
+        : { letter: colors[0].letter, color: colors[0].color};
       setSelectedColor(newSelected);
       setColorsDisplayArray(createColorsDisplay());
     }
@@ -84,6 +85,16 @@ const Colors = () => {
     }
   }
 
+  const removeColor = () => {
+    let colorsCopy = [...colors];
+    let success = removeColorReturnSuccess(selectedColor.letter, colorsCopy);
+    if (!success) {
+      alert(`Could not remove color. Must have at least one.`);
+    } else {
+      setColors(colorsCopy);
+    }
+  }
+
   //#endregion
 
   //#region event methods
@@ -96,6 +107,10 @@ const Colors = () => {
     addNewColor();
   }
 
+  const clickRemoveButton = () => {
+    removeColor();
+  }
+
   //#endregion
 
   return (
@@ -103,7 +118,7 @@ const Colors = () => {
 
       <div className="colors-display">
         {colorsDisplayArray}
-        <button ref={deleteRef}>Remove</button>
+        <button ref={deleteRef} onClick={clickRemoveButton}>Remove</button>
       </div>
       <div className="changer">
         <input type="color" ref={selectorRef} onChange={changeInputColor} />
