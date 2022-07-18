@@ -45,7 +45,6 @@ const ColorSquare = ({id}) => {
 
   //#endregion
 
-
   //#region normal methods
 
   const changeColor = () => {
