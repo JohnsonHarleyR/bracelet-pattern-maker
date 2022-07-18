@@ -76,9 +76,3 @@ export const calculateNumberOfBackgroundImages = (nodesAcross, rowCount) => {
 }
 
 //#endregion
-
-//#region
-
-
-
-//#endregion

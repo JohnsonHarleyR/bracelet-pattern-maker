@@ -57,11 +57,9 @@ const ColorSquare = ({id}) => {
     } else {
       colorRef.current.className = "color-square";
     }
-    console.log(`classname after: ${colorRef.current.className}`);
   }
 
   const selectColor = (id) => {
-    console.log(`selecting color: ${id}`);
     let copy = [...colors];
     copy.forEach(c => {
       if (c.letter === id) {
@@ -70,7 +68,6 @@ const ColorSquare = ({id}) => {
         c.isSelected = false;
       }
     });
-    console.log(`classname before: ${colorRef.current.className}`);
     setColors(copy);
   }
 

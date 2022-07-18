@@ -39,7 +39,7 @@ const Stage = () => {
 
   useEffect(() => {
     if (bgLoadCount && bgLoadCount !== 0) {
-      console.log(`loaded: ${bgLoadCount}/${totalBgImages}`);
+      //console.log(`loaded: ${bgLoadCount}/${totalBgImages}`);
       if (bgLoadCount === totalBgImages) {
         renderCircleFill(canvasRef.current, "#ffff00", 5, 5);
       }
@@ -69,14 +69,14 @@ const Stage = () => {
   //#endregion
 
   const clearBgLoadCount = () => {
-    console.log(`clearing loaded image count.`);
+    //console.log(`clearing loaded image count.`);
     loadedBgImageCount = 0;
     setBgLoadCount(0);
   }
 
   const addToBgLoadCount = () => {
     loadedBgImageCount++;
-    console.log(`adding to loaded count: ${loadedBgImageCount}`);
+    //console.log(`adding to loaded count: ${loadedBgImageCount}`);
     if (loadedBgImageCount === totalBgImages) {
       setBgLoadCount(loadedBgImageCount);
     }
