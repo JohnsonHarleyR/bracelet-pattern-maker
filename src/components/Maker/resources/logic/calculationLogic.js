@@ -49,12 +49,26 @@ export const getStrandIndexesByNodeIndex = (nodeIndex) => {
 
 //#endregion
 
+//#region Position Calculations
+
+  export const calculateStrandImageRenderingPosition = (positionIndex, rowIndex) => {
+    let yStart = rowIndex === 0
+      ? 0
+      : ImageHeight.STRAND_START_LEFT + (rowIndex * ImageHeight.STRAND_LEFT);
+
+    let xStart = ImageWidth.TILE_START + (positionIndex * ImageWidth.STRAND_LEFT);
+
+    return {x: xStart, y: yStart};
+  }
+
+//#endregion
+
 //#region Size Calculations
 
 export const calculateCanvasWidth = (nodesAcross) => {
   let endWidths = ImageWidth.TILE_LEFT + ImageWidth.TILE_RIGHT;
   let nodeAreaWidth = ImageWidth.STRAND_LEFT + ImageWidth.STRAND_RIGHT;
-  let totalWidth = endWidths + (nodeAreaWidth * nodesAcross);
+  let totalWidth = endWidths + (nodeAreaWidth * (nodesAcross - 1));
   return totalWidth;
 }
 
@@ -73,6 +87,21 @@ export const calculateNumberOfBackgroundImages = (nodesAcross, rowCount) => {
 
   const total = imagesInARow * totalRows;
   return total;
+}
+
+export const calculateStrandWidthAndHeight = (rowIndex, rowCount) => {
+  let width = ImageWidth.STRAND_LEFT;
+  let height = ImageHeight.STRAND_LEFT;
+  if (rowIndex === 0) {
+    height = ImageHeight.STRAND_START_LEFT;
+  } else if (rowCount > 1 && rowIndex === rowCount - 1) {
+    height = ImageHeight.STRAND_END_LEFT;
+  }
+
+  return {
+    width: width,
+    height: height,
+  }
 }
 
 //#endregion

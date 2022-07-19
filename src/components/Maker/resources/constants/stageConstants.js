@@ -86,3 +86,8 @@ export const ImageHeight = {
   TILE_END_LEFT: 44,
   TILE_END_RIGHT: 44,
 }
+
+export const LeftOrRight = {
+  LEFT: "LEFT",
+  RIGHT: "RIGHT"
+}

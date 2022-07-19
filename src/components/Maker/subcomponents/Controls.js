@@ -13,7 +13,7 @@ const Controls = () => {
     isSetupDecided, setIsSetupDecided,
     strandsAcross, setStrandsAcross,
     setNodesAcross,
-    strandInfos, setStrandInfos,
+    startStrandInfos, setStartStrandInfos,
     selectedColor,
     colors,
   } = useContext(MakerContext);
@@ -25,10 +25,10 @@ const Controls = () => {
 
   useEffect(() => {
     if (colors) {
-      if (strandInfos !== undefined) {
-        let newStrandInfos = createNewDefaultStrandInfosArray(strandsAcross, selectedColor, colors, strandInfos);
+      if (startStrandInfos !== undefined) {
+        let newStrandInfos = createNewDefaultStrandInfosArray(strandsAcross, selectedColor, colors, startStrandInfos);
         console.log(`new strand infos: ${JSON.stringify(newStrandInfos)}`);
-        setStrandInfos(newStrandInfos);
+        setStartStrandInfos(newStrandInfos);
       }
     }
   }, [colors, strandsAcross]);
