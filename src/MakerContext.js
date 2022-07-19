@@ -1,4 +1,5 @@
 import React, {useState, createContext, useEffect} from 'react';
+import { createFirstRowOfNodes } from './components/Maker/resources/logic/nodeLogic';
 
 const MakerContext = createContext({});
 
@@ -11,6 +12,7 @@ const MakerProvider = ({children}) => {
   const [rowCount, setRowCount] = useState(1);
 
   const [startStrandInfos, setStartStrandInfos] = useState([]);
+  const [nodes, setNodes] = useState([]);
 
   const [selectedColor, setSelectedColor] = useState({
     letter: "A",
@@ -29,6 +31,13 @@ const MakerProvider = ({children}) => {
     },
   ]);
 
+  useEffect(() => {
+    if (startStrandInfos && !isSetupDecided) {
+      let firstRow = createFirstRowOfNodes(startStrandInfos);
+      setNodes([firstRow]);
+    }
+  }, [startStrandInfos]);
+
 
     return (
         <MakerContext.Provider value={{
@@ -37,6 +46,7 @@ const MakerProvider = ({children}) => {
           strandsAcross, setStrandsAcross,
           rowCount, setRowCount,
           startStrandInfos, setStartStrandInfos,
+          nodes, setNodes,
           selectedColor, setSelectedColor,
           colors, setColors,
         }}>

@@ -20,6 +20,7 @@ import CircleCurveLeft from "../images/circle-left-curve.png";
 import CircleCurveRight from "../images/circle-right-curve.png";
 import { ImageHeight, ImageName, ImageWidth, LeftOrRight, StageDefaults } from "../constants/stageConstants";
 import { calculateStrandImageRenderingPosition, calculateStrandWidthAndHeight } from "./calculationLogic";
+import { NodeDefaults } from "../constants/nodeConstants";
 
 //#region Rendering Background
 
@@ -157,17 +158,43 @@ const renderSquareFill = (canvas, color, x, y, w, h) => {
 
 //#region Rendering Strands
 
-export const renderStartStrandRow = (canvas, strandInfos, rowCount, clearLoadedCount, addToLoadedCount) => {
-  strandInfos.forEach((si, i) => {
-    renderStartOrEndStrand(canvas, i, si, 0, rowCount, addToLoadedCount);
+export const renderStrands = (canvas, nodes, rowCount, clearLoadedCount, addToLoadedCount) => {
+  if (nodes.length === 0) {
+    return;
+  }
+
+  clearLoadedCount();
+  nodes.forEach((n, i) => {
+    if (i === 0) {
+      renderFirstStrandRow(canvas, n, rowCount, addToLoadedCount);
+    }
+
+    if (i === rowCount - 1) {
+      renderLastStrandRow(canvas, n, rowCount, addToLoadedCount);
+    }
   })
 }
 
-export const renderStartOrEndStrand = (canvas, strandIndex, strandInfo, rowIndex, rowCount, addToLoadedCount) => {
-  let wh = calculateStrandWidthAndHeight(rowIndex, rowCount);
-  let xy = calculateStrandImageRenderingPosition(strandIndex, rowIndex);
-  let color = strandInfo.color;
-  let imageName = getStrandImageName(strandIndex, rowIndex, rowCount);
+const renderFirstStrandRow = (canvas, firstNodeRow, rowCount, addToLoadedCount) => {
+  firstNodeRow.forEach((n, i) => {
+    renderStartOrEndStrand(canvas, i * 2, n.topLeftStrand, 0, rowCount, addToLoadedCount);
+    renderStartOrEndStrand(canvas, i * 2 + 1, n.topRightStrand, 0, rowCount, addToLoadedCount);
+  })
+}
+
+const renderLastStrandRow = (canvas, lastNodeRow, rowCount, addToLoadedCount) => {
+  let index = rowCount - 1;
+  lastNodeRow.forEach((n, i) => {
+    renderStartOrEndStrand(canvas, i * 2, n.bottomLeftStrand, index, rowCount, addToLoadedCount, false);
+    renderStartOrEndStrand(canvas, i * 2 + 1, n.bottomRightStrand, index, rowCount, addToLoadedCount, false);
+  })
+}
+
+const renderStartOrEndStrand = (canvas, strandIndex, strandInfo, rowIndex, rowCount, addToLoadedCount, isStart = true) => {
+  let wh = calculateStrandWidthAndHeight(rowIndex, rowCount, isStart);
+  let xy = calculateStrandImageRenderingPosition(strandIndex, rowIndex, canvas.height, !isStart);
+  let color = strandInfo !== null ? strandInfo.color : NodeDefaults.EMPTY_COLOR;
+  let imageName = getStrandImageName(strandIndex, rowIndex, rowCount, isStart);
 
   // first fill the background color
   //renderSquareFill(canvas, color, xy.x, xy.y, wh.width, wh.height);
@@ -192,21 +219,21 @@ export const renderStartOrEndStrand = (canvas, strandIndex, strandInfo, rowIndex
   renderImageWithUnderFills(canvas, imageInfo, fillInfos, addToLoadedCount);
 }
 
-const getStrandImageName = (positionIndex, rowIndex, rowCount) => {
+const getStrandImageName = (positionIndex, rowIndex, rowCount, isStart = false) => {
   let relPosIndex = positionIndex + 1;
   let side = relPosIndex % 2 === 0
     ? LeftOrRight.RIGHT
     : LeftOrRight.LEFT;
 
   // check if first or last row
-  if (rowIndex === 0) {
+  if (isStart) {
     switch(side) {
       case LeftOrRight.LEFT:
         return ImageName.STRAND_START_LEFT;
       case LeftOrRight.RIGHT:
         return ImageName.STRAND_START_RIGHT;
     }
-  } else if (rowCount > 1 && rowIndex === rowCount - 1) {
+  } else if (rowIndex === rowCount - 1) {
     switch(side) {
       case LeftOrRight.LEFT:
         return ImageName.STRAND_END_LEFT;
@@ -281,9 +308,9 @@ const getImage = (imageName) => {
     case ImageName.STRAND_START_RIGHT:
       return StrandStartRight;
     case ImageName.STRAND_END_LEFT:
-      return StrandStartLeft;
+      return StrandEndLeft;
     case ImageName.STRAND_END_RIGHT:
-      return StrandStartRight;
+      return StrandEndRight;
     case ImageName.CIRCLE_BLANK:
       return CircleBlank;
     case ImageName.CIRCLE_POINT_LEFT:

@@ -51,10 +51,14 @@ export const getStrandIndexesByNodeIndex = (nodeIndex) => {
 
 //#region Position Calculations
 
-  export const calculateStrandImageRenderingPosition = (positionIndex, rowIndex) => {
-    let yStart = rowIndex === 0
+  export const calculateStrandImageRenderingPosition = (positionIndex, rowIndex, canvasHeight, isEnd = false) => {
+    let yStart = rowIndex === 0 && !isEnd
       ? 0
       : ImageHeight.STRAND_START_LEFT + (rowIndex * ImageHeight.STRAND_LEFT);
+
+    if (isEnd) {
+      yStart = canvasHeight - ImageHeight.STRAND_END_LEFT;
+    }
 
     let xStart = ImageWidth.TILE_START + (positionIndex * ImageWidth.STRAND_LEFT);
 
@@ -91,20 +95,16 @@ export const calculateNumberOfBackgroundImages = (nodesAcross, rowCount) => {
 
 export const calculateNumberOfStrandImages = (nodesAcross, rowCount) => {
   const strandsAcross = nodesAcross * 2;
-  let total = strandsAcross * rowCount;
-  if (rowCount > 1) {
-    total += strandsAcross;
-    // TODO check that this works accurately - this should be due to end strands when there's more than one row
-  }
-  return strandsAcross;
+  let total = strandsAcross * rowCount + strandsAcross;
+  return total;
 }
 
-export const calculateStrandWidthAndHeight = (rowIndex, rowCount) => {
+export const calculateStrandWidthAndHeight = (rowIndex, rowCount, isStart) => {
   let width = ImageWidth.STRAND_LEFT;
   let height = ImageHeight.STRAND_LEFT;
-  if (rowIndex === 0) {
+  if (isStart) {
     height = ImageHeight.STRAND_START_LEFT;
-  } else if (rowCount > 1 && rowIndex === rowCount - 1) {
+  } else if (rowIndex === rowCount - 1) {
     height = ImageHeight.STRAND_END_LEFT;
   }
 

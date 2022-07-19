@@ -7,7 +7,7 @@ import {
   calculateNumberOfBackgroundImages,
   calculateNumberOfStrandImages
 } from '../resources/logic/calculationLogic';
-import { renderBackground, renderCircleFill, renderStartStrandRow } from '../resources/logic/drawLogic';
+import { renderBackground, renderCircleFill, renderStrands } from '../resources/logic/drawLogic';
 
 const Stage = () => {
 
@@ -18,6 +18,7 @@ const Stage = () => {
     nodesAcross,
     rowCount,
     startStrandInfos,
+    nodes,
     colors,
   } = useContext(MakerContext);
 
@@ -72,13 +73,15 @@ const Stage = () => {
 
   useEffect(() => {
     if (isBgLoaded) {
-      renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+      //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+      renderStrands(canvasRef.current, nodes, rowCount, clearStrandLoadCount, addToStrandLoadCount);
     }
   }, [isBgLoaded]);
 
   useEffect(() => {
     if (colors) {
-      renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+      //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+      renderStrands(canvasRef.current, nodes, rowCount, clearStrandLoadCount, addToStrandLoadCount);
     }
   }, [colors]);
 
@@ -90,7 +93,8 @@ const Stage = () => {
         renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
       }
       if (isBgLoaded) {
-        renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+        //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+        renderStrands(canvasRef.current, nodes, rowCount, clearStrandLoadCount, addToStrandLoadCount);
       }
     }
   }, [canvasWidth]);
@@ -103,7 +107,8 @@ const Stage = () => {
         renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
       }
       if (isBgLoaded) {
-        renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+        //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+        renderStrands(canvasRef.current, nodes, rowCount, clearStrandLoadCount, addToStrandLoadCount);
       }
     }
   }, [canvasHeight]);
