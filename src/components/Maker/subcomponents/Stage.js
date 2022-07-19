@@ -83,7 +83,7 @@ const Stage = () => {
       //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
       renderStrands(canvasRef.current, nodes, rowCount, clearStrandLoadCount, addToStrandLoadCount);
     }
-  }, [colors]);
+  }, [colors, nodes]);
 
   useEffect(() => {
     if (canvasWidth) {
