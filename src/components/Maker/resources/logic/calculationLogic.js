@@ -89,6 +89,16 @@ export const calculateNumberOfBackgroundImages = (nodesAcross, rowCount) => {
   return total;
 }
 
+export const calculateNumberOfStrandImages = (nodesAcross, rowCount) => {
+  const strandsAcross = nodesAcross * 2;
+  let total = strandsAcross * rowCount;
+  if (rowCount > 1) {
+    total += strandsAcross;
+    // TODO check that this works accurately - this should be due to end strands when there's more than one row
+  }
+  return strandsAcross;
+}
+
 export const calculateStrandWidthAndHeight = (rowIndex, rowCount) => {
   let width = ImageWidth.STRAND_LEFT;
   let height = ImageHeight.STRAND_LEFT;

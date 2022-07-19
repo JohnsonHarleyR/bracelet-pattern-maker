@@ -4,7 +4,8 @@ import { MakerContext } from '../../../MakerContext';
 import {
   calculateCanvasHeight,
   calculateCanvasWidth,
-  calculateNumberOfBackgroundImages
+  calculateNumberOfBackgroundImages,
+  calculateNumberOfStrandImages
 } from '../resources/logic/calculationLogic';
 import { renderBackground, renderCircleFill, renderStartStrandRow } from '../resources/logic/drawLogic';
 
@@ -17,14 +18,16 @@ const Stage = () => {
     nodesAcross,
     rowCount,
     startStrandInfos,
+    colors,
   } = useContext(MakerContext);
 
+  const [isBgLoaded, setIsBgLoaded] = useState(false);
   const [totalBgImages, setTotalBgImages] = useState(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
   let loadedBgImageCount = 0;
   const [bgLoadCount, setBgLoadCount] = useState(0);
 
   // TODO implement the next two constants
-  const [totalStrandImages, setTotalStrandImages] = useState(0);
+  const [totalStrandImages, setTotalStrandImages] = useState(calculateNumberOfStrandImages(nodesAcross, rowCount));
   let loadedStrandImageCount = 0;
   const [strandLoadCount, setStrandLoadCount] = useState(0);
 
@@ -49,17 +52,31 @@ const Stage = () => {
       //console.log(`loaded: ${bgLoadCount}/${totalBgImages}`);
       if (bgLoadCount === totalBgImages) {
         // RENDER STRAND IMAGES
-        renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
-        renderCircleFill(canvasRef.current, "#ffff00", 5, 5);
+        setIsBgLoaded(true);
+        console.log(`bg loaded`);
+        //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+        //renderCircleFill(canvasRef.current, "#ffff00", 5, 5);
       }
     }
   }, [bgLoadCount]);
 
   useEffect(() => {
-    if (startStrandInfos) {
-      renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
+    if (isBgLoaded) {
+      renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
     }
-  }, [startStrandInfos]);
+  }, [isBgLoaded]);
+
+  useEffect(() => {
+    if (colors) {
+      renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+    }
+  }, [colors]);
+
+  // useEffect(() => {
+  //   if (startStrandInfos) {
+  //     renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
+  //   }
+  // }, [startStrandInfos]);
 
   useEffect(() => {
     if (canvasWidth) {
@@ -67,6 +84,9 @@ const Stage = () => {
       
       if (canvasHeight) {
         renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
+      }
+      if (isBgLoaded) {
+        renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
       }
     }
   }, [canvasWidth]);
@@ -77,6 +97,9 @@ const Stage = () => {
       
       if (canvasWidth) {
         renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
+      }
+      if (isBgLoaded) {
+        renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
       }
     }
   }, [canvasHeight]);
@@ -89,6 +112,7 @@ const Stage = () => {
     //console.log(`clearing loaded image count.`);
     loadedBgImageCount = 0;
     setBgLoadCount(0);
+    //setIsBgLoaded(false);
   }
 
   const clearStrandLoadCount = () => {

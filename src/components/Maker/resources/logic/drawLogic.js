@@ -36,6 +36,7 @@ export const renderBackground = (canvas, nodesAcross, rowCount, clearLoadedCount
   //renderCircleFill(canvas, "#ffff00", 5, 5);
 
   // TODO now draw forefront images
+  console.log(`bg rendered`);
 }
 
 const renderBackgroundTiles = (canvas, nodesAcross, rowCount, addToLoadedCount) => {
@@ -169,11 +170,26 @@ export const renderStartOrEndStrand = (canvas, strandIndex, strandInfo, rowIndex
   let imageName = getStrandImageName(strandIndex, rowIndex, rowCount);
 
   // first fill the background color
-  renderSquareFill(canvas, color, xy.x, xy.y, wh.width, wh.height);
+  //renderSquareFill(canvas, color, xy.x, xy.y, wh.width, wh.height);
+  let fillInfos = [{
+    color: color,
+    x: xy.x,
+    y: xy.y,
+    width: wh.width,
+    height: wh.height,
+  }];
 
   // now render foreground images
   // HACK do not worry about writing letters on top on images yet?
-  renderImage(canvas, imageName, xy.x, xy.y, wh.width, wh.height, addToLoadedCount);
+  let imageInfo = {
+    imageName: imageName,
+    x: xy.x,
+    y: xy.y,
+    width: wh.width,
+    height: wh.height
+  };
+  //renderImage(canvas, imageName, xy.x, xy.y, wh.width, wh.height, addToLoadedCount);
+  renderImageWithUnderFills(canvas, imageInfo, fillInfos, addToLoadedCount);
 }
 
 const getStrandImageName = (positionIndex, rowIndex, rowCount) => {
@@ -219,6 +235,19 @@ export const renderImage = (canvas, imageName, x, y, width, height, addToLoadedC
   image.src = getImage(imageName);
   image.onload = () => {
     ctx.drawImage(image, x, y, width, height);
+    addToLoadedCount();
+  };
+}
+
+const renderImageWithUnderFills = (canvas, imageInfo, fillInfos, addToLoadedCount) => {
+  let ctx = canvas.getContext("2d");
+  let image = new Image();
+  image.src = getImage(imageInfo.imageName);
+  image.onload = () => {
+    fillInfos.forEach(fi => {
+      renderSquareFill(canvas, fi.color, fi.x, fi.y, fi.width, fi.height);
+    });
+    ctx.drawImage(image, imageInfo.x, imageInfo.y, imageInfo.width, imageInfo.height);
     addToLoadedCount();
   };
 }
