@@ -27,6 +27,7 @@ const Stage = () => {
   const [bgLoadCount, setBgLoadCount] = useState(0);
 
   // TODO implement the next two constants
+  const [areStrandsLoaded, setAreStrandsLoaded] = useState(false);
   const [totalStrandImages, setTotalStrandImages] = useState(calculateNumberOfStrandImages(nodesAcross, rowCount));
   let loadedStrandImageCount = 0;
   const [strandLoadCount, setStrandLoadCount] = useState(0);
@@ -37,6 +38,7 @@ const Stage = () => {
     if (nodesAcross) {
       setCanvasWidth(calculateCanvasWidth(nodesAcross));
       setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
+      setTotalStrandImages(calculateNumberOfStrandImages(nodesAcross, rowCount));
     }
   }, [nodesAcross]);
 
@@ -44,6 +46,7 @@ const Stage = () => {
     if (rowCount) {
       setCanvasHeight(calculateCanvasHeight(rowCount));
       setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
+      setTotalStrandImages(calculateNumberOfStrandImages(nodesAcross, rowCount));
     }
   }, [rowCount]);
 
@@ -51,14 +54,21 @@ const Stage = () => {
     if (bgLoadCount && bgLoadCount !== 0) {
       //console.log(`loaded: ${bgLoadCount}/${totalBgImages}`);
       if (bgLoadCount === totalBgImages) {
-        // RENDER STRAND IMAGES
         setIsBgLoaded(true);
-        console.log(`bg loaded`);
-        //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
-        //renderCircleFill(canvasRef.current, "#ffff00", 5, 5);
+        console.log(`bg images loaded`);
       }
     }
   }, [bgLoadCount]);
+
+  useEffect(() => {
+    if (strandLoadCount && strandLoadCount !== 0) {
+      //console.log(`loaded: ${bgLoadCount}/${totalBgImages}`);
+      if (strandLoadCount === totalStrandImages) {
+        setAreStrandsLoaded(true);
+        console.log(`strand images loaded`);
+      }
+    }
+  }, [strandLoadCount]);
 
   useEffect(() => {
     if (isBgLoaded) {
@@ -71,12 +81,6 @@ const Stage = () => {
       renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
     }
   }, [colors]);
-
-  // useEffect(() => {
-  //   if (startStrandInfos) {
-  //     renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
-  //   }
-  // }, [startStrandInfos]);
 
   useEffect(() => {
     if (canvasWidth) {
