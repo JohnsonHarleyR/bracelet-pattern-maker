@@ -1,6 +1,6 @@
 
 export const NodeDefaults = {
-  EMPTY_COLOR: "#ffff00",
+  EMPTY_COLOR: "#ffffff",
 }
 
 export const NodeSymbol = {

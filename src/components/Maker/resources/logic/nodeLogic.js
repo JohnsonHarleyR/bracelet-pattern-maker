@@ -4,21 +4,36 @@ import { calculateOddNodeRenderingPosition } from "./calculationLogic";
 
 //#region Create Nodes
 
-export const createFirstRowOfNodes = (startStrandInfos) => {
-  let nodes = [];
+export const createFirstRowOfNodes = (startStrandInfos, nodes) => {
+  let nodeRow = nodes.length > 0
+    ? [...nodes[0]]
+    : [];
 
-  for (let i = 0; i < startStrandInfos.length; i++) {
+  if (nodeRow.length === startStrandInfos.length / 2) {
+    return nodeRow;
+  }
+
+  // splice row if there are fewer strands than needed for nodes
+  if (startStrandInfos.length / 2 < nodeRow.length) {
+    nodeRow = nodeRow.splice(0, startStrandInfos.length / 2);
+  }
+
+    // TODO transfer/change existing first? (if necessary)
+    // TODO replace missing infos if there are any?? (if necessary)
+
+  let startI = nodeRow.length * 2;
+  for (let i = startI; i < startStrandInfos.length; i++) {
     // only do on odd strands (by index + 1)
     if ((i + 1) % 2 !== 0) {
       let newNode = new NodeModel(null, null, startStrandInfos[i], startStrandInfos[i + 1]);
       let xy = calculateOddNodeRenderingPosition(newNode, 0);
       newNode.xStart = xy.x;
       newNode.yStart = xy.y;
-      nodes.push(newNode);
+      nodeRow.push(newNode);
     }
   }
 
-  return nodes;
+  return nodeRow;
 
 }
 

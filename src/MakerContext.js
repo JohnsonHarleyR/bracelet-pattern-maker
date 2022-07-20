@@ -33,7 +33,8 @@ const MakerProvider = ({children}) => {
 
   useEffect(() => {
     if (startStrandInfos && !isSetupDecided) {
-      let firstRow = createFirstRowOfNodes(startStrandInfos);
+      let n = nodes ? nodes : [];
+      let firstRow = createFirstRowOfNodes(startStrandInfos, n);
       setNodes([firstRow]);
     }
   }, [nodesAcross, startStrandInfos]);
