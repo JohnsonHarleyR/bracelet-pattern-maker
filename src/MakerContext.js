@@ -1,5 +1,5 @@
 import React, {useState, createContext, useEffect} from 'react';
-import { createFirstRowOfNodes } from './components/Maker/resources/logic/nodeLogic';
+import { createAllNodesAfterSetup, createFirstRowOfNodes } from './components/Maker/resources/logic/nodeLogic';
 
 const MakerContext = createContext({});
 
@@ -38,6 +38,18 @@ const MakerProvider = ({children}) => {
       setNodes([firstRow]);
     }
   }, [nodesAcross, startStrandInfos]);
+
+  useEffect(() => {
+    if (isSetupDecided && rowCount > 1) {
+      setNodes(createAllNodesAfterSetup(nodes, nodesAcross, rowCount));
+    }
+  }, [rowCount]);
+
+  useEffect(() => {
+    if (isSetupDecided) {
+      setRowCount(2);
+    }
+  }, [isSetupDecided]);
 
 
     return (

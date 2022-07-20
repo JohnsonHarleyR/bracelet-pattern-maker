@@ -71,6 +71,18 @@ export const calculateOddNodeRenderingPosition = (node, rowIndex) => {
   return {x: xStart, y: yStart};
 }
 
+export const calculateEvenNodeRenderingPosition = (rowIndex, prevRow) => {
+  let aboveLeftNode = prevRow[rowIndex];
+  let aboveRightNode = prevRow[rowIndex + 1];
+  let aboveLeftX = calculateOddNodeRenderingPosition(aboveLeftNode, rowIndex).xStart;
+  let aboveRightX = calculateOddNodeRenderingPosition(aboveRightNode, rowIndex + 1).xStart;
+  let halfXDistance = (aboveRightX - aboveLeftX) / 2;
+
+  let xStart = aboveLeftX + halfXDistance;
+  let yStart = ImageHeight.TILE_START + (rowIndex * (ImageHeight.TILE / 2));
+  return {x: xStart, y: yStart};
+}
+
 //#endregion
 
 //#region Size Calculations

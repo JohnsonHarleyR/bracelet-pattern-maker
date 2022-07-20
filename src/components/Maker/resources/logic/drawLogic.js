@@ -9,6 +9,8 @@ import TileEndLeft from "../images/tile-end-left.png";
 import TileEndRight from "../images/tile-end-right.png";
 import StrandLeft from "../images/strand-left.png";
 import StrandRight from "../images/strand-right.png";
+import StrandLeftFinalEdge from "../images/strand-left-final-edge.png";
+import StrandRightFinalEdge from "../images/strand-right-final-edge.png";
 import StrandStartLeft from "../images/strand-start-left.png";
 import StrandStartRight from "../images/strand-start-right.png";
 import StrandEndLeft from "../images/strand-end-left.png";
@@ -422,6 +424,10 @@ const getImage = (imageName) => {
       return StrandLeft;
     case ImageName.STRAND_RIGHT:
       return StrandRight;
+    case ImageName.STRAND_LEFT_FINAL_EDGE:
+    return StrandLeftFinalEdge;
+    case ImageName.STRAND_RIGHT_FINAL_EDGE:
+      return StrandRightFinalEdge;
     case ImageName.STRAND_START_LEFT:
       return StrandStartLeft;
     case ImageName.STRAND_START_RIGHT:

@@ -16,6 +16,8 @@ export const ImageName = {
 
   STRAND_LEFT: "strand-left.png",
   STRAND_RIGHT: "strand-right.png",
+  STRAND_LEFT_FINAL_EDGE: "strand-left-final-edge.png",
+  STRAND_RIGHT_FINAL_EDGE: "strand-right-final-edge.png",
 
   STRAND_START_LEFT: "strand-start-left.png",
   STRAND_START_RIGHT: "strand-start-right.png",
@@ -44,6 +46,8 @@ export const ImageWidth = {
 
   STRAND_LEFT: 59,
   STRAND_RIGHT: 59,
+  STRAND_LEFT_FINAL_EDGE: 59,
+  STRAND_RIGHT_FINAL_EDGE: 59,
 
   STRAND_START_LEFT: 59,
   STRAND_START_RIGHT: 59,
@@ -72,6 +76,8 @@ export const ImageHeight = {
 
   STRAND_LEFT: 85,
   STRAND_RIGHT: 85,
+  STRAND_LEFT_FINAL_EDGE: 85,
+  STRAND_RIGHT_FINAL_EDGE: 85,
 
   STRAND_START_LEFT: 70,
   STRAND_START_RIGHT: 70,
