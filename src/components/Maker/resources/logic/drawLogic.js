@@ -19,8 +19,8 @@ import CirclePointRight from "../images/circle-right-arrow.png";
 import CircleCurveLeft from "../images/circle-left-curve.png";
 import CircleCurveRight from "../images/circle-right-curve.png";
 import { ImageHeight, ImageName, ImageWidth, LeftOrRight, StageDefaults } from "../constants/stageConstants";
-import { calculateStrandImageRenderingPosition, calculateStrandWidthAndHeight } from "./calculationLogic";
-import { NodeDefaults } from "../constants/nodeConstants";
+import { calculateOddNodeRenderingPosition, calculateStrandImageRenderingPosition, calculateStrandWidthAndHeight } from "./calculationLogic";
+import { NodeDefaults, NodeSymbol } from "../constants/nodeConstants";
 
 //#region Rendering Background
 
@@ -156,6 +156,48 @@ const renderSquareFill = (canvas, color, x, y, w, h) => {
 
 //#endregion
 
+//#region  Rendering Nodes
+
+export const renderNodes = (canvas, nodes) => {
+  for (let y = 0; y < nodes.length; y++) {
+    let row = nodes[y];
+    for (let x = 0; x < row.length; x++) {
+      renderNode(canvas, row[x], y);
+    }
+  }
+}
+
+const renderNode = (canvas, node, rowIndex) => {
+  let color = node.nodeColor;
+  let xy = calculateOddNodeRenderingPosition(node, rowIndex);
+  let w = ImageWidth.CIRCLE_BLANK;
+  let h = ImageHeight.CIRCLE_BLANK;
+  let imageName = getNodeImageName(node);
+
+  node.startX = xy.x;
+  node.startY = xy.y;
+
+  renderCircleImageWithUnderFill(canvas, imageName, color, xy.x, xy.y, w, h);
+  //renderImage(canvas, imageName, xy.x, xy.y, w, h);
+}
+
+const getNodeImageName = (node) => {
+  switch(node.nodeSymbol) {
+    case NodeSymbol.NONE:
+      return ImageName.CIRCLE_BLANK;
+    case NodeSymbol.LEFT:
+      return ImageName.CIRCLE_POINT_LEFT;
+    case NodeSymbol.LEFT_RIGHT:
+      return ImageName.CIRCLE_CURVE_RIGHT;
+    case NodeSymbol.RIGHT:
+      return ImageName.CIRCLE_POINT_RIGHT;
+    case NodeSymbol.RIGHT_LEFT:
+      return ImageName.CIRCLE_CURVE_LEFT;
+  }
+}
+
+//#endregion
+
 //#region Rendering Strands
 
 export const renderStrands = (canvas, nodes, rowCount, clearLoadedCount, addToLoadedCount) => {
@@ -195,6 +237,11 @@ const renderStartOrEndStrand = (canvas, strandIndex, strandInfo, rowIndex, rowCo
   let xy = calculateStrandImageRenderingPosition(strandIndex, rowIndex, canvas.height, !isStart);
   let color = strandInfo !== null ? strandInfo.color : NodeDefaults.EMPTY_COLOR;
   let imageName = getStrandImageName(strandIndex, rowIndex, rowCount, isStart);
+
+  // if (strandInfo) {
+  //   strandInfo.xStart = xy.x;
+  //   strandInfo.yStart = xy.y;
+  // }
 
   // first fill the background color
   //renderSquareFill(canvas, color, xy.x, xy.y, wh.width, wh.height);
@@ -256,13 +303,25 @@ const getStrandImageName = (positionIndex, rowIndex, rowCount, isStart = false) 
 
 //#region Rendering Images
 
-export const renderImage = (canvas, imageName, x, y, width, height, addToLoadedCount) => {
+export const renderImage = (canvas, imageName, x, y, width, height, addToLoadedCount = null) => {
   let ctx = canvas.getContext("2d");
   let image = new Image();
   image.src = getImage(imageName);
   image.onload = () => {
     ctx.drawImage(image, x, y, width, height);
-    addToLoadedCount();
+    if (addToLoadedCount !== null) {
+      addToLoadedCount();
+    }
+  };
+}
+
+const renderCircleImageWithUnderFill = (canvas, imageName, color, x, y, width, height) => {
+  let ctx = canvas.getContext("2d");
+  let image = new Image();
+  image.src = getImage(imageName);
+  image.onload = () => {
+    renderCircleFill(canvas, color, x, y);
+    ctx.drawImage(image, x, y, width, height);
   };
 }
 

@@ -2,6 +2,8 @@
 
 //#region colors
 
+import { calculateStrandImageRenderingPosition } from "./calculationLogic";
+
 export const getColorIndexById = (id, colors) => {
   for (let i = 0; i < colors.length; i++) {
     if (colors[i].letter === id) {
@@ -146,6 +148,14 @@ export const createNewDefaultStrandInfosArray = (strandsAcross, selectedColor, c
     }
   }
 
+  copy.forEach((c, i) => {
+    if (c.xStart === undefined && c.yStart === undefined) {
+      let xy = calculateStrandImageRenderingPosition(i, 0);
+      c.xStart = xy.x;
+      c.yStart = xy.y;
+    }
+  });
+
   // now, if the strands array has values already, update those values
   // according to any changes in color. If a letter/id value no longer exists,
   // set that strand to the selected color values
@@ -153,7 +163,7 @@ export const createNewDefaultStrandInfosArray = (strandsAcross, selectedColor, c
     return copy;
   }
 
-  copy.forEach(c => {
+  copy.forEach((c) => {
     if (!doesIdExist(c.letter, colors)) {
       if (doesIdExist(selectedColor.letter, colors)) {
         c.letter = selectedColor.letter;

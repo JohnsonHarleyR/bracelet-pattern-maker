@@ -1,6 +1,6 @@
 
 export const NodeDefaults = {
-  EMPTY_COLOR: "#ffffff",
+  EMPTY_COLOR: "#ffff00",
 }
 
 export const NodeSymbol = {
@@ -11,7 +11,18 @@ export const NodeSymbol = {
   RIGHT_LEFT: 'RIGHT_LEFT',
 }
 
+export const NodeSymbolType = {
+  NONE: 'NONE',
+  POINT: 'POINT',
+  CURVE: 'CURVE',
+}
+
 export const RowType = {
   ODD: "ODD",
   EVEN: "EVEN",
+}
+
+export const ClickType = {
+  RIGHT: "RIGHT",
+  LEFT: "LEFT",
 }

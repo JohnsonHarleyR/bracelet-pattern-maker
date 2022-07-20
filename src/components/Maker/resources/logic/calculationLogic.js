@@ -51,19 +51,25 @@ export const getStrandIndexesByNodeIndex = (nodeIndex) => {
 
 //#region Position Calculations
 
-  export const calculateStrandImageRenderingPosition = (positionIndex, rowIndex, canvasHeight, isEnd = false) => {
-    let yStart = rowIndex === 0 && !isEnd
-      ? 0
-      : ImageHeight.STRAND_START_LEFT + (rowIndex * ImageHeight.STRAND_LEFT);
+export const calculateStrandImageRenderingPosition = (positionIndex, rowIndex, canvasHeight, isEnd = false) => {
+  let yStart = rowIndex === 0 && !isEnd
+    ? 0
+    : ImageHeight.STRAND_START_LEFT + (rowIndex * ImageHeight.STRAND_LEFT);
 
-    if (isEnd) {
-      yStart = canvasHeight - ImageHeight.STRAND_END_LEFT;
-    }
-
-    let xStart = ImageWidth.TILE_START + (positionIndex * ImageWidth.STRAND_LEFT);
-
-    return {x: xStart, y: yStart};
+  if (isEnd) {
+    yStart = canvasHeight - ImageHeight.STRAND_END_LEFT;
   }
+
+  let xStart = ImageWidth.TILE_START + (positionIndex * ImageWidth.STRAND_LEFT);
+
+  return {x: xStart, y: yStart};
+}
+
+export const calculateOddNodeRenderingPosition = (node, rowIndex) => {
+  let xStart = node.topLeftStrand.xStart + ImageWidth.STRAND_LEFT - (ImageWidth.CIRCLE_BLANK / 2);
+  let yStart = ImageHeight.TILE_START + (rowIndex * (ImageHeight.TILE / 2));
+  return {x: xStart, y: yStart};
+}
 
 //#endregion
 

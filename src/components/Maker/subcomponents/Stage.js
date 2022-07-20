@@ -7,7 +7,9 @@ import {
   calculateNumberOfBackgroundImages,
   calculateNumberOfStrandImages
 } from '../resources/logic/calculationLogic';
-import { renderBackground, renderCircleFill, renderStrands } from '../resources/logic/drawLogic';
+import { renderBackground, renderCircleFill, renderNodes, renderStrands } from '../resources/logic/drawLogic';
+import { getNodeFromMouseClick, getStartStrandIndexFromMouseClick } from '../resources/logic/nodeLogic';
+import { ClickType } from '../resources/constants/nodeConstants';
 
 const Stage = () => {
 
@@ -15,10 +17,12 @@ const Stage = () => {
   const [canvasWidth, setCanvasWidth] = useState(0);
   const [canvasHeight, setCanvasHeight] = useState(0);
   const {
+    isSetupDecided,
     nodesAcross,
     rowCount,
-    startStrandInfos,
-    nodes,
+    startStrandInfos, setStartStrandInfos,
+    selectedColor,
+    nodes, setNodes,
     colors,
   } = useContext(MakerContext);
 
@@ -68,6 +72,8 @@ const Stage = () => {
         setAreStrandsLoaded(true);
         console.log(`strand images loaded`);
       }
+    } else {
+      setAreStrandsLoaded(false);
     }
   }, [strandLoadCount]);
 
@@ -79,9 +85,19 @@ const Stage = () => {
   }, [isBgLoaded]);
 
   useEffect(() => {
+    if (areStrandsLoaded) {
+      renderNodes(canvasRef.current, nodes);
+    }
+  }, [areStrandsLoaded]);
+
+  useEffect(() => {
     if (colors) {
-      //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+      renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
       renderStrands(canvasRef.current, nodes, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+      // renderNodes(canvasRef.current, nodes);
+      if (areStrandsLoaded) {
+        renderNodes(canvasRef.current, nodes);
+      }
     }
   }, [colors, nodes]);
 
@@ -96,6 +112,10 @@ const Stage = () => {
         //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
         renderStrands(canvasRef.current, nodes, rowCount, clearStrandLoadCount, addToStrandLoadCount);
       }
+
+      if (areStrandsLoaded) {
+        renderNodes(canvasRef.current, nodes);
+      }
     }
   }, [canvasWidth]);
 
@@ -109,6 +129,10 @@ const Stage = () => {
       if (isBgLoaded) {
         //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
         renderStrands(canvasRef.current, nodes, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+      }
+
+      if (areStrandsLoaded) {
+        renderNodes(canvasRef.current, nodes);
       }
     }
   }, [canvasHeight]);
@@ -148,9 +172,59 @@ const Stage = () => {
 
   //#endregion
 
+  //#region Event Methods
+
+  const rightClickCanvas = (evt) => {
+    evt.preventDefault();
+    clickCanvas(evt, true);
+  }
+
+  const clickCanvas = (evt, isRightClick = false) => {
+    let mousePos = getMousePos(canvasRef.current, evt);
+    console.log(`Mouse pos: {x: ${Math.round(mousePos.x)}, y: ${Math.round(mousePos.y)}}`);
+
+    // do different checks depending on whether setup is complete or not
+    let nodesCopy = [...nodes];
+    let nodeClicked = getNodeFromMouseClick(mousePos, nodesCopy);
+
+    if (nodeClicked === null) {
+      if (!isSetupDecided) {
+        // see if they clicked a start strand
+        let strandIndex = getStartStrandIndexFromMouseClick(mousePos, startStrandInfos);
+        if (strandIndex !== null) {
+          let copy = [...startStrandInfos];
+          copy[strandIndex].letter = selectedColor.letter;
+          copy[strandIndex].color = selectedColor.color;
+          setStartStrandInfos(copy);
+        }
+      }
+    } else {
+      console.log(`node clicked`);
+      if (isRightClick) {
+        nodeClicked.clickNode(ClickType.RIGHT);
+      } else {
+        nodeClicked.clickNode(ClickType.LEFT);
+      }
+      setNodes(nodesCopy);
+    }
+
+  }
+
+  const getMousePos = (canvas, evt) => {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top
+    };
+  }
+
+  //#endregion
+
   return (
     <div>
-      <canvas ref={canvasRef} className="canvas-area" />
+      <canvas ref={canvasRef} className="canvas-area"
+        onClick={clickCanvas}
+        onContextMenu={rightClickCanvas}/>
       <br></br>
       test
     </div>

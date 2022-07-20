@@ -1,4 +1,5 @@
-import { NodeDefaults, NodeSymbol } from "../constants/nodeConstants";
+import { ClickType, NodeDefaults, NodeSymbol, NodeSymbolType } from "../constants/nodeConstants";
+import { ImageHeight, ImageWidth } from "../constants/stageConstants";
 
 
 export default class NodeModel {
@@ -16,12 +17,77 @@ export default class NodeModel {
 
     this.nodeSymbol = NodeSymbol.NONE;
     this.nodeColor = this.determineNodeColor();
+    this.nodeSymbolType = NodeSymbolType.NONE;
+
+    this.xStart = 0;
+    this.yStart = 0;
+  }
+
+  clickNode = (clickType) => {
+    // first cycle symbol type
+    this.cycleNodeSymbolType();
+
+    // now decide which symbol to change to
+    let symbol = NodeSymbol.NONE;
+    switch(clickType) {
+      case ClickType.LEFT:
+        symbol = this.getLeftClickSymbolBySymbolType();
+        break;
+      case ClickType.RIGHT:
+        symbol = this.getRightClickSymbolBySymbolType();
+    }
+
+    this.changeNodeSymbol(symbol);
   }
 
   changeNodeSymbol = (newSymbol) => {
     this.nodeSymbol = newSymbol;
     this.changeBottomStrands();
     this.nodeColor = this.determineNodeColor();
+  }
+
+  isMouseOnCircle = (position) => {
+    let xEnd = this.xStart + ImageWidth.CIRCLE_BLANK;
+    let yEnd = this.yStart + ImageHeight.CIRCLE_BLANK;
+
+    if (position.x >= this.xStart &&
+        position.x <= xEnd &&
+        position.y >= this.yStart &&
+        position.y <= yEnd) {
+          return true;
+    }
+    return false;
+  }
+
+  cycleNodeSymbolType = () => {
+    if (this.nodeSymbolType === NodeSymbolType.NONE) {
+      this.nodeSymbolType = NodeSymbolType.POINT;
+    } else if (this.nodeSymbolType === NodeSymbolType.POINT) {
+      this.nodeSymbolType = NodeSymbolType.CURVE;
+    } else if (this.nodeSymbolType === NodeSymbolType.CURVE) {
+      //this.nodeSymbolType = NodeSymbolType.NONE;
+      this.nodeSymbolType = NodeSymbolType.POINT;
+    }
+  }
+
+  getRightClickSymbolBySymbolType = () => {
+    if (this.nodeSymbolType === NodeSymbolType.NONE) {
+      return NodeSymbol.NONE;
+    } else if (this.nodeSymbolType === NodeSymbolType.POINT) {
+      return NodeSymbol.RIGHT;
+    } else if (this.nodeSymbolType === NodeSymbolType.CURVE) {
+      return NodeSymbol.LEFT_RIGHT;
+    }
+  }
+
+  getLeftClickSymbolBySymbolType = () => {
+    if (this.nodeSymbolType === NodeSymbolType.NONE) {
+      return NodeSymbol.NONE;
+    } else if (this.nodeSymbolType === NodeSymbolType.POINT) {
+      return NodeSymbol.LEFT;
+    } else if (this.nodeSymbolType === NodeSymbolType.CURVE) {
+      return NodeSymbol.RIGHT_LEFT;
+    }
   }
 
   determineNodeColor = () => {
