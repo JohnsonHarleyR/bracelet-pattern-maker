@@ -92,7 +92,10 @@ const Stage = () => {
 
   useEffect(() => {
     if (colors) {
+      if (!isSetupDecided) {
       renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
+
+      }
       renderStrands(canvasRef.current, nodes, rowCount, clearStrandLoadCount, addToStrandLoadCount);
       // renderNodes(canvasRef.current, nodes);
       if (areStrandsLoaded) {
