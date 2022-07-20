@@ -1,4 +1,4 @@
-import { ClickType, NodeDefaults, NodeSymbol, NodeSymbolType } from "../constants/nodeConstants";
+import { ClickType, NodeDefaults, NodeSymbol, NodeSymbolType as NodeSymbolShape } from "../constants/nodeConstants";
 import { ImageHeight, ImageWidth } from "../constants/stageConstants";
 
 
@@ -16,83 +16,46 @@ export default class NodeModel {
     // center position?
 
     this.nodeSymbol = NodeSymbol.NONE;
-    this.nodeColor = this.determineNodeColor();
-    this.nodeSymbolType = NodeSymbolType.NONE;
+    this.nodeSymbolShape = NodeSymbolShape.NONE;
+    this.prevClickType = ClickType.NONE;
 
     this.xStart = 0;
     this.yStart = 0;
   }
 
   clickNode = (clickType) => {
+    this.checkForNullStrands();
+    
     // first cycle symbol type
-    this.cycleNodeSymbolType();
+    if (this.prevClickType === ClickType.NONE ||
+      this.prevClickType === clickType) {
+        this.cycleNodeSymbolType();
+    }
+
+    this.prevClickType = clickType;
 
     // now decide which symbol to change to
     let symbol = NodeSymbol.NONE;
-    switch(clickType) {
-      case ClickType.LEFT:
-        symbol = this.getLeftClickSymbolBySymbolType();
-        break;
-      case ClickType.RIGHT:
-        symbol = this.getRightClickSymbolBySymbolType();
+
+    // Dont allow left or right symbols if the top strands are null
+    if (this.topLeftStrand !== null && this.topRightStrand !== null) {
+      switch(clickType) {
+        case ClickType.LEFT:
+          symbol = this.getLeftClickSymbolBySymbolType();
+          break;
+        case ClickType.RIGHT:
+          symbol = this.getRightClickSymbolBySymbolType();
+      }
     }
 
     this.changeNodeSymbol(symbol);
   }
 
-  changeNodeSymbol = (newSymbol) => {
-    this.nodeSymbol = newSymbol;
-    this.changeBottomStrands();
-    this.nodeColor = this.determineNodeColor();
-  }
-
-  isMouseOnCircle = (position) => {
-    let xEnd = this.xStart + ImageWidth.CIRCLE_BLANK;
-    let yEnd = this.yStart + ImageHeight.CIRCLE_BLANK;
-
-    if (position.x >= this.xStart &&
-        position.x <= xEnd &&
-        position.y >= this.yStart &&
-        position.y <= yEnd) {
-          return true;
-    }
-    return false;
-  }
-
-  cycleNodeSymbolType = () => {
-    if (this.nodeSymbolType === NodeSymbolType.NONE) {
-      this.nodeSymbolType = NodeSymbolType.POINT;
-    } else if (this.nodeSymbolType === NodeSymbolType.POINT) {
-      this.nodeSymbolType = NodeSymbolType.CURVE;
-    } else if (this.nodeSymbolType === NodeSymbolType.CURVE) {
-      //this.nodeSymbolType = NodeSymbolType.NONE;
-      this.nodeSymbolType = NodeSymbolType.POINT;
-    }
-  }
-
-  getRightClickSymbolBySymbolType = () => {
-    if (this.nodeSymbolType === NodeSymbolType.NONE) {
-      return NodeSymbol.NONE;
-    } else if (this.nodeSymbolType === NodeSymbolType.POINT) {
-      return NodeSymbol.RIGHT;
-    } else if (this.nodeSymbolType === NodeSymbolType.CURVE) {
-      return NodeSymbol.LEFT_RIGHT;
-    }
-  }
-
-  getLeftClickSymbolBySymbolType = () => {
-    if (this.nodeSymbolType === NodeSymbolType.NONE) {
-      return NodeSymbol.NONE;
-    } else if (this.nodeSymbolType === NodeSymbolType.POINT) {
-      return NodeSymbol.LEFT;
-    } else if (this.nodeSymbolType === NodeSymbolType.CURVE) {
-      return NodeSymbol.RIGHT_LEFT;
-    }
-  }
-
-  determineNodeColor = () => {
+  getColor = () => {
+    this.checkForNullStrands();
     switch (this.nodeSymbol) {
       default:
+      case NodeSymbol.NONE:
         return NodeDefaults.EMPTY_COLOR;
       case NodeSymbol.LEFT:
         return this.topRightStrand !== null
@@ -110,6 +73,56 @@ export default class NodeModel {
         return this.topLeftStrand !== null
         ? this.topLeftStrand.color
         : NodeDefaults.EMPTY_COLOR;
+    }
+  }
+
+  isMouseOnCircle = (position) => {
+    let xEnd = this.xStart + ImageWidth.CIRCLE_BLANK;
+    let yEnd = this.yStart + ImageHeight.CIRCLE_BLANK;
+
+    if (position.x >= this.xStart &&
+        position.x <= xEnd &&
+        position.y >= this.yStart &&
+        position.y <= yEnd) {
+          return true;
+    }
+    return false;
+  }
+
+  changeNodeSymbol = (newSymbol) => {
+    this.nodeSymbol = newSymbol;
+    this.changeBottomStrands();
+    // this.nodeColor = this.getNodeColor();
+  }
+
+  cycleNodeSymbolType = () => {
+    if (this.nodeSymbolShape === NodeSymbolShape.NONE) {
+      this.nodeSymbolShape = NodeSymbolShape.POINT;
+    } else if (this.nodeSymbolShape === NodeSymbolShape.POINT) {
+      this.nodeSymbolShape = NodeSymbolShape.CURVE;
+    } else if (this.nodeSymbolShape === NodeSymbolShape.CURVE) {
+      //this.nodeSymbolType = NodeSymbolType.NONE;
+      this.nodeSymbolShape = NodeSymbolShape.POINT;
+    }
+  }
+
+  getRightClickSymbolBySymbolType = () => {
+    if (this.nodeSymbolShape === NodeSymbolShape.NONE) {
+      return NodeSymbol.NONE;
+    } else if (this.nodeSymbolShape === NodeSymbolShape.POINT) {
+      return NodeSymbol.RIGHT;
+    } else if (this.nodeSymbolShape === NodeSymbolShape.CURVE) {
+      return NodeSymbol.LEFT_RIGHT;
+    }
+  }
+
+  getLeftClickSymbolBySymbolType = () => {
+    if (this.nodeSymbolShape === NodeSymbolShape.NONE) {
+      return NodeSymbol.NONE;
+    } else if (this.nodeSymbolShape === NodeSymbolShape.POINT) {
+      return NodeSymbol.LEFT;
+    } else if (this.nodeSymbolShape === NodeSymbolShape.CURVE) {
+      return NodeSymbol.RIGHT_LEFT;
     }
   }
 
@@ -150,6 +163,16 @@ export default class NodeModel {
       return rightNodeAbove.bottomLeftStrand;
     }
     return topRightStrand;
+  }
+
+  
+  checkForNullStrands = () => {
+    if ((this.topLeftStrand === null || this.topRightStrand === null) &&
+        this.nodeSymbol !== NodeSymbol.NONE) {
+          this.nodeSymbolShape = NodeSymbolShape.NONE;
+          this.prevClickType(ClickType.NONE);
+          this.changeNodeSymbol(NodeSymbol.NONE);
+      }
   }
 
 }

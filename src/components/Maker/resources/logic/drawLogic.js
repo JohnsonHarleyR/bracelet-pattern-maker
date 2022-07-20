@@ -15,12 +15,18 @@ import StrandEndLeft from "../images/strand-end-left.png";
 import StrandEndRight from "../images/strand-end-right.png";
 import CircleBlank from "../images/blank-circle.png";
 import CirclePointLeft from "../images/circle-left-arrow.png";
+import CirclePointLeftWhite from "../images/circle-left-arrow-white.png";
 import CirclePointRight from "../images/circle-right-arrow.png";
+import CirclePointRightWhite from "../images/circle-right-arrow-white.png";
 import CircleCurveLeft from "../images/circle-left-curve.png";
+import CircleCurveLeftWhite from "../images/circle-left-curve-white.png";
 import CircleCurveRight from "../images/circle-right-curve.png";
+import CircleCurveRightWhite from "../images/circle-right-curve-white.png";
 import { ImageHeight, ImageName, ImageWidth, LeftOrRight, StageDefaults } from "../constants/stageConstants";
 import { calculateOddNodeRenderingPosition, calculateStrandImageRenderingPosition, calculateStrandWidthAndHeight } from "./calculationLogic";
 import { NodeDefaults, NodeSymbol } from "../constants/nodeConstants";
+import { getClosestEndOfColorSpectrum } from "./hexLogic";
+import { ColorValue } from "../constants/designConstants";
 
 //#region Rendering Background
 
@@ -168,11 +174,13 @@ export const renderNodes = (canvas, nodes) => {
 }
 
 const renderNode = (canvas, node, rowIndex) => {
-  let color = node.nodeColor;
+  let color = node.getColor();
+  let isColorCloserToBlack = getClosestEndOfColorSpectrum(color) === ColorValue.BLACK
+    ? true : false;
   let xy = calculateOddNodeRenderingPosition(node, rowIndex);
   let w = ImageWidth.CIRCLE_BLANK;
   let h = ImageHeight.CIRCLE_BLANK;
-  let imageName = getNodeImageName(node);
+  let imageName = getNodeImageName(node, isColorCloserToBlack);
 
   node.startX = xy.x;
   node.startY = xy.y;
@@ -181,18 +189,26 @@ const renderNode = (canvas, node, rowIndex) => {
   //renderImage(canvas, imageName, xy.x, xy.y, w, h);
 }
 
-const getNodeImageName = (node) => {
+const getNodeImageName = (node, isColorCloserToBlack = false) => {
   switch(node.nodeSymbol) {
     case NodeSymbol.NONE:
       return ImageName.CIRCLE_BLANK;
     case NodeSymbol.LEFT:
-      return ImageName.CIRCLE_POINT_LEFT;
+      return isColorCloserToBlack
+        ? ImageName.CIRCLE_POINT_LEFT_WHITE
+        : ImageName.CIRCLE_POINT_LEFT;
     case NodeSymbol.LEFT_RIGHT:
-      return ImageName.CIRCLE_CURVE_RIGHT;
+      return isColorCloserToBlack
+        ? ImageName.CIRCLE_CURVE_RIGHT_WHITE
+        : ImageName.CIRCLE_CURVE_RIGHT;
     case NodeSymbol.RIGHT:
-      return ImageName.CIRCLE_POINT_RIGHT;
+      return isColorCloserToBlack
+        ? ImageName.CIRCLE_POINT_RIGHT_WHITE
+        : ImageName.CIRCLE_POINT_RIGHT;
     case NodeSymbol.RIGHT_LEFT:
-      return ImageName.CIRCLE_CURVE_LEFT;
+      return isColorCloserToBlack
+        ? ImageName.CIRCLE_CURVE_LEFT_WHITE
+        : ImageName.CIRCLE_CURVE_LEFT;
   }
 }
 
@@ -374,12 +390,20 @@ const getImage = (imageName) => {
       return CircleBlank;
     case ImageName.CIRCLE_POINT_LEFT:
       return CirclePointLeft;
+    case ImageName.CIRCLE_POINT_LEFT_WHITE:
+      return CirclePointLeftWhite;
     case ImageName.CIRCLE_POINT_RIGHT:
       return CirclePointRight;
+    case ImageName.CIRCLE_POINT_RIGHT_WHITE:
+      return CirclePointRightWhite;
     case ImageName.CIRCLE_CURVE_LEFT:
       return CircleCurveLeft;
+    case ImageName.CIRCLE_CURVE_LEFT_WHITE:
+      return CircleCurveLeftWhite;
     case ImageName.CIRCLE_CURVE_RIGHT:
       return CircleCurveRight;
+    case ImageName.CIRCLE_CURVE_RIGHT_WHITE:
+      return CircleCurveRightWhite;
     
   }
 }

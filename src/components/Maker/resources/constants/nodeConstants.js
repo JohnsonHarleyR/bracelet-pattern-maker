@@ -25,4 +25,5 @@ export const RowType = {
 export const ClickType = {
   RIGHT: "RIGHT",
   LEFT: "LEFT",
+  NONE: "NONE",
 }

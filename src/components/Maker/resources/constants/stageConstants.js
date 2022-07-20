@@ -6,9 +6,13 @@ export const StageDefaults = {
 export const ImageName = {
   CIRCLE_BLANK: "blank-circle.png",
   CIRCLE_POINT_LEFT: "circle-left-arrow.png",
+  CIRCLE_POINT_LEFT_WHITE: "circle-left-arrow-white.png",
   CIRCLE_POINT_RIGHT: "circle-right-arrow.png",
+  CIRCLE_POINT_RIGHT_WHITE: "circle-right-arrow-white.png",
   CIRCLE_CURVE_LEFT: "circle-left-curve.png",
+  CIRCLE_CURVE_LEFT_WHITE: "circle-left-curve-white.png",
   CIRCLE_CURVE_RIGHT: "circle-right-curve.png",
+  CIRCLE_CURVE_RIGHT_WHITE: "circle-right-curve-white.png",
 
   STRAND_LEFT: "strand-left.png",
   STRAND_RIGHT: "strand-right.png",

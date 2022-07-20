@@ -36,7 +36,7 @@ const MakerProvider = ({children}) => {
       let firstRow = createFirstRowOfNodes(startStrandInfos);
       setNodes([firstRow]);
     }
-  }, [startStrandInfos, nodesAcross]);
+  }, [nodesAcross, startStrandInfos]);
 
 
     return (
