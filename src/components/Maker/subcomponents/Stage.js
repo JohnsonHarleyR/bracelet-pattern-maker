@@ -80,7 +80,7 @@ const Stage = () => {
   useEffect(() => {
     if (isBgLoaded) {
       //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
-      renderStrands(canvasRef.current, nodes, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+      renderStrands(canvasRef.current, nodes, rowCount, isSetupDecided, clearStrandLoadCount, addToStrandLoadCount);
     }
   }, [isBgLoaded]);
 
@@ -96,7 +96,7 @@ const Stage = () => {
       renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
 
       }
-      renderStrands(canvasRef.current, nodes, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+      renderStrands(canvasRef.current, nodes, rowCount, isSetupDecided, clearStrandLoadCount, addToStrandLoadCount);
       // renderNodes(canvasRef.current, nodes);
       if (areStrandsLoaded) {
         renderNodes(canvasRef.current, nodes);
@@ -113,7 +113,7 @@ const Stage = () => {
       }
       if (isBgLoaded) {
         //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
-        renderStrands(canvasRef.current, nodes, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+        renderStrands(canvasRef.current, nodes, rowCount, isSetupDecided, clearStrandLoadCount, addToStrandLoadCount);
       }
 
       if (areStrandsLoaded) {
@@ -131,7 +131,7 @@ const Stage = () => {
       }
       if (isBgLoaded) {
         //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
-        renderStrands(canvasRef.current, nodes, rowCount, clearStrandLoadCount, addToStrandLoadCount);
+        renderStrands(canvasRef.current, nodes, rowCount, isSetupDecided, clearStrandLoadCount, addToStrandLoadCount);
       }
 
       if (areStrandsLoaded) {

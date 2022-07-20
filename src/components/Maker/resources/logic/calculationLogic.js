@@ -71,15 +71,15 @@ export const calculateOddNodeRenderingPosition = (node, rowIndex) => {
   return {x: xStart, y: yStart};
 }
 
-export const calculateEvenNodeRenderingPosition = (rowIndex, prevRow) => {
-  let aboveLeftNode = prevRow[rowIndex];
-  let aboveRightNode = prevRow[rowIndex + 1];
-  let aboveLeftX = calculateOddNodeRenderingPosition(aboveLeftNode, rowIndex).xStart;
-  let aboveRightX = calculateOddNodeRenderingPosition(aboveRightNode, rowIndex + 1).xStart;
+export const calculateEvenNodeRenderingPosition = (rowIndex, posIndex, prevRow) => {
+  let aboveLeftNode = prevRow[posIndex];
+  let aboveRightNode = prevRow[posIndex + 1];
+  let aboveLeftX = calculateOddNodeRenderingPosition(aboveLeftNode, rowIndex).x;
+  let aboveRightX = calculateOddNodeRenderingPosition(aboveRightNode, rowIndex + 1).x;
   let halfXDistance = (aboveRightX - aboveLeftX) / 2;
 
   let xStart = aboveLeftX + halfXDistance;
-  let yStart = ImageHeight.TILE_START + (rowIndex * (ImageHeight.TILE / 2));
+  let yStart = ImageHeight.TILE_START + ((rowIndex + 1) * (ImageHeight.TILE / 2));
   return {x: xStart, y: yStart};
 }
 

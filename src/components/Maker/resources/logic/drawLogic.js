@@ -25,10 +25,11 @@ import CircleCurveLeftWhite from "../images/circle-left-curve-white.png";
 import CircleCurveRight from "../images/circle-right-curve.png";
 import CircleCurveRightWhite from "../images/circle-right-curve-white.png";
 import { ImageHeight, ImageName, ImageWidth, LeftOrRight, StageDefaults } from "../constants/stageConstants";
-import { calculateOddNodeRenderingPosition, calculateStrandImageRenderingPosition, calculateStrandWidthAndHeight } from "./calculationLogic";
-import { NodeDefaults, NodeSymbol } from "../constants/nodeConstants";
+import { calculateEvenNodeRenderingPosition, calculateOddNodeRenderingPosition, calculateStrandImageRenderingPosition, calculateStrandWidthAndHeight } from "./calculationLogic";
+import { NodeDefaults, NodeSymbol, RowType } from "../constants/nodeConstants";
 import { getClosestEndOfColorSpectrum } from "./hexLogic";
 import { ColorValue, TextDefaults } from "../constants/designConstants";
+import { getRowType } from "./nodeLogic";
 
 //#region Rendering Background
 
@@ -170,16 +171,20 @@ export const renderNodes = (canvas, nodes) => {
   for (let y = 0; y < nodes.length; y++) {
     let row = nodes[y];
     for (let x = 0; x < row.length; x++) {
-      renderNode(canvas, row[x], y);
+      renderNode(canvas, row[x], x, y, nodes);
     }
   }
 }
 
-const renderNode = (canvas, node, rowIndex) => {
+const renderNode = (canvas, node, posIndex, rowIndex, nodes) => {
+  let rowType = getRowType(rowIndex);
+
   let color = node.getColor();
   let isColorCloserToBlack = getClosestEndOfColorSpectrum(color) === ColorValue.BLACK
     ? true : false;
-  let xy = calculateOddNodeRenderingPosition(node, rowIndex);
+  let xy = rowType === RowType.SHORT
+    ? calculateEvenNodeRenderingPosition(rowIndex, posIndex, nodes[rowIndex - 1])
+    : calculateOddNodeRenderingPosition(node, rowIndex);
   let w = ImageWidth.CIRCLE_BLANK;
   let h = ImageHeight.CIRCLE_BLANK;
   let imageName = getNodeImageName(node, isColorCloserToBlack);
@@ -246,7 +251,7 @@ const renderRightTopStrandText = (canvas, strandLetter, strandX, strandY) => {
 
 //#region Rendering Strands
 
-export const renderStrands = (canvas, nodes, rowCount, clearLoadedCount, addToLoadedCount) => {
+export const renderStrands = (canvas, nodes, rowCount, isSetupDecided, clearLoadedCount, addToLoadedCount) => {
   if (nodes.length === 0) {
     return;
   }
@@ -257,8 +262,13 @@ export const renderStrands = (canvas, nodes, rowCount, clearLoadedCount, addToLo
       renderFirstStrandRow(canvas, n, rowCount, addToLoadedCount);
     }
 
-    if (i === rowCount - 1) {
+    if (!isSetupDecided && i === rowCount - 1) {
       renderLastStrandRow(canvas, n, rowCount, addToLoadedCount);
+    }
+
+    // if setup is over, render slightly differently
+    if (isSetupDecided) {
+
     }
   })
 }

@@ -116,7 +116,7 @@ export const createRowOfNodes = (rowIndex, nodes, nodesAcross, rowCount) => {
 
     let newNode = new NodeModel(null, null, leftStrand, rightStrand);
     let xy = rowType === RowType.SHORT
-      ? calculateEvenNodeRenderingPosition(rowIndex, prevRow)
+      ? calculateEvenNodeRenderingPosition(rowIndex, i, prevRow)
       : calculateOddNodeRenderingPosition(newNode, 0);
     newNode.xStart = xy.x;
     newNode.yStart = xy.y;
