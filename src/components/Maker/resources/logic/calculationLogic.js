@@ -65,6 +65,14 @@ export const calculateStrandImageRenderingPosition = (positionIndex, rowIndex, c
   return {x: xStart, y: yStart};
 }
 
+export const calculateStrandImageRenderingPositionForLower = (positionIndex, rowIndex) => {
+  let yStart = ImageHeight.STRAND_START_LEFT + (rowIndex * ImageHeight.STRAND_LEFT);
+
+  let xStart = ImageWidth.TILE_START + (positionIndex * ImageWidth.STRAND_LEFT);
+
+  return {x: xStart, y: yStart};
+}
+
 export const calculateOddNodeRenderingPosition = (node, rowIndex) => {
   let xStart = node.topLeftStrand.xStart + ImageWidth.STRAND_LEFT - (ImageWidth.CIRCLE_BLANK / 2);
   let yStart = ImageHeight.TILE_START + (rowIndex * (ImageHeight.TILE / 2));
@@ -77,6 +85,7 @@ export const calculateEvenNodeRenderingPosition = (rowIndex, posIndex, prevRow) 
   let aboveLeftX = calculateOddNodeRenderingPosition(aboveLeftNode, rowIndex).x;
   let aboveRightX = calculateOddNodeRenderingPosition(aboveRightNode, rowIndex + 1).x;
   let halfXDistance = (aboveRightX - aboveLeftX) / 2;
+  console.log(`x shift for short rows: ${halfXDistance}`);
 
   let xStart = aboveLeftX + halfXDistance;
   let yStart = ImageHeight.TILE_START + ((rowIndex + 1) * (ImageHeight.TILE / 2));

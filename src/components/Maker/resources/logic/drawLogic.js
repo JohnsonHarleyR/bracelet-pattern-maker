@@ -25,7 +25,7 @@ import CircleCurveLeftWhite from "../images/circle-left-curve-white.png";
 import CircleCurveRight from "../images/circle-right-curve.png";
 import CircleCurveRightWhite from "../images/circle-right-curve-white.png";
 import { ImageHeight, ImageName, ImageWidth, LeftOrRight, StageDefaults } from "../constants/stageConstants";
-import { calculateEvenNodeRenderingPosition, calculateOddNodeRenderingPosition, calculateStrandImageRenderingPosition, calculateStrandWidthAndHeight } from "./calculationLogic";
+import { calculateEvenNodeRenderingPosition, calculateOddNodeRenderingPosition, calculateStrandImageRenderingPosition, calculateStrandImageRenderingPositionForLower, calculateStrandWidthAndHeight } from "./calculationLogic";
 import { NodeDefaults, NodeSymbol, RowType } from "../constants/nodeConstants";
 import { getClosestEndOfColorSpectrum } from "./hexLogic";
 import { ColorValue, TextDefaults } from "../constants/designConstants";
@@ -262,15 +262,95 @@ export const renderStrands = (canvas, nodes, rowCount, isSetupDecided, clearLoad
       renderFirstStrandRow(canvas, n, rowCount, addToLoadedCount);
     }
 
-    if (!isSetupDecided && i === rowCount - 1) {
+    if (i === rowCount - 1) {
       renderLastStrandRow(canvas, n, rowCount, addToLoadedCount);
     }
 
     // if setup is over, render slightly differently
-    if (isSetupDecided) {
+    if (isSetupDecided && i !== nodes.length - 1) {
+      let rowType = getRowType(i);
+      let isEndLongRow = rowType === RowType.LONG && i === rowCount - 2;
+      for (let x = 0; x < n.length; x++) {
+        if (!isEndLongRow) {
+          let belowRow = nodes[i + 1];
+          // left strand
+          let leftBelowLeftNode = rowType === RowType.LONG && x === 0
+            ? null
+            : belowRow[x];
+          let rightBelowRightNode = belowRow[x + 1];
+          renderStrandBelowOddRowNode(canvas, n[x], LeftOrRight.LEFT, leftBelowLeftNode,
+            rightBelowRightNode, i, rowCount, x);
 
+        } else {
+        }
+      }
     }
   })
+}
+
+const renderStrandBelowOddRowNode = (canvas, node, leftOrRight,
+  belowLeftNode, belowRightNode, rowIndex, rowCount, nodePosIndex) => {
+  let isEndRow = rowIndex === rowCount - 1;
+  let strandIndex = leftOrRight.LEFT
+    ? nodePosIndex * 2
+    : nodePosIndex * 2 + 1;
+  let wh = calculateStrandWidthAndHeight(rowIndex, rowCount, false);
+  let halfHeight = wh.height / 2;
+  let xy = calculateStrandImageRenderingPositionForLower(strandIndex, rowIndex);
+  let topColor = leftOrRight === LeftOrRight.LEFT
+    ? node.bottomLeftStrand !== null
+      ? node.bottomLeftStrand.color
+      : NodeDefaults.EMPTY_COLOR
+    : node.bottomRightStrand !== null
+      ? node.bottomRightStrand.color
+      : NodeDefaults.EMPTY_COLOR;
+  let bottomColor = isEndRow
+    ? topColor
+    : leftOrRight === LeftOrRight.LEFT
+      ? belowLeftNode.bottomRightStrand === null
+        ? NodeDefaults.EMPTY_COLOR
+        : belowLeftNode.bottomRightStrand.color
+      : belowRightNode.bottomLeftStrand === null
+        ? NodeDefaults.EMPTY_COLOR
+        : belowRightNode.bottomRightStrand.color;
+  let imageName = getStrandImageNameAfterSetup(leftOrRight, isEndRow);
+
+  // if (strandInfo) {
+  //   strandInfo.xStart = xy.x;
+  //   strandInfo.yStart = xy.y;
+  // }
+
+  // first fill the background color
+  //renderSquareFill(canvas, color, xy.x, xy.y, wh.width, wh.height);
+  let fillInfos = [
+    {
+      color: topColor,
+      x: xy.x,
+      y: xy.y,
+      width: wh.width,
+      height: halfHeight,
+    },
+    {
+      color: bottomColor,
+      x: xy.x,
+      y: xy.y + halfHeight,
+      width: wh.width,
+      height: halfHeight,
+    },
+  ];
+
+  // now render foreground images
+  // HACK do not worry about writing letters on top on images yet?
+  let imageInfo = {
+    imageName: imageName,
+    x: xy.x,
+    y: xy.y,
+    width: wh.width,
+    height: wh.height
+  };
+  //renderImage(canvas, imageName, xy.x, xy.y, wh.width, wh.height, addToLoadedCount);
+  let text = "";
+  renderImageWithUnderFills(canvas, imageInfo, fillInfos, false, leftOrRight, text, null);
 }
 
 const renderFirstStrandRow = (canvas, firstNodeRow, rowCount, addToLoadedCount) => {
@@ -296,6 +376,10 @@ const renderStartOrEndStrand = (canvas, strandIndex, strandInfo, rowIndex, rowCo
   let color = strandInfo !== null ? strandInfo.color : NodeDefaults.EMPTY_COLOR;
   let imageName = getStrandImageName(strandIndex, rowIndex, rowCount, isStart);
 
+  let rowType = getRowType(rowIndex);
+  if (rowType === RowType.SHORT) {
+    xy.x += NodeDefaults.SHORT_ROW_X_OFFSET;
+  }
   // if (strandInfo) {
   //   strandInfo.xStart = xy.x;
   //   strandInfo.yStart = xy.y;
@@ -358,6 +442,22 @@ const getStrandImageName = (positionIndex, rowIndex, rowCount, isStart = false) 
   }
 
   throw `Error in finding a strand image name to render. (getStrandImageName: drawLogic.js)`;
+}
+
+const getStrandImageNameAfterSetup = (leftOrRight, isLastRow) => {
+  if (leftOrRight === LeftOrRight.LEFT) {
+    if (isLastRow) {
+      return ImageName.STRAND_LEFT_FINAL_EDGE;
+    } else {
+      return ImageName.STRAND_LEFT;
+    }
+  } else {
+    if (isLastRow) {
+      return ImageName.STRAND_RIGHT_FINAL_EDGE;
+    } else {
+      return ImageName.STRAND_RIGHT;
+    }
+  }
 }
 
 //#endregion

@@ -1,6 +1,7 @@
 
 export const NodeDefaults = {
   EMPTY_COLOR: "#ffffff",
+  SHORT_ROW_X_OFFSET: 59,
 }
 
 export const NodeSymbol = {
