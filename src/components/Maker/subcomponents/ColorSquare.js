@@ -5,7 +5,6 @@ import '../resources/styling/colors.css';
 
 const ColorSquare = ({id}) => {
 
-
   const colorRef = useRef();
 
   const {colors, setColors} = useContext(MakerContext);
