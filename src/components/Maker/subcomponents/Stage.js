@@ -224,7 +224,7 @@ const Stage = () => {
   //#endregion
 
   return (
-    <div>
+    <div className="stage">
       <canvas ref={canvasRef} className="canvas-area"
         onClick={clickCanvas}
         onContextMenu={rightClickCanvas}/>

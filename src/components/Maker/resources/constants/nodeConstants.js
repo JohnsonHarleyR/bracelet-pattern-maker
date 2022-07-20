@@ -18,8 +18,8 @@ export const NodeSymbolType = {
 }
 
 export const RowType = {
-  ODD: "ODD",
-  EVEN: "EVEN",
+  LONG: "LONG",
+  SHORT: "SHORT",
 }
 
 export const ClickType = {

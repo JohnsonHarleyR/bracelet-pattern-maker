@@ -2,6 +2,7 @@
 
 //#region colors
 
+import { NodeSymbol } from "../constants/nodeConstants";
 import { calculateStrandImageRenderingPosition } from "./calculationLogic";
 
 export const getColorIndexById = (id, colors) => {
@@ -180,6 +181,25 @@ export const createNewDefaultStrandInfosArray = (strandsAcross, selectedColor, c
 
   return copy;
 
+}
+
+//#endregion
+
+//#region Button Logic
+
+export const canCompleteSetup = (nodes) => {
+  if (nodes.length === 0) {
+    return false;
+  }
+
+  let firstRow = nodes[0];
+  for (let i = 0; i < firstRow.length; i++) {
+    if (firstRow[i].nodeSymbol === NodeSymbol.NONE) {
+      return false;
+    }
+  }
+  
+  return true;
 }
 
 //#endregion

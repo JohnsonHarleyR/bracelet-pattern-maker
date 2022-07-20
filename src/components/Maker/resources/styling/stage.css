@@ -1,4 +1,7 @@
+.stage {
+  margin-top: -10;
+}
 
-#canvas-area {
+.canvas-area {
   border: 2px solid black;
 }

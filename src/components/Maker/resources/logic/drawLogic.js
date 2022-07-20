@@ -26,7 +26,7 @@ import { ImageHeight, ImageName, ImageWidth, LeftOrRight, StageDefaults } from "
 import { calculateOddNodeRenderingPosition, calculateStrandImageRenderingPosition, calculateStrandWidthAndHeight } from "./calculationLogic";
 import { NodeDefaults, NodeSymbol } from "../constants/nodeConstants";
 import { getClosestEndOfColorSpectrum } from "./hexLogic";
-import { ColorValue } from "../constants/designConstants";
+import { ColorValue, TextDefaults } from "../constants/designConstants";
 
 //#region Rendering Background
 
@@ -214,6 +214,34 @@ const getNodeImageName = (node, isColorCloserToBlack = false) => {
 
 //#endregion
 
+
+//#region Rendering Text
+export const drawText = (canvas, text, x, y) => {
+  let ctx = canvas.getContext("2d");
+  ctx.beginPath();
+  ctx.fillStyle = TextDefaults.COLOR;
+  ctx.font = TextDefaults.FONT;
+  ctx.closePath();
+  ctx.fillText(text, x, y);
+  ctx.fillText(text, x, y);
+}
+
+const renderLeftTopStrandText = (canvas, strandLetter, strandX, strandY) => {
+  let x = strandX + TextDefaults.X_LEFT_TOP_OFFSET;
+  let y = strandY + TextDefaults.Y_LEFT_TOP_OFFSET;
+
+  drawText(canvas, strandLetter, x, y);
+}
+
+const renderRightTopStrandText = (canvas, strandLetter, strandX, strandY) => {
+  let x = strandX + TextDefaults.X_RIGHT_TOP_OFFSET;
+  let y = strandY + TextDefaults.Y_RIGHT_TOP_OFFSET;
+
+  drawText(canvas, strandLetter, x, y);
+}
+
+//#endregion
+
 //#region Rendering Strands
 
 export const renderStrands = (canvas, nodes, rowCount, clearLoadedCount, addToLoadedCount) => {
@@ -235,20 +263,22 @@ export const renderStrands = (canvas, nodes, rowCount, clearLoadedCount, addToLo
 
 const renderFirstStrandRow = (canvas, firstNodeRow, rowCount, addToLoadedCount) => {
   firstNodeRow.forEach((n, i) => {
-    renderStartOrEndStrand(canvas, i * 2, n.topLeftStrand, 0, rowCount, addToLoadedCount);
-    renderStartOrEndStrand(canvas, i * 2 + 1, n.topRightStrand, 0, rowCount, addToLoadedCount);
+    renderStartOrEndStrand(canvas, i * 2, n.topLeftStrand, 0, rowCount, LeftOrRight.LEFT, addToLoadedCount);
+
+    renderStartOrEndStrand(canvas, i * 2 + 1, n.topRightStrand, 0, rowCount, LeftOrRight.RIGHT, addToLoadedCount);
+    //renderRightTopStrandText(canvas, n.topRightStrand, xy.x, xy.y);
   })
 }
 
 const renderLastStrandRow = (canvas, lastNodeRow, rowCount, addToLoadedCount) => {
   let index = rowCount - 1;
   lastNodeRow.forEach((n, i) => {
-    renderStartOrEndStrand(canvas, i * 2, n.bottomLeftStrand, index, rowCount, addToLoadedCount, false);
-    renderStartOrEndStrand(canvas, i * 2 + 1, n.bottomRightStrand, index, rowCount, addToLoadedCount, false);
+    renderStartOrEndStrand(canvas, i * 2, n.bottomLeftStrand, index, rowCount, LeftOrRight.LEFT, addToLoadedCount, false);
+    renderStartOrEndStrand(canvas, i * 2 + 1, n.bottomRightStrand, index, rowCount, LeftOrRight.RIGHT, addToLoadedCount, false);
   })
 }
 
-const renderStartOrEndStrand = (canvas, strandIndex, strandInfo, rowIndex, rowCount, addToLoadedCount, isStart = true) => {
+const renderStartOrEndStrand = (canvas, strandIndex, strandInfo, rowIndex, rowCount, leftOrRight, addToLoadedCount, isStart = true) => {
   let wh = calculateStrandWidthAndHeight(rowIndex, rowCount, isStart);
   let xy = calculateStrandImageRenderingPosition(strandIndex, rowIndex, canvas.height, !isStart);
   let color = strandInfo !== null ? strandInfo.color : NodeDefaults.EMPTY_COLOR;
@@ -279,7 +309,10 @@ const renderStartOrEndStrand = (canvas, strandIndex, strandInfo, rowIndex, rowCo
     height: wh.height
   };
   //renderImage(canvas, imageName, xy.x, xy.y, wh.width, wh.height, addToLoadedCount);
-  renderImageWithUnderFills(canvas, imageInfo, fillInfos, addToLoadedCount);
+  let text = strandInfo 
+    ? strandInfo.letter
+    : "";
+  renderImageWithUnderFills(canvas, imageInfo, fillInfos, isStart, leftOrRight, text, addToLoadedCount);
 }
 
 const getStrandImageName = (positionIndex, rowIndex, rowCount, isStart = false) => {
@@ -341,7 +374,7 @@ const renderCircleImageWithUnderFill = (canvas, imageName, color, x, y, width, h
   };
 }
 
-const renderImageWithUnderFills = (canvas, imageInfo, fillInfos, addToLoadedCount) => {
+const renderImageWithUnderFills = (canvas, imageInfo, fillInfos, isStart = false, leftOrRight, text, addToLoadedCount) => {
   let ctx = canvas.getContext("2d");
   let image = new Image();
   image.src = getImage(imageInfo.imageName);
@@ -350,7 +383,18 @@ const renderImageWithUnderFills = (canvas, imageInfo, fillInfos, addToLoadedCoun
       renderSquareFill(canvas, fi.color, fi.x, fi.y, fi.width, fi.height);
     });
     ctx.drawImage(image, imageInfo.x, imageInfo.y, imageInfo.width, imageInfo.height);
-    addToLoadedCount();
+
+    if (isStart) {
+      if (leftOrRight === LeftOrRight.LEFT) {
+        renderLeftTopStrandText(canvas, text, imageInfo.x, imageInfo.y);
+      } else {
+        renderRightTopStrandText(canvas, text, imageInfo.x, imageInfo.y);
+      }
+    }
+
+    if (addToLoadedCount) {
+      addToLoadedCount();
+    }
   };
 }
 
