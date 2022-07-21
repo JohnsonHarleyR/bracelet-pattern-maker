@@ -141,8 +141,7 @@ export const createNewDefaultStrandInfosArray = (strandsAcross, selectedColor, c
     let startIndex = strandInfos.length;
     for (let i = startIndex; i < strandsAcross; i++) {
       copy.push({
-        startIndex: i,
-        currentIndex: i,
+        index: i,
         letter: selectedColor.letter,
         color: selectedColor.color,
       });

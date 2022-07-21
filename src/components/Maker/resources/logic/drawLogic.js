@@ -257,44 +257,42 @@ export const renderStrands = (canvas, nodes, rowCount, isSetupDecided, clearLoad
   }
 
   clearLoadedCount();
-  nodes.forEach((n, i) => {
-    if (i === 0) {
-      renderFirstStrandRow(canvas, n, rowCount, addToLoadedCount);
-    }
 
-    if (i === rowCount - 1) {
-      renderLastStrandRow(canvas, n, rowCount, addToLoadedCount);
-    }
-
-    // if setup is over, render slightly differently
-    if (isSetupDecided && i !== nodes.length - 1) {
+  if (isSetupDecided) {
+    nodes.forEach((n, i) => {
+  
+      // if setup is over, render slightly differently
       let rowType = getRowType(i);
-      let isEndLongRow = rowType === RowType.LONG && i === rowCount - 2;
-      //let isLastRow = i === rowCount - 1;
-      for (let x = 0; x < n.length; x++) {
-        let belowRow = i < nodes.length - 2 
-            ? nodes[i + 1]
-            : null;
-          // left strand
-          let leftBelowLeftNode = rowType === RowType.LONG && x === 0
-            ? null
-            : belowRow !== null
-              ? belowRow[x]
+      if (i !== nodes.length - 1) {
+        for (let x = 0; x < n.length; x++) {
+
+          let belowRow = i < nodes.length - 2 
+              ? nodes[i + 1]
               : null;
-          let rightBelowRightNode = belowRow !== null
-            ? belowRow[x + 1]
-            : null;
-          renderStrandBelowOddRowNode(canvas, n[x], LeftOrRight.LEFT, leftBelowLeftNode,
-            rightBelowRightNode, i, rowCount, x, n.length);
-          renderStrandBelowOddRowNode(canvas, n[x], LeftOrRight.RIGHT, leftBelowLeftNode,
-            rightBelowRightNode, i, rowCount, x, n.length);
+            // left strand
+            let leftBelowLeftNode = rowType === RowType.LONG && x === 0
+              ? null
+              : belowRow !== null
+                ? belowRow[x]
+                : null;
+            let rightBelowRightNode = belowRow !== null
+              ? belowRow[x + 1]
+              : null;
+            renderStrandBelowOddRowNode(canvas, n[x], LeftOrRight.LEFT, leftBelowLeftNode,
+              rightBelowRightNode, i, rowCount, x, n.length, addToLoadedCount);
+            renderStrandBelowOddRowNode(canvas, n[x], LeftOrRight.RIGHT, leftBelowLeftNode,
+              rightBelowRightNode, i, rowCount, x, n.length, addToLoadedCount);
+        }
       }
-    }
-  })
+    })
+  }
+
+  renderFirstStrandRow(canvas, nodes[0], rowCount, addToLoadedCount);
+  renderLastStrandRow(canvas, nodes[rowCount - 1], rowCount, addToLoadedCount);
 }
 
 const renderStrandBelowOddRowNode = (canvas, node, leftOrRight,
-  belowLeftNode, belowRightNode, rowIndex, rowCount, nodePosIndex, nodesAcross) => {
+  belowLeftNode, belowRightNode, rowIndex, rowCount, nodePosIndex, nodesAcross, addToLoadedCount) => {
   let isEndRow = rowIndex === rowCount - 1;
   let isLastOddRow = rowIndex === rowCount - 2;
   let isFirstOrLast = nodePosIndex === 0 || nodePosIndex === nodesAcross - 1;
@@ -307,18 +305,18 @@ const renderStrandBelowOddRowNode = (canvas, node, leftOrRight,
   let topColor = leftOrRight === LeftOrRight.LEFT
     ? node !== null && node.bottomLeftStrand !== null
       ? node.bottomLeftStrand.color
-      : NodeDefaults.EMPTY_COLOR
+      : null
     : node !== null && node.bottomRightStrand !== null
       ? node.bottomRightStrand.color
-      : NodeDefaults.EMPTY_COLOR;
+      : null
   let bottomColor = isEndRow === true
     ? topColor
     : leftOrRight === LeftOrRight.LEFT
       ? belowLeftNode === null || belowLeftNode.bottomRightStrand === null
-        ? NodeDefaults.EMPTY_COLOR
+        ? null
         : belowLeftNode.bottomRightStrand.color
       : belowRightNode === null || belowRightNode.bottomLeftStrand === null
-        ? NodeDefaults.EMPTY_COLOR
+        ? null
         : belowRightNode.bottomRightStrand.color;
 
   let isEdgeLooseEnd = isLastOddRow && isFirstOrLast;
@@ -365,7 +363,13 @@ const renderStrandBelowOddRowNode = (canvas, node, leftOrRight,
   //renderImage(canvas, imageName, xy.x, xy.y, wh.width, wh.height, addToLoadedCount);
   let text = "";
   let showHalfImage = isLastOddRow && !isFirstOrLast;
-  renderImageWithUnderFills(canvas, imageInfo, fillInfos, false, leftOrRight, text, null, showHalfImage);
+  if (!showHalfImage &&
+      (nodePosIndex === 0 && imageName === ImageName.STRAND_RIGHT_FINAL_EDGE) ||
+      (nodePosIndex === nodesAcross - 1 && imageName === ImageName.STRAND_LEFT_FINAL_EDGE)) {
+        showHalfImage = true;
+        fillInfos = [fillInfos[0]];
+  }
+  renderImageWithUnderFills(canvas, imageInfo, fillInfos, false, leftOrRight, text, addToLoadedCount, showHalfImage);
 }
 
 const renderFirstStrandRow = (canvas, firstNodeRow, rowCount, addToLoadedCount) => {
@@ -507,7 +511,9 @@ const renderImageWithUnderFills = (canvas, imageInfo, fillInfos, isStart = false
   image.src = getImage(imageInfo.imageName);
   image.onload = () => {
     fillInfos.forEach(fi => {
-      renderSquareFill(canvas, fi.color, fi.x, fi.y, fi.width, fi.height);
+      if (fi.color !== null) {
+        renderSquareFill(canvas, fi.color, fi.x, fi.y, fi.width, fi.height);
+      }
     });
     if (!showHalfImage) {
       ctx.drawImage(image, imageInfo.x, imageInfo.y, imageInfo.width, imageInfo.height);

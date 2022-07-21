@@ -1,4 +1,5 @@
 import React, {useState, createContext, useEffect} from 'react';
+import { NodeDefaults } from './components/Maker/resources/constants/nodeConstants';
 import { createAllNodesAfterSetup, createFirstRowOfNodes } from './components/Maker/resources/logic/nodeLogic';
 
 const MakerContext = createContext({});
@@ -47,7 +48,7 @@ const MakerProvider = ({children}) => {
 
   useEffect(() => {
     if (isSetupDecided) {
-      setRowCount(2);
+      setRowCount(NodeDefaults.ROWS_AFTER_SETUP);
     }
   }, [isSetupDecided]);
 

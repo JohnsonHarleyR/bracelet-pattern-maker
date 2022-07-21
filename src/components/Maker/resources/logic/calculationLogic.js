@@ -1,5 +1,6 @@
 
-import { ImageHeight, ImageWidth } from "../constants/stageConstants"
+import { RowType } from "../constants/nodeConstants";
+import { ImageHeight, ImageWidth, LeftOrRight } from "../constants/stageConstants"
 
 //#region Basic Math Calculations
 
@@ -13,6 +14,17 @@ export const isEven = (number) => {
 //#endregion
 
 //#region Index Calculations
+
+export const getRelativeStrandIndex = (nodeIndex, rowType, leftOrRight) => {
+  let base = rowType === RowType.LONG
+    ? nodeIndex * 2
+    : nodeIndex * 2 + 1;
+  if (leftOrRight === LeftOrRight.LEFT) {
+    return base;
+  } else {
+    return base + 1;
+  }
+}
 
 export const getNodeIndexByStrandIndex = (strandIndex) => {
   // add one in order to do regular math - (index typically starts at 0)
@@ -111,18 +123,31 @@ export const calculateCanvasHeight = (rowCount) => {
 }
 
 export const calculateNumberOfBackgroundImages = (nodesAcross, rowCount) => {
-  const sideTiles = 2;
   const tilesPerNode = 2;
-  const imagesInARow = tilesPerNode * nodesAcross + sideTiles;
-  const totalRows = rowCount + sideTiles;
+  const imagesInARow = tilesPerNode * nodesAcross;
+  const imagesInAllRows = rowCount * imagesInARow;
+  const startAndEndImages = 2 * imagesInARow;
 
-  const total = imagesInARow * totalRows;
+  const total = imagesInAllRows + startAndEndImages;
+  console.log(`bg total calculated: ${total}`);
   return total;
 }
 
 export const calculateNumberOfStrandImages = (nodesAcross, rowCount) => {
   const strandsAcross = nodesAcross * 2;
   let total = strandsAcross * rowCount + strandsAcross;
+  return total;
+}
+
+export const calculateNumberOfStrandImagesAfterSetup = (nodesAcross, rowCount) => {
+  let startStrands = nodesAcross * 2;
+  let endStrands = (nodesAcross - 1) * 2;
+  let total = startStrands + endStrands;
+  for (let i = 1; i <= rowCount; i++) {
+    if (i % 2 !== 0) {
+      total += nodesAcross * 2;
+    }
+  }
   return total;
 }
 
