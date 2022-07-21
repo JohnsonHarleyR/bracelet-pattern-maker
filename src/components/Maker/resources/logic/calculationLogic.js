@@ -104,6 +104,10 @@ export const calculateEvenNodeRenderingPosition = (rowIndex, posIndex, prevRow) 
   return {x: xStart, y: yStart};
 }
 
+export const showRenderPositionDifferences = (nodes) => {
+  
+}
+
 //#endregion
 
 //#region Size Calculations
