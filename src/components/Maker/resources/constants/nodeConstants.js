@@ -1,6 +1,6 @@
 
 export const NodeDefaults = {
-  EMPTY_COLOR: "#ffffff",
+  EMPTY_COLOR: "#ffff00",
   SHORT_ROW_X_OFFSET: 59,
 }
 

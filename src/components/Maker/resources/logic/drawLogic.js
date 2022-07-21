@@ -270,50 +270,59 @@ export const renderStrands = (canvas, nodes, rowCount, isSetupDecided, clearLoad
     if (isSetupDecided && i !== nodes.length - 1) {
       let rowType = getRowType(i);
       let isEndLongRow = rowType === RowType.LONG && i === rowCount - 2;
+      //let isLastRow = i === rowCount - 1;
       for (let x = 0; x < n.length; x++) {
-        if (!isEndLongRow) {
-          let belowRow = nodes[i + 1];
+        let belowRow = i < nodes.length - 2 
+            ? nodes[i + 1]
+            : null;
           // left strand
           let leftBelowLeftNode = rowType === RowType.LONG && x === 0
             ? null
-            : belowRow[x];
-          let rightBelowRightNode = belowRow[x + 1];
+            : belowRow !== null
+              ? belowRow[x]
+              : null;
+          let rightBelowRightNode = belowRow !== null
+            ? belowRow[x + 1]
+            : null;
           renderStrandBelowOddRowNode(canvas, n[x], LeftOrRight.LEFT, leftBelowLeftNode,
-            rightBelowRightNode, i, rowCount, x);
-
-        } else {
-        }
+            rightBelowRightNode, i, rowCount, x, n.length);
+          renderStrandBelowOddRowNode(canvas, n[x], LeftOrRight.RIGHT, leftBelowLeftNode,
+            rightBelowRightNode, i, rowCount, x, n.length);
       }
     }
   })
 }
 
 const renderStrandBelowOddRowNode = (canvas, node, leftOrRight,
-  belowLeftNode, belowRightNode, rowIndex, rowCount, nodePosIndex) => {
+  belowLeftNode, belowRightNode, rowIndex, rowCount, nodePosIndex, nodesAcross) => {
   let isEndRow = rowIndex === rowCount - 1;
-  let strandIndex = leftOrRight.LEFT
+  let isLastOddRow = rowIndex === rowCount - 2;
+  let isFirstOrLast = nodePosIndex === 0 || nodePosIndex === nodesAcross - 1;
+  let strandIndex = leftOrRight === LeftOrRight.LEFT
     ? nodePosIndex * 2
     : nodePosIndex * 2 + 1;
   let wh = calculateStrandWidthAndHeight(rowIndex, rowCount, false);
   let halfHeight = wh.height / 2;
   let xy = calculateStrandImageRenderingPositionForLower(strandIndex, rowIndex);
   let topColor = leftOrRight === LeftOrRight.LEFT
-    ? node.bottomLeftStrand !== null
+    ? node !== null && node.bottomLeftStrand !== null
       ? node.bottomLeftStrand.color
       : NodeDefaults.EMPTY_COLOR
-    : node.bottomRightStrand !== null
+    : node !== null && node.bottomRightStrand !== null
       ? node.bottomRightStrand.color
       : NodeDefaults.EMPTY_COLOR;
-  let bottomColor = isEndRow
+  let bottomColor = isEndRow === true
     ? topColor
     : leftOrRight === LeftOrRight.LEFT
-      ? belowLeftNode.bottomRightStrand === null
+      ? belowLeftNode === null || belowLeftNode.bottomRightStrand === null
         ? NodeDefaults.EMPTY_COLOR
         : belowLeftNode.bottomRightStrand.color
-      : belowRightNode.bottomLeftStrand === null
+      : belowRightNode === null || belowRightNode.bottomLeftStrand === null
         ? NodeDefaults.EMPTY_COLOR
         : belowRightNode.bottomRightStrand.color;
-  let imageName = getStrandImageNameAfterSetup(leftOrRight, isEndRow);
+
+  let isEdgeLooseEnd = isLastOddRow && isFirstOrLast;
+  let imageName = getStrandImageNameAfterSetup(leftOrRight, isEdgeLooseEnd);
 
   // if (strandInfo) {
   //   strandInfo.xStart = xy.x;
@@ -322,6 +331,11 @@ const renderStrandBelowOddRowNode = (canvas, node, leftOrRight,
 
   // first fill the background color
   //renderSquareFill(canvas, color, xy.x, xy.y, wh.width, wh.height);
+  let colorTwo = imageName === ImageName.STRAND_RIGHT_FINAL_EDGE
+    || imageName === ImageName.STRAND_LEFT_FINAL_EDGE
+      ? topColor
+      : bottomColor;
+
   let fillInfos = [
     {
       color: topColor,
@@ -331,7 +345,7 @@ const renderStrandBelowOddRowNode = (canvas, node, leftOrRight,
       height: halfHeight,
     },
     {
-      color: bottomColor,
+      color: colorTwo,
       x: xy.x,
       y: xy.y + halfHeight,
       width: wh.width,
@@ -346,11 +360,12 @@ const renderStrandBelowOddRowNode = (canvas, node, leftOrRight,
     x: xy.x,
     y: xy.y,
     width: wh.width,
-    height: wh.height
+    height: wh.height,
   };
   //renderImage(canvas, imageName, xy.x, xy.y, wh.width, wh.height, addToLoadedCount);
   let text = "";
-  renderImageWithUnderFills(canvas, imageInfo, fillInfos, false, leftOrRight, text, null);
+  let showHalfImage = isLastOddRow && !isFirstOrLast;
+  renderImageWithUnderFills(canvas, imageInfo, fillInfos, false, leftOrRight, text, null, showHalfImage);
 }
 
 const renderFirstStrandRow = (canvas, firstNodeRow, rowCount, addToLoadedCount) => {
@@ -444,15 +459,15 @@ const getStrandImageName = (positionIndex, rowIndex, rowCount, isStart = false) 
   throw `Error in finding a strand image name to render. (getStrandImageName: drawLogic.js)`;
 }
 
-const getStrandImageNameAfterSetup = (leftOrRight, isLastRow) => {
+const getStrandImageNameAfterSetup = (leftOrRight, isLastSideLooseStrand) => {
   if (leftOrRight === LeftOrRight.LEFT) {
-    if (isLastRow) {
+    if (isLastSideLooseStrand) {
       return ImageName.STRAND_LEFT_FINAL_EDGE;
     } else {
       return ImageName.STRAND_LEFT;
     }
   } else {
-    if (isLastRow) {
+    if (isLastSideLooseStrand) {
       return ImageName.STRAND_RIGHT_FINAL_EDGE;
     } else {
       return ImageName.STRAND_RIGHT;
@@ -486,7 +501,7 @@ const renderCircleImageWithUnderFill = (canvas, imageName, color, x, y, width, h
   };
 }
 
-const renderImageWithUnderFills = (canvas, imageInfo, fillInfos, isStart = false, leftOrRight, text, addToLoadedCount) => {
+const renderImageWithUnderFills = (canvas, imageInfo, fillInfos, isStart = false, leftOrRight, text, addToLoadedCount, showHalfImage = false) => {
   let ctx = canvas.getContext("2d");
   let image = new Image();
   image.src = getImage(imageInfo.imageName);
@@ -494,7 +509,12 @@ const renderImageWithUnderFills = (canvas, imageInfo, fillInfos, isStart = false
     fillInfos.forEach(fi => {
       renderSquareFill(canvas, fi.color, fi.x, fi.y, fi.width, fi.height);
     });
-    ctx.drawImage(image, imageInfo.x, imageInfo.y, imageInfo.width, imageInfo.height);
+    if (!showHalfImage) {
+      ctx.drawImage(image, imageInfo.x, imageInfo.y, imageInfo.width, imageInfo.height);
+    } else {
+      ctx.drawImage(image, 0, 0, imageInfo.width, imageInfo.height / 2, imageInfo.x, imageInfo.y, imageInfo.width, imageInfo.height / 2);
+    }
+
 
     if (isStart) {
       if (leftOrRight === LeftOrRight.LEFT) {
