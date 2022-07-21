@@ -39,19 +39,20 @@ export const createFirstRowOfNodes = (startStrandInfos, nodes) => {
 
 export const createAllNodesAfterSetup = (nodes, nodesAcross, rowCount) => {
   let copy = [...nodes];
-
-  if (rowCount === 2) {
-    if (nodes.length > rowCount) {
-      copy = copy.splice(0, rowCount - 1);
-    } else if (nodes.length < rowCount) {
-      let startI = nodes.length;
-      for (let i = startI; i < rowCount; i++) {
+  
+  if (nodes.length > rowCount) {
+    copy = copy.splice(0, rowCount - 1);
+  } else if (nodes.length < rowCount) {
+    let startI = nodes.length;
+    for (let i = startI; i < rowCount; i++) {
+      if (rowCount === 2) {
         let newRow = createRowOfNodesAfterSetupFirstComplete(i, nodes, nodesAcross, rowCount);
         copy.push(newRow);
+      } else {
+
       }
     }
   }
-
 
   return copy;
 
