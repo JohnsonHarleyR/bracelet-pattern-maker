@@ -182,17 +182,17 @@ const renderNode = (canvas, node, posIndex, rowIndex, nodes) => {
   let color = node.getColor();
   let isColorCloserToBlack = getClosestEndOfColorSpectrum(color) === ColorValue.BLACK
     ? true : false;
-  let xy = rowType === RowType.SHORT
-    ? calculateEvenNodeRenderingPosition(rowIndex, posIndex, nodes[rowIndex - 1])
-    : calculateOddNodeRenderingPosition(node, rowIndex);
+  // let xy = rowType === RowType.SHORT
+  //   ? calculateEvenNodeRenderingPosition(rowIndex, posIndex, nodes[rowIndex - 1])
+  //   : calculateOddNodeRenderingPosition(node, rowIndex);
   let w = ImageWidth.CIRCLE_BLANK;
   let h = ImageHeight.CIRCLE_BLANK;
   let imageName = getNodeImageName(node, isColorCloserToBlack);
 
-  node.startX = xy.x;
-  node.startY = xy.y;
+  // node.startX = xy.x;
+  // node.startY = xy.y;
 
-  renderCircleImageWithUnderFill(canvas, imageName, color, xy.x, xy.y, w, h);
+  renderCircleImageWithUnderFill(canvas, imageName, color, node.xStart, node.yStart, w, h);
   //renderImage(canvas, imageName, xy.x, xy.y, w, h);
 }
 
@@ -272,7 +272,10 @@ export const renderStrands = (canvas, nodes, rowCount, isSetupDecided, clearLoad
   }
 
   renderFirstStrandRow(canvas, nodes[0], rowCount, addToLoadedCount);
-  renderLastStrandRow(canvas, nodes[rowCount - 1], rowCount, addToLoadedCount);
+  if (!isSetupDecided) {
+    renderLastStrandRow(canvas, nodes[rowCount - 1], rowCount, addToLoadedCount);
+  }
+
 
   // if (isSetupDecided) {
   //   showRenderPositionDifferences(nodes);
@@ -301,20 +304,28 @@ const renderBottomStrandsForRow = (canvas, nodes, rowIndex, addToLoadedCount) =>
 
     let isLooseStrandLeft = isFirst && isLastLongRow;
     let xStartLeft = node.xStart + StrandOffset.X_BOTTOM_LEFT;
-    let yStartLeft = node.yStart + StrandOffset.Y_BOTTOM_LEFT;
+    let yStartLeft = !isLastRow
+      ? node.yStart + StrandOffset.Y_BOTTOM_LEFT
+      : canvas.height - ImageHeight.STRAND_END_LEFT;
     let heightLeft = rowType === RowType.LONG && isFirst
       ? ImageHeight.STRAND_LEFT
-      : halfHeight;
+      : !isLastRow
+        ? halfHeight
+        : ImageHeight.STRAND_END_LEFT;
     let leftFillColor = node.getBottomStrandColor(LeftOrRight.LEFT);
     let leftImageName = getStrandImageNameAfterSetup(LeftOrRight.LEFT, isLooseStrandLeft, isLastRow);
     renderBottomStrand(canvas, leftFillColor, leftImageName, xStartLeft, yStartLeft, width, heightLeft, addToLoadedCount);
 
     let isLooseStrandRight = isLast && isLastLongRow;
     let xStartRight = node.xStart + StrandOffset.X_BOTTOM_RIGHT;
-    let yStartRight = node.yStart + StrandOffset.Y_BOTTOM_RIGHT;
+    let yStartRight = !isLastRow
+      ? node.yStart + StrandOffset.Y_BOTTOM_RIGHT
+      : canvas.height - ImageHeight.STRAND_END_RIGHT;
     let heightRight = rowType === RowType.LONG && isLast
       ? ImageHeight.STRAND_RIGHT
-      : halfHeight;
+      : !isLastRow
+        ? halfHeight
+        : ImageHeight.STRAND_END_RIGHT;
     let rightFillColor = node.getBottomStrandColor(LeftOrRight.RIGHT);
     let rightImageName = getStrandImageNameAfterSetup(LeftOrRight.RIGHT, isLooseStrandRight, isLastRow);
     renderBottomStrand(canvas, rightFillColor, rightImageName, xStartRight, yStartRight, width, heightRight, addToLoadedCount);

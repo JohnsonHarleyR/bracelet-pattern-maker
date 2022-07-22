@@ -45,9 +45,7 @@ export const createAllNodesAfterSetup = (nodes, nodesAcross, rowCount) => {
   } else if (nodes.length < rowCount) {
     let startI = nodes.length;
     for (let i = startI; i < rowCount; i++) {
-      let newRow = rowCount === 2
-        ? createRowOfNodesAfterSetupFirstComplete(i, nodes, nodesAcross, rowCount)
-        : createRowOfNodesAfterFirstTwo(getRowType(i), i, copy);
+      let newRow = createRowOfNodesAfterSetupFirstComplete(i, copy, nodesAcross, rowCount);
       copy.push(newRow);
     }
   }
