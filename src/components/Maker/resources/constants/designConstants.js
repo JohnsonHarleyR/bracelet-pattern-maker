@@ -13,3 +13,9 @@ export const TextDefaults = {
   X_RIGHT_TOP_OFFSET: 26,
   Y_RIGHT_TOP_OFFSET: 14,
 }
+
+export const PatternDefaults = {
+  TILE_SIZE: 4,
+  LINE_THICKNESS: 1,
+  LINE_COLOR: "#000000",
+}

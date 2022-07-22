@@ -105,30 +105,31 @@ export const calculateEvenNodeRenderingPosition = (rowIndex, posIndex, prevRow) 
 }
 
 export const showRenderPositionDifferences = (nodes) => {
-  let firstRow = nodes[0];
-  let secondRow = nodes[1];
-  let nodeA1 = firstRow[0];
-  let nodeA2 = firstRow[1];
-  let nodeB1 = secondRow[0];
 
-  let xNodeDif = Math.abs(nodeA2.xStart - nodeA1.xStart);
-  console.log(`x difference between nodes: ${xNodeDif}`);
+  // let firstRow = nodes[0];
+  // let secondRow = nodes[1];
+  // let nodeA1 = firstRow[0];
+  // let nodeA2 = firstRow[1];
+  // let nodeB1 = secondRow[0];
 
-  let yNodeDif = Math.abs(nodeB1.yStart - nodeA1.yStart);
-  console.log(`y difference between nodes: ${yNodeDif}`);
+  // let xNodeDif = Math.abs(nodeA2.xStart - nodeA1.xStart);
+  // console.log(`x difference between nodes: ${xNodeDif}`);
 
-  let xLongNodeEdgeDif = nodeA1.xStart;
-  console.log(`long row left node distance to left side: ${xLongNodeEdgeDif}`);
+  // let yNodeDif = Math.abs(nodeB1.yStart - nodeA1.yStart);
+  // console.log(`y difference between nodes: ${yNodeDif}`);
 
-  let xShortNodeEdgeDif = nodeB1.xStart;
-  console.log(`short row left node distance to left side: ${xShortNodeEdgeDif}`);
+  // let xLongNodeEdgeDif = nodeA1.xStart;
+  // console.log(`long row left node distance to left side: ${xLongNodeEdgeDif}`);
 
-  let xLongLeftStrandDif = nodeA1.bottomLeftInfo.x - nodeA1.xStart;
-  let yLongLeftStrandDif = nodeA1.bottomLeftInfo.y - nodeA1.yStart;
-  let xLongRightStrandDif = nodeA1.bottomRightInfo.x - nodeA1.xStart;
-  let yLongRightStrandDif = nodeA1.bottomRightInfo.y - nodeA1.yStart;
-  console.log(`node left strand rel difs: {x: ${xLongLeftStrandDif}, y ${yLongLeftStrandDif}}`);
-  console.log(`node right strand rel difs: {x: ${xLongRightStrandDif}, y ${yLongRightStrandDif}}`);
+  // let xShortNodeEdgeDif = nodeB1.xStart;
+  // console.log(`short row left node distance to left side: ${xShortNodeEdgeDif}`);
+
+  // let xLongLeftStrandDif = nodeA1.bottomLeftInfo.x - nodeA1.xStart;
+  // let yLongLeftStrandDif = nodeA1.bottomLeftInfo.y - nodeA1.yStart;
+  // let xLongRightStrandDif = nodeA1.bottomRightInfo.x - nodeA1.xStart;
+  // let yLongRightStrandDif = nodeA1.bottomRightInfo.y - nodeA1.yStart;
+  // console.log(`node left strand rel difs: {x: ${xLongLeftStrandDif}, y ${yLongLeftStrandDif}}`);
+  // console.log(`node right strand rel difs: {x: ${xLongRightStrandDif}, y ${yLongRightStrandDif}}`);
 
   // let xShortLeftStrandDif = nodeA1.bottomLeftInfo.x - nodeB1.xStart;
   // let yShortLeftStrandDif = nodeA1.bottomLeftInfo.y - nodeB1.yStart;
@@ -163,7 +164,7 @@ export const calculateNumberOfBackgroundImages = (nodesAcross, rowCount) => {
   const startAndEndImages = 2 * imagesInARow;
 
   const total = imagesInAllRows + startAndEndImages;
-  console.log(`bg total calculated: ${total}`);
+  //console.log(`bg total calculated: ${total}`);
   return total;
 }
 

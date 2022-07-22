@@ -85,31 +85,6 @@ const createRowOfNodesAfterSetupFirstComplete = (rowIndex, nodes, nodesAcross, r
     return nodeRow;
   }
 
-  // NOTE dont worry about any splicing because the number of strands cannot be changed
-  // by the time this method is used. The bool isSetupDecided should be true to use this.
-
-  // The important thing is deciding where the top left and right edge strands are coming from.
-  // **If it is a "short" row, it should come from the row right before it.
-  // (Top left at start should come from bottom right, top right at end should come from bottom left.
-  // (Above node with bottom right strand for top left at start node should have same xindex.)
-  // (Above node with bottom left strand for top right at end node should have xindex + 1.)
-  // **If it is a "long" row, it should come from the previous long row - so two above it.
-  // (Top left start should come from bottom left same index.)
-  // (Top right end should come from bottom right same index.)
-
-
-
-  //let endIndex = nodesAcross - 1;
-  // let prevRowForEdges = rowType === RowType.SHORT
-  //   ? nodes[rowIndex - 1]
-  //   : nodes[rowIndex - 2];
-  // let topLeftNode = rowType === RowType.SHORT
-  //   ? prevRowForEdges[0].bottomRightStrand
-  //   : prevRowForEdges[0].bottomLeftStrand;
-  // let topRightEndStrand = rowType === RowType.SHORT
-  //   ? prevRowForEdges[endIndex].bottomLeftStrand
-  //   : prevRowForEdges[endIndex].bottomRightStrand;
-
   // now create all the nodes
   let startI = nodeRow.length;
   for (let i = startI; i < rowNodeCount; i++) {
@@ -139,19 +114,6 @@ const createRowOfNodesAfterSetupFirstComplete = (rowIndex, nodes, nodesAcross, r
       rightNodeAbove = prevRow[i + 1];
     }
 
-
-    // let leftStrand = i === 0
-    //   ? topLeftNode
-    //   : rowType === RowType.SHORT
-    //     ? prevRow[i].bottomRightStrand
-    //     : prevRow[i].bottomLeftStrand;
-
-    // let rightStrand = i === rowNodeCount - 1
-    //   ? topRightEndStrand
-    //   : rowType === RowType.SHORT
-    //     ? prevRow[endIndex].bottomLeftStrand
-    //     : prevRow[prevRow.length - 1].bottomRightStrand;
-
     let isLongLeft = isFirst && rowType === RowType.LONG;
     let isLongRight = isLast && rowType === RowType.LONG;
     let newNode = new NodeModel(`${rowIndex}-${i}`, leftNodeAbove, rightNodeAbove, isLongLeft, isLongRight);
@@ -160,11 +122,7 @@ const createRowOfNodesAfterSetupFirstComplete = (rowIndex, nodes, nodesAcross, r
       ? NodeOffset.X_FROM_EDGE_LONG
       : NodeOffset.X_FROM_EDGE_SHORT;
     newNode.xStart = xFromEdge + (i * NodeOffset.X_BETWEEN_NODES);
-    // let xy = rowType === RowType.SHORT
-    //   ? calculateEvenNodeRenderingPosition(rowIndex, i, prevRow)
-    //   : calculateOddNodeRenderingPosition(newNode, 0);
-    // newNode.xStart = xy.x;
-    // newNode.yStart = xy.y;
+
     nodeRow.push(newNode);
   }
 

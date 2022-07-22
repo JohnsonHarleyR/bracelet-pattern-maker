@@ -171,13 +171,12 @@ export const renderNodes = (canvas, nodes) => {
   for (let y = 0; y < nodes.length; y++) {
     let row = nodes[y];
     for (let x = 0; x < row.length; x++) {
-      renderNode(canvas, row[x], x, y, nodes);
+      renderNode(canvas, row[x]);
     }
   }
 }
 
-const renderNode = (canvas, node, posIndex, rowIndex, nodes) => {
-  let rowType = getRowType(rowIndex);
+const renderNode = (canvas, node) => {
 
   let color = node.getColor();
   let isColorCloserToBlack = getClosestEndOfColorSpectrum(color) === ColorValue.BLACK
@@ -330,7 +329,7 @@ const renderBottomStrandsForRow = (canvas, nodes, rowIndex, addToLoadedCount) =>
     let rightImageName = getStrandImageNameAfterSetup(LeftOrRight.RIGHT, isLooseStrandRight, isLastRow);
     renderBottomStrand(canvas, rightFillColor, rightImageName, xStartRight, yStartRight, width, heightRight, addToLoadedCount);
 
-    console.log(`Node ${row[x].id} - LN above: ${row[x].leftNodeAbove ? row[x].leftNodeAbove.id : `null`}; RN above: ${row[x].rightNodeAbove ? row[x].rightNodeAbove.id : `null`}; BL color: ${leftFillColor}; BR color ${rightFillColor}`);
+    //console.log(`Node ${row[x].id} - LN above: ${row[x].leftNodeAbove ? row[x].leftNodeAbove.id : `null`}; RN above: ${row[x].rightNodeAbove ? row[x].rightNodeAbove.id : `null`}; BL color: ${leftFillColor}; BR color ${rightFillColor}`);
 
   }
 }
@@ -347,130 +346,6 @@ const renderBottomStrand = (canvas, fillColor, imageName, xStart, yStart, width,
       addToLoadedCount();
     }
   };
-}
-
-const renderForFirstTwoStrandRows = (canvas, nodes, rowCount, addToLoadedCount) => {
-  nodes.forEach((n, i) => {
-  
-    // if setup is over, render slightly differently
-    let rowType = getRowType(i);
-    if (i !== nodes.length - 1) {
-      for (let x = 0; x < n.length; x++) {
-
-        let belowRow = i < nodes.length - 2 
-            ? nodes[i + 1]
-            : null;
-          // left strand
-          let leftBelowLeftNode = rowType === RowType.LONG && x === 0
-            ? null
-            : belowRow !== null
-              ? belowRow[x]
-              : null;
-          let rightBelowRightNode = belowRow !== null
-            ? belowRow[x + 1]
-            : null;
-          renderStrandBelowOddRowNode(canvas, n[x], LeftOrRight.LEFT, leftBelowLeftNode,
-            rightBelowRightNode, i, rowCount, x, n.length, addToLoadedCount);
-          renderStrandBelowOddRowNode(canvas, n[x], LeftOrRight.RIGHT, leftBelowLeftNode,
-            rightBelowRightNode, i, rowCount, x, n.length, addToLoadedCount);
-      }
-    }
-  });
-}
-
-const renderStrandBelowOddRowNode = (canvas, node, leftOrRight,
-  belowLeftNode, belowRightNode, rowIndex, rowCount, nodePosIndex, nodesAcross, addToLoadedCount) => {
-  let isEndRow = rowIndex === rowCount - 1;
-  let isLastOddRow = rowIndex === rowCount - 2;
-  let isFirstOrLast = nodePosIndex === 0 || nodePosIndex === nodesAcross - 1;
-  let strandIndex = leftOrRight === LeftOrRight.LEFT
-    ? nodePosIndex * 2
-    : nodePosIndex * 2 + 1;
-  let wh = calculateStrandWidthAndHeight(rowIndex, rowCount, false);
-  let halfHeight = wh.height / 2;
-  let xy = calculateStrandImageRenderingPositionForLower(strandIndex, rowIndex);
-  let topColor = leftOrRight === LeftOrRight.LEFT
-    ? node !== null && node.bottomLeftStrand !== null
-      ? node.bottomLeftStrand.color
-      : null
-    : node !== null && node.bottomRightStrand !== null
-      ? node.bottomRightStrand.color
-      : null
-  let bottomColor = isEndRow === true
-    ? topColor
-    : leftOrRight === LeftOrRight.LEFT
-      ? belowLeftNode === null || belowLeftNode.bottomRightStrand === null
-        ? null
-        : belowLeftNode.bottomRightStrand.color
-      : belowRightNode === null || belowRightNode.bottomLeftStrand === null
-        ? null
-        : belowRightNode.bottomRightStrand.color;
-
-  let isEdgeLooseEnd = isLastOddRow && isFirstOrLast;
-  let imageName = getStrandImageNameAfterSetup(leftOrRight, isEdgeLooseEnd);
-
-  // if (strandInfo) {
-  //   strandInfo.xStart = xy.x;
-  //   strandInfo.yStart = xy.y;
-  // }
-
-  // first fill the background color
-  //renderSquareFill(canvas, color, xy.x, xy.y, wh.width, wh.height);
-  let colorTwo = imageName === ImageName.STRAND_RIGHT_FINAL_EDGE
-    || imageName === ImageName.STRAND_LEFT_FINAL_EDGE
-      ? topColor
-      : bottomColor;
-
-  let fillInfos = [
-    {
-      color: topColor,
-      x: xy.x,
-      y: xy.y,
-      width: wh.width,
-      height: halfHeight,
-    },
-    {
-      color: colorTwo,
-      x: xy.x,
-      y: xy.y + halfHeight,
-      width: wh.width,
-      height: halfHeight,
-    },
-  ];
-
-  // now render foreground images
-  // HACK do not worry about writing letters on top on images yet?
-  let imageInfo = {
-    imageName: imageName,
-    x: xy.x,
-    y: xy.y,
-    width: wh.width,
-    height: wh.height,
-  };
-  //renderImage(canvas, imageName, xy.x, xy.y, wh.width, wh.height, addToLoadedCount);
-  let text = "";
-  let showHalfImage = isLastOddRow && !isFirstOrLast;
-  if (!showHalfImage &&
-      (nodePosIndex === 0 && imageName === ImageName.STRAND_RIGHT_FINAL_EDGE) ||
-      (nodePosIndex === nodesAcross - 1 && imageName === ImageName.STRAND_LEFT_FINAL_EDGE)) {
-        showHalfImage = true;
-        fillInfos = [fillInfos[0]];
-  }
-
-    // store the info inside node
-    if (leftOrRight === LeftOrRight.LEFT) {
-      node.bottomLeftInfo = {
-        x: imageInfo.x,
-        y: imageInfo.y,
-      }
-    } else {
-      node.bottomRightInfo = {
-        x: imageInfo.x,
-        y: imageInfo.y,
-      }
-    }
-
-  renderImageWithUnderFills(canvas, imageInfo, fillInfos, false, leftOrRight, text, addToLoadedCount, showHalfImage);
 }
 
 const renderFirstStrandRow = (canvas, firstNodeRow, rowCount, addToLoadedCount) => {
