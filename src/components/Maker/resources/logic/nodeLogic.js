@@ -45,12 +45,10 @@ export const createAllNodesAfterSetup = (nodes, nodesAcross, rowCount) => {
   } else if (nodes.length < rowCount) {
     let startI = nodes.length;
     for (let i = startI; i < rowCount; i++) {
-      if (rowCount === 2) {
-        let newRow = createRowOfNodesAfterSetupFirstComplete(i, nodes, nodesAcross, rowCount);
-        copy.push(newRow);
-      } else {
-
-      }
+      let newRow = rowCount === 2
+        ? createRowOfNodesAfterSetupFirstComplete(i, nodes, nodesAcross, rowCount)
+        : createRowOfNodesAfterFirstTwo(getRowType(i), i, copy);
+      copy.push(newRow);
     }
   }
 
@@ -58,7 +56,11 @@ export const createAllNodesAfterSetup = (nodes, nodesAcross, rowCount) => {
 
 }
 
-export const createRowOfNodesAfterSetupFirstComplete = (rowIndex, nodes, nodesAcross, rowCount) => {
+const createRowOfNodesAfterFirstTwo = (rowType, rowIndex, nodes) => {
+
+}
+
+const createRowOfNodesAfterSetupFirstComplete = (rowIndex, nodes, nodesAcross, rowCount) => {
   // get existing or create new row
   let nodeRow = rowCount >= rowIndex + 1 && nodes.length < rowCount
     ? []

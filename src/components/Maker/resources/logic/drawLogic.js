@@ -25,8 +25,8 @@ import CircleCurveLeftWhite from "../images/circle-left-curve-white.png";
 import CircleCurveRight from "../images/circle-right-curve.png";
 import CircleCurveRightWhite from "../images/circle-right-curve-white.png";
 import { ImageHeight, ImageName, ImageWidth, LeftOrRight, StageDefaults } from "../constants/stageConstants";
-import { calculateEvenNodeRenderingPosition, calculateOddNodeRenderingPosition, calculateStrandImageRenderingPosition, calculateStrandImageRenderingPositionForLower, calculateStrandWidthAndHeight } from "./calculationLogic";
-import { NodeDefaults, NodeSymbol, RowType } from "../constants/nodeConstants";
+import { calculateEvenNodeRenderingPosition, calculateOddNodeRenderingPosition, calculateStrandImageRenderingPosition, calculateStrandImageRenderingPositionForLower, calculateStrandWidthAndHeight, showRenderPositionDifferences } from "./calculationLogic";
+import { NodeDefaults, NodeSymbol, RowType, StrandOffset } from "../constants/nodeConstants";
 import { getClosestEndOfColorSpectrum } from "./hexLogic";
 import { ColorValue, TextDefaults } from "../constants/designConstants";
 import { getRowType } from "./nodeLogic";
@@ -260,15 +260,84 @@ export const renderStrands = (canvas, nodes, rowCount, isSetupDecided, clearLoad
 
   if (isSetupDecided) {
 
-    if (rowCount === 2) {
-      renderForFirstTwoStrandRows(canvas, nodes, rowCount, addToLoadedCount);
-    } else {
-      
+    // if (rowCount === 2) {
+    //   renderForFirstTwoStrandRows(canvas, nodes, rowCount, addToLoadedCount);
+    // } else {
+
+    // }
+
+    for (let y = 0; y < nodes.length; y++) {
+      renderBottomStrandsForRow(canvas, nodes, y, addToLoadedCount);
     }
   }
 
   renderFirstStrandRow(canvas, nodes[0], rowCount, addToLoadedCount);
   renderLastStrandRow(canvas, nodes[rowCount - 1], rowCount, addToLoadedCount);
+
+  // if (isSetupDecided) {
+  //   showRenderPositionDifferences(nodes);
+  // }
+}
+
+const renderBottomStrandsForRow = (canvas, nodes, rowIndex, addToLoadedCount) => {
+  let rowType = getRowType(rowIndex);
+  let isLastRow = rowIndex === nodes.length - 1;
+  let isLastLongRow = rowType === RowType.LONG
+    && rowIndex === nodes.length - 2;
+
+  let width = ImageWidth.STRAND_LEFT;
+
+  let row = nodes[rowIndex];
+  for (let x = 0; x < row.length; x++) {
+    let isFirst = x === 0;
+    let isLast = x === row.length - 1;
+
+    if (isLastRow) {
+      continue;
+    }
+
+    let node = row[x];
+    let halfHeight = ImageHeight.STRAND_LEFT / 2;
+
+    let isLooseStrandLeft = isFirst && isLastLongRow;
+    let xStartLeft = node.xStart + StrandOffset.X_BOTTOM_LEFT;
+    let yStartLeft = node.yStart + StrandOffset.Y_BOTTOM_LEFT;
+    let heightLeft = rowType === RowType.LONG && isFirst
+      ? ImageHeight.STRAND_LEFT
+      : halfHeight;
+    let leftFillColor = node.bottomLeftStrand !== null
+      ? node.bottomLeftStrand.color
+      : NodeDefaults.EMPTY_COLOR;
+    let leftImageName = getStrandImageNameAfterSetup(LeftOrRight.LEFT, isLooseStrandLeft);
+    renderBottomStrand(canvas, leftFillColor, leftImageName, xStartLeft, yStartLeft, width, heightLeft, addToLoadedCount);
+
+    let isLooseStrandRight = isLast && isLastLongRow;
+    let xStartRight = node.xStart + StrandOffset.X_BOTTOM_RIGHT;
+    let yStartRight = node.yStart + StrandOffset.Y_BOTTOM_RIGHT;
+    let heightRight = rowType === RowType.LONG && isLast
+      ? ImageHeight.STRAND_RIGHT
+      : halfHeight;
+    let rightFillColor = node.bottomRightStrand !== null
+      ? node.bottomRightStrand.color
+      : NodeDefaults.EMPTY_COLOR;
+    let rightImageName = getStrandImageNameAfterSetup(LeftOrRight.RIGHT, isLooseStrandRight);
+    renderBottomStrand(canvas, rightFillColor, rightImageName, xStartRight, yStartRight, width, heightRight, addToLoadedCount);
+
+  }
+}
+
+const renderBottomStrand = (canvas, fillColor, imageName, xStart, yStart, width, height, addToLoadedCount) => {
+  let ctx = canvas.getContext("2d");
+  let image = new Image();
+  image.src = getImage(imageName);
+  image.onload = () => {
+    renderSquareFill(canvas, fillColor, xStart, yStart, width, height);
+    ctx.drawImage(image, 0, 0, width, height, xStart, yStart, width, height);
+
+    if (addToLoadedCount) {
+      addToLoadedCount();
+    }
+  };
 }
 
 const renderForFirstTwoStrandRows = (canvas, nodes, rowCount, addToLoadedCount) => {
