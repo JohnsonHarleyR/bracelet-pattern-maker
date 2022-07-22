@@ -3,7 +3,7 @@ import { ImageHeight, ImageWidth, LeftOrRight } from "../constants/stageConstant
 
 
 export default class NodeModel {
-  constructor(id, leftNodeAbove, rightNodeAbove, topLeftStrand = null, topRightStrand = null) {
+  constructor(id, leftNodeAbove, rightNodeAbove, isLeftLongEdge, isRightLongEdge, topLeftStrand = null, topRightStrand = null) {
     this.id = id;
     this.topLeftStrand = this.determineTopLeftStrand(leftNodeAbove, topLeftStrand);
     this.topRightStrand =this.determineTopRightStrand(rightNodeAbove, topRightStrand);
@@ -22,6 +22,9 @@ export default class NodeModel {
 
     this.xStart = 0;
     this.yStart = 0;
+
+    this.isLeftLongEdge = isLeftLongEdge;
+    this.isRightLongEdge = isRightLongEdge;
   }
 
   clickNode = (clickType) => {
@@ -157,11 +160,15 @@ export default class NodeModel {
   
   refreshStrands = () => {
     if (this.leftNodeAbove !== null) {
-      this.topLeftStrand = this.leftNodeAbove.bottomRightStrand;
+      this.topLeftStrand = this.isLeftLongEdge
+        ? this.leftNodeAbove.bottomLeftStrand
+        : this.leftNodeAbove.bottomRightStrand;
     }
 
     if (this.rightNodeAbove !== null) {
-      this.topRightStrand = this.rightNodeAbove.bottomLeftStrand;
+      this.topRightStrand = this.isRightLongEdge
+        ? this.rightNodeAbove.bottomRightStrand
+        : this.rightNodeAbove.bottomLeftStrand;
     }
 
     this.changeBottomStrands();
