@@ -1,4 +1,4 @@
-import { RowType } from "../constants/nodeConstants";
+import { NodeOffset, RowType } from "../constants/nodeConstants";
 import { ImageHeight, ImageWidth } from "../constants/stageConstants";
 import NodeModel from "../models/nodeModel";
 import { calculateEvenNodeRenderingPosition, calculateOddNodeRenderingPosition } from "./calculationLogic";
@@ -70,15 +70,18 @@ const createRowOfNodesAfterSetupFirstComplete = (rowIndex, nodes, nodesAcross, r
   let rowType = getRowType(rowIndex);
 
   // decide how many nodes should be in the row
-  let nodeCount = rowType === RowType.LONG
+  let rowNodeCount = rowType === RowType.LONG
     ? nodesAcross
     : nodesAcross - 1;
 
   // get the row before it
   let prevRow = nodes[rowIndex - 1];
+  let prevTypeRow = nodes[rowIndex - 2] !== undefined
+    ? nodes[rowIndex - 2]
+    : null;
 
   // if the nodes already exist, just return the exist row.
-  if (nodeRow.length === nodeCount) {
+  if (nodeRow.length === rowNodeCount) {
     return nodeRow;
   }
 
@@ -94,38 +97,72 @@ const createRowOfNodesAfterSetupFirstComplete = (rowIndex, nodes, nodesAcross, r
   // (Top left start should come from bottom left same index.)
   // (Top right end should come from bottom right same index.)
 
-  let endIndex = nodesAcross - 1;
-  let prevRowForEdges = rowType === RowType.SHORT
-    ? nodes[rowIndex - 1]
-    : nodes[rowIndex - 2];
-  let topLeftStartStrand = rowType === RowType.SHORT
-    ? prevRowForEdges[0].bottomRightStrand
-    : prevRowForEdges[0].bottomLeftStrand;
-  let topRightEndStrand = rowType === RowType.SHORT
-    ? prevRowForEdges[endIndex].bottomLeftStrand
-    : prevRowForEdges[endIndex].bottomRightStrand;
+
+
+  //let endIndex = nodesAcross - 1;
+  // let prevRowForEdges = rowType === RowType.SHORT
+  //   ? nodes[rowIndex - 1]
+  //   : nodes[rowIndex - 2];
+  // let topLeftNode = rowType === RowType.SHORT
+  //   ? prevRowForEdges[0].bottomRightStrand
+  //   : prevRowForEdges[0].bottomLeftStrand;
+  // let topRightEndStrand = rowType === RowType.SHORT
+  //   ? prevRowForEdges[endIndex].bottomLeftStrand
+  //   : prevRowForEdges[endIndex].bottomRightStrand;
 
   // now create all the nodes
   let startI = nodeRow.length;
-  for (let i = startI; i < nodeCount; i++) {
-    let leftStrand = i === 0
-      ? topLeftStartStrand
-      : rowType === RowType.SHORT
-        ? prevRow[i].bottomRightStrand
-        : prevRow[i].bottomLeftStrand;
+  for (let i = startI; i < rowNodeCount; i++) {
 
-    let rightStrand = i === nodeCount - 1
-      ? topRightEndStrand
-      : rowType === RowType.SHORT
-        ? prevRow[endIndex].bottomLeftStrand
-        : prevRow[prevRow.length - 1].bottomRightStrand;
+    let isFirst = i === 0;
+    let isLast = i === rowNodeCount - 1;
 
-    let newNode = new NodeModel(null, null, leftStrand, rightStrand);
-    let xy = rowType === RowType.SHORT
-      ? calculateEvenNodeRenderingPosition(rowIndex, i, prevRow)
-      : calculateOddNodeRenderingPosition(newNode, 0);
-    newNode.xStart = xy.x;
-    newNode.yStart = xy.y;
+    // let leftNodeAbove = isFirst && rowType === RowType.LONG
+    //   ? prevTypeRow[0]
+    //   : 
+
+    let leftNodeAbove = null;
+    if (isFirst && rowType === RowType.LONG) {
+      leftNodeAbove = prevTypeRow[i];
+    } else if (rowType === RowType.LONG) {
+      leftNodeAbove = prevRow[i - 1];
+    } else {
+      leftNodeAbove = prevRow[i];
+    }
+
+    let rightNodeAbove = null;
+    if (isLast && rowType === RowType.LONG) {
+      rightNodeAbove = prevTypeRow[i];
+    } else if (rowType === RowType.LONG) {
+      rightNodeAbove = prevRow[i];
+    } else {
+      rightNodeAbove = prevRow[i + 1];
+    }
+
+
+    // let leftStrand = i === 0
+    //   ? topLeftNode
+    //   : rowType === RowType.SHORT
+    //     ? prevRow[i].bottomRightStrand
+    //     : prevRow[i].bottomLeftStrand;
+
+    // let rightStrand = i === rowNodeCount - 1
+    //   ? topRightEndStrand
+    //   : rowType === RowType.SHORT
+    //     ? prevRow[endIndex].bottomLeftStrand
+    //     : prevRow[prevRow.length - 1].bottomRightStrand;
+
+    let newNode = new NodeModel(leftNodeAbove, rightNodeAbove);
+    newNode.yStart = prevRow[0].yStart + NodeOffset.Y_BETWEEN_NODES;
+    let xFromEdge = rowType === RowType.LONG
+      ? NodeOffset.X_FROM_EDGE_LONG
+      : NodeOffset.X_FROM_EDGE_SHORT;
+    newNode.xStart = xFromEdge + (i * NodeOffset.X_BETWEEN_NODES);
+    // let xy = rowType === RowType.SHORT
+    //   ? calculateEvenNodeRenderingPosition(rowIndex, i, prevRow)
+    //   : calculateOddNodeRenderingPosition(newNode, 0);
+    // newNode.xStart = xy.x;
+    // newNode.yStart = xy.y;
     nodeRow.push(newNode);
   }
 

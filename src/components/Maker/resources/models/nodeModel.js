@@ -1,5 +1,5 @@
 import { ClickType, NodeDefaults, NodeSymbol, NodeSymbolType as NodeSymbolShape } from "../constants/nodeConstants";
-import { ImageHeight, ImageWidth } from "../constants/stageConstants";
+import { ImageHeight, ImageWidth, LeftOrRight } from "../constants/stageConstants";
 
 
 export default class NodeModel {
@@ -24,6 +24,8 @@ export default class NodeModel {
   }
 
   clickNode = (clickType) => {
+    this.refreshStrands();
+
     this.checkForNullStrands();
     
     // first cycle symbol type
@@ -52,6 +54,7 @@ export default class NodeModel {
   }
 
   getColor = () => {
+    this.refreshStrands();
     this.checkForNullStrands();
     switch (this.nodeSymbol) {
       default:
@@ -72,6 +75,18 @@ export default class NodeModel {
       case NodeSymbol.RIGHT_LEFT:
         return this.topLeftStrand !== null
         ? this.topLeftStrand.color
+        : NodeDefaults.EMPTY_COLOR;
+    }
+  }
+
+  
+  getBottomStrandColor = (leftOrRight) => {
+    this.refreshStrands();
+    let nodeAbove = this.getNodeAbove(leftOrRight);
+    if (nodeAbove === null) {
+      let strand = this.getBottomStrand(leftOrRight);
+      return strand !== null
+        ? strand.color
         : NodeDefaults.EMPTY_COLOR;
     }
   }
@@ -126,6 +141,30 @@ export default class NodeModel {
     }
   }
 
+  
+  refreshStrands = () => {
+    if (this.leftNodeAbove !== null
+        && this.topLeftStrand !== this.leftNodeAbove.bottomRightStrand) {
+      this.topLeftStrand = this.leftNodeAbove.bottomRightStrand;
+    }
+
+    if (this.rightNodeAbove !== null
+        && this.topRightStrand !== this.rightNodeAbove.bottomLeftStrand) {
+      this.topRightStrand = this.rightNodeAbove.bottomLeftStrand;
+    }
+
+    this.changeBottomStrands();
+  }
+
+  
+  getBottomStrand = (leftOrRight) => {
+    if (leftOrRight === LeftOrRight.LEFT) {
+      return this.bottomLeftStrand;
+    } else {
+      return this.bottomRightStrand;
+    }
+  }
+
   changeBottomStrands = () => {
     switch (this.nodeSymbol) {
       default:
@@ -173,6 +212,15 @@ export default class NodeModel {
           this.prevClickType(ClickType.NONE);
           this.changeNodeSymbol(NodeSymbol.NONE);
       }
+  }
+
+  
+  getNodeAbove = (leftOrRight) => {
+    if (leftOrRight === LeftOrRight.LEFT) {
+      return this.leftNodeAbove;
+    } else {
+      return this.rightNodeAbove;
+    }
   }
 
 }

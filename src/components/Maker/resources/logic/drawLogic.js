@@ -292,9 +292,9 @@ const renderBottomStrandsForRow = (canvas, nodes, rowIndex, addToLoadedCount) =>
     let isFirst = x === 0;
     let isLast = x === row.length - 1;
 
-    if (isLastRow) {
-      continue;
-    }
+    // if (isLastRow) {
+    //   continue;
+    // }
 
     let node = row[x];
     let halfHeight = ImageHeight.STRAND_LEFT / 2;
@@ -305,10 +305,8 @@ const renderBottomStrandsForRow = (canvas, nodes, rowIndex, addToLoadedCount) =>
     let heightLeft = rowType === RowType.LONG && isFirst
       ? ImageHeight.STRAND_LEFT
       : halfHeight;
-    let leftFillColor = node.bottomLeftStrand !== null
-      ? node.bottomLeftStrand.color
-      : NodeDefaults.EMPTY_COLOR;
-    let leftImageName = getStrandImageNameAfterSetup(LeftOrRight.LEFT, isLooseStrandLeft);
+    let leftFillColor = node.getBottomStrandColor(LeftOrRight.LEFT);
+    let leftImageName = getStrandImageNameAfterSetup(LeftOrRight.LEFT, isLooseStrandLeft, isLastRow);
     renderBottomStrand(canvas, leftFillColor, leftImageName, xStartLeft, yStartLeft, width, heightLeft, addToLoadedCount);
 
     let isLooseStrandRight = isLast && isLastLongRow;
@@ -317,10 +315,8 @@ const renderBottomStrandsForRow = (canvas, nodes, rowIndex, addToLoadedCount) =>
     let heightRight = rowType === RowType.LONG && isLast
       ? ImageHeight.STRAND_RIGHT
       : halfHeight;
-    let rightFillColor = node.bottomRightStrand !== null
-      ? node.bottomRightStrand.color
-      : NodeDefaults.EMPTY_COLOR;
-    let rightImageName = getStrandImageNameAfterSetup(LeftOrRight.RIGHT, isLooseStrandRight);
+    let rightFillColor = node.getBottomStrandColor(LeftOrRight.RIGHT);
+    let rightImageName = getStrandImageNameAfterSetup(LeftOrRight.RIGHT, isLooseStrandRight, isLastRow);
     renderBottomStrand(canvas, rightFillColor, rightImageName, xStartRight, yStartRight, width, heightRight, addToLoadedCount);
 
   }
@@ -555,16 +551,20 @@ const getStrandImageName = (positionIndex, rowIndex, rowCount, isStart = false) 
   throw `Error in finding a strand image name to render. (getStrandImageName: drawLogic.js)`;
 }
 
-const getStrandImageNameAfterSetup = (leftOrRight, isLastSideLooseStrand) => {
+const getStrandImageNameAfterSetup = (leftOrRight, isLastSideLooseStrand, isLastRow = false) => {
   if (leftOrRight === LeftOrRight.LEFT) {
     if (isLastSideLooseStrand) {
       return ImageName.STRAND_LEFT_FINAL_EDGE;
+    } else if (isLastRow) {
+      return ImageName.STRAND_END_LEFT;
     } else {
       return ImageName.STRAND_LEFT;
     }
   } else {
     if (isLastSideLooseStrand) {
       return ImageName.STRAND_RIGHT_FINAL_EDGE;
+    } else if (isLastRow) {
+      return ImageName.STRAND_END_RIGHT;
     } else {
       return ImageName.STRAND_RIGHT;
     }
