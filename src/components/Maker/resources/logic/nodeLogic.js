@@ -26,7 +26,7 @@ export const createFirstRowOfNodes = (startStrandInfos, nodes) => {
   for (let i = startI; i < startStrandInfos.length; i++) {
     // only do on odd strands (by index + 1)
     if ((i + 1) % 2 !== 0) {
-      let newNode = new NodeModel(null, null, startStrandInfos[i], startStrandInfos[i + 1]);
+      let newNode = new NodeModel(`0-${i / 2}`, null, null, startStrandInfos[i], startStrandInfos[i + 1]);
       let xy = calculateOddNodeRenderingPosition(newNode, 0);
       newNode.xStart = xy.x;
       newNode.yStart = xy.y;
@@ -150,7 +150,7 @@ const createRowOfNodesAfterSetupFirstComplete = (rowIndex, nodes, nodesAcross, r
     //     ? prevRow[endIndex].bottomLeftStrand
     //     : prevRow[prevRow.length - 1].bottomRightStrand;
 
-    let newNode = new NodeModel(leftNodeAbove, rightNodeAbove);
+    let newNode = new NodeModel(`${rowIndex}-${i}`, leftNodeAbove, rightNodeAbove);
     newNode.yStart = prevRow[0].yStart + NodeOffset.Y_BETWEEN_NODES;
     let xFromEdge = rowType === RowType.LONG
       ? NodeOffset.X_FROM_EDGE_LONG

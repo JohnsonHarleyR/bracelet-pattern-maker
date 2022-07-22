@@ -3,7 +3,8 @@ import { ImageHeight, ImageWidth, LeftOrRight } from "../constants/stageConstant
 
 
 export default class NodeModel {
-  constructor(leftNodeAbove, rightNodeAbove, topLeftStrand = null, topRightStrand = null) {
+  constructor(id, leftNodeAbove, rightNodeAbove, topLeftStrand = null, topRightStrand = null) {
+    this.id = id;
     this.topLeftStrand = this.determineTopLeftStrand(leftNodeAbove, topLeftStrand);
     this.topRightStrand =this.determineTopRightStrand(rightNodeAbove, topRightStrand);
 
@@ -24,7 +25,6 @@ export default class NodeModel {
   }
 
   clickNode = (clickType) => {
-    this.refreshStrands();
 
     this.checkForNullStrands();
     
@@ -82,13 +82,25 @@ export default class NodeModel {
   
   getBottomStrandColor = (leftOrRight) => {
     this.refreshStrands();
-    let nodeAbove = this.getNodeAbove(leftOrRight);
-    if (nodeAbove === null) {
-      let strand = this.getBottomStrand(leftOrRight);
-      return strand !== null
-        ? strand.color
-        : NodeDefaults.EMPTY_COLOR;
+    if (this.nodeSymbol === NodeSymbol.NONE) {
+      return NodeDefaults.EMPTY_COLOR;
     }
+    if (leftOrRight === LeftOrRight.LEFT) {
+      return this.bottomLeftStrand !== null
+        ? this.bottomLeftStrand.color
+        : NodeDefaults.EMPTY_COLOR;
+    } else {
+      return this.bottomRightStrand !== null
+      ? this.bottomRightStrand.color
+      : NodeDefaults.EMPTY_COLOR;
+    }
+    // let nodeAbove = this.getNodeAbove(leftOrRight);
+    // if (nodeAbove === null) {
+    //   let strand = this.getBottomStrand(leftOrRight);
+    //   return strand !== null
+    //     ? strand.color
+    //     : NodeDefaults.EMPTY_COLOR;
+    // }
   }
 
   isMouseOnCircle = (position) => {
@@ -106,6 +118,7 @@ export default class NodeModel {
 
   changeNodeSymbol = (newSymbol) => {
     this.nodeSymbol = newSymbol;
+    this.refreshStrands();
     this.changeBottomStrands();
     // this.nodeColor = this.getNodeColor();
   }
@@ -143,13 +156,11 @@ export default class NodeModel {
 
   
   refreshStrands = () => {
-    if (this.leftNodeAbove !== null
-        && this.topLeftStrand !== this.leftNodeAbove.bottomRightStrand) {
+    if (this.leftNodeAbove !== null) {
       this.topLeftStrand = this.leftNodeAbove.bottomRightStrand;
     }
 
-    if (this.rightNodeAbove !== null
-        && this.topRightStrand !== this.rightNodeAbove.bottomLeftStrand) {
+    if (this.rightNodeAbove !== null) {
       this.topRightStrand = this.rightNodeAbove.bottomLeftStrand;
     }
 

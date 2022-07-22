@@ -330,6 +330,8 @@ const renderBottomStrandsForRow = (canvas, nodes, rowIndex, addToLoadedCount) =>
     let rightImageName = getStrandImageNameAfterSetup(LeftOrRight.RIGHT, isLooseStrandRight, isLastRow);
     renderBottomStrand(canvas, rightFillColor, rightImageName, xStartRight, yStartRight, width, heightRight, addToLoadedCount);
 
+    console.log(`Node ${row[x].id} - LN above: ${row[x].leftNodeAbove ? row[x].leftNodeAbove.id : `null`}; RN above: ${row[x].rightNodeAbove ? row[x].rightNodeAbove.id : `null`}; BL color: ${leftFillColor}; BR color ${rightFillColor}`);
+
   }
 }
 

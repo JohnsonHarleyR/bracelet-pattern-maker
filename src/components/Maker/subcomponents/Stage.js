@@ -28,7 +28,7 @@ const Stage = () => {
   } = useContext(MakerContext);
 
   const [isBgLoaded, setIsBgLoaded] = useState(false);
-  console.log(`calculate # of bg images`);
+  //console.log(`calculate # of bg images`);
   const [totalBgImages, setTotalBgImages] = useState(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
   let loadedBgImageCount = 0;
   const [bgLoadCount, setBgLoadCount] = useState(0);
@@ -45,7 +45,7 @@ const Stage = () => {
     if (isSetupDecided) {
       loadedBgImageCount = 0;
       loadedStrandImageCount = 0;
-      console.log(`calculate # of bg images`);
+      //console.log(`calculate # of bg images`);
       setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
       setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
       setBgLoadCount(0);
@@ -72,7 +72,7 @@ const Stage = () => {
   useEffect(() => {
     if (nodesAcross) {
       setCanvasWidth(calculateCanvasWidth(nodesAcross));
-      console.log(`calculate # of bg images`);
+      //console.log(`calculate # of bg images`);
       setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
       if (!isSetupDecided) {
         setTotalStrandImages(calculateNumberOfStrandImages(nodesAcross, rowCount));
@@ -86,7 +86,7 @@ const Stage = () => {
   useEffect(() => {
     if (rowCount) {
       setCanvasHeight(calculateCanvasHeight(rowCount));
-      console.log(`calculate # of bg images`);
+      //console.log(`calculate # of bg images`);
       setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
       if (!isSetupDecided) {
         setTotalStrandImages(calculateNumberOfStrandImages(nodesAcross, rowCount));
@@ -97,7 +97,7 @@ const Stage = () => {
   }, [rowCount]);
 
   useEffect(() => {
-    console.log(`bgLoadCount: ${bgLoadCount}`);
+    //console.log(`bgLoadCount: ${bgLoadCount}`);
     if (bgLoadCount && bgLoadCount !== 0) {
       //console.log(`loaded: ${bgLoadCount}/${totalBgImages}`);
       if (bgLoadCount === totalBgImages) {
@@ -112,10 +112,10 @@ const Stage = () => {
       //console.log(`loaded: ${bgLoadCount}/${totalBgImages}`);
       if (strandLoadCount === totalStrandImages) {
         setAreStrandsLoaded(true);
-        console.log(`strand images loaded: ${strandLoadCount}/${totalStrandImages}`);
+        //console.log(`strand images loaded: ${strandLoadCount}/${totalStrandImages}`);
       }
     } else {
-      console.log(`strand images loaded: ${strandLoadCount}/${totalStrandImages}`);
+      //console.log(`strand images loaded: ${strandLoadCount}/${totalStrandImages}`);
       // setAreStrandsLoaded(false);
     }
   }, [strandLoadCount]);
@@ -177,7 +177,7 @@ const Stage = () => {
       canvasRef.current.height = canvasHeight;
 
       if (isSetupDecided) {
-        console.log(`calculate # of bg images`);
+        //console.log(`calculate # of bg images`);
         setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
         setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
       }
@@ -223,7 +223,7 @@ const Stage = () => {
 
   const addToBgLoadCount = () => {
     loadedBgImageCount++;
-    console.log(`loaded bg images: ${loadedBgImageCount}/${totalBgImages}`);
+    //console.log(`loaded bg images: ${loadedBgImageCount}/${totalBgImages}`);
     //console.log(`adding to loaded count: ${loadedBgImageCount}`);
     if (loadedBgImageCount >= totalBgImages) {
       console.log('done Loading');
