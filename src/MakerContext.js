@@ -15,6 +15,8 @@ const MakerProvider = ({children}) => {
   const [startStrandInfos, setStartStrandInfos] = useState([]);
   const [nodes, setNodes] = useState([]);
 
+  const [pattern, setPattern] = useState([]);
+
   const [selectedColor, setSelectedColor] = useState({
     letter: "A",
     color: "#ff00ff"
@@ -63,6 +65,7 @@ const MakerProvider = ({children}) => {
           nodes, setNodes,
           selectedColor, setSelectedColor,
           colors, setColors,
+          pattern, setPattern,
         }}>
             {children}
         </MakerContext.Provider>

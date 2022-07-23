@@ -101,3 +101,9 @@ export const LeftOrRight = {
   LEFT: "LEFT",
   RIGHT: "RIGHT"
 }
+
+export const TileTextOffset = {
+  X_LEFT_TILE: 10,
+  X_RIGHT_TILE: ImageWidth.TILE_RIGHT - 18,
+  Y_TILE: 25.5,
+}

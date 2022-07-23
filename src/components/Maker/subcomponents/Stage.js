@@ -8,13 +8,16 @@ import {
   calculateNumberOfStrandImages,
   calculateNumberOfStrandImagesAfterSetup
 } from '../resources/logic/calculationLogic';
-import { renderBackground, renderCircleFill, renderNodes, renderStrands } from '../resources/logic/drawLogic';
+import { renderBackground, renderCircleFill, renderNodes, renderPattern, renderStrands } from '../resources/logic/drawLogic';
 import { getNodeFromMouseClick, getStartStrandIndexFromMouseClick } from '../resources/logic/nodeLogic';
 import { ClickType, NodeDefaults } from '../resources/constants/nodeConstants';
+import { calculatePatternLength, calculatePatternThickness, createPatternFromNodes } from '../resources/logic/patternLogic';
 
 const Stage = () => {
 
   const canvasRef = useRef();
+  const patternCanvasRef = useRef();
+
   const [canvasWidth, setCanvasWidth] = useState(0);
   const [canvasHeight, setCanvasHeight] = useState(0);
   const {
@@ -25,6 +28,7 @@ const Stage = () => {
     selectedColor,
     nodes, setNodes,
     colors,
+    pattern, setPattern,
   } = useContext(MakerContext);
 
   const [isBgLoaded, setIsBgLoaded] = useState(false);
@@ -52,6 +56,10 @@ const Stage = () => {
       setStrandLoadCount(0);
       setIsBgLoaded(false);
       setAreStrandsLoaded(false);
+
+      
+      patternCanvasRef.current.width = calculatePatternLength();
+      patternCanvasRef.current.height = calculatePatternThickness(nodes);
     }
   }, [isSetupDecided]);
 
@@ -140,6 +148,11 @@ const Stage = () => {
         startRenderBg();
       //renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
       }
+      else {
+        // also the pattern
+        setPattern(createPatternFromNodes(nodes));
+      }
+
       if (isBgLoaded) {
         console.log('rendering strands');
         renderStrands(canvasRef.current, nodes, rowCount, isSetupDecided, clearStrandLoadCount, addToStrandLoadCount);
@@ -198,6 +211,12 @@ const Stage = () => {
       }
     }
   }, [canvasHeight]);
+
+  useEffect(() => {
+    if (pattern && isSetupDecided) {
+      renderPattern(patternCanvasRef.current, pattern);
+    }
+  }, [pattern]);
 
   //#endregion
 
@@ -292,6 +311,10 @@ const Stage = () => {
 
   return (
     <div className="stage">
+      {!isSetupDecided
+        ? <></>
+        : <><canvas ref={patternCanvasRef} /><br></br></>
+      }
       <canvas ref={canvasRef} className="canvas-area"
         onClick={clickCanvas}
         onContextMenu={rightClickCanvas}/>

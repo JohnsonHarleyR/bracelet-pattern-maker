@@ -24,11 +24,11 @@ import CircleCurveLeft from "../images/circle-left-curve.png";
 import CircleCurveLeftWhite from "../images/circle-left-curve-white.png";
 import CircleCurveRight from "../images/circle-right-curve.png";
 import CircleCurveRightWhite from "../images/circle-right-curve-white.png";
-import { ImageHeight, ImageName, ImageWidth, LeftOrRight, StageDefaults } from "../constants/stageConstants";
+import { ImageHeight, ImageName, ImageWidth, LeftOrRight, StageDefaults, TileTextOffset } from "../constants/stageConstants";
 import { calculateEvenNodeRenderingPosition, calculateOddNodeRenderingPosition, calculateStrandImageRenderingPosition, calculateStrandImageRenderingPositionForLower, calculateStrandWidthAndHeight, showRenderPositionDifferences } from "./calculationLogic";
 import { NodeDefaults, NodeSymbol, RowType, StrandOffset } from "../constants/nodeConstants";
 import { getClosestEndOfColorSpectrum } from "./hexLogic";
-import { ColorValue, TextDefaults } from "../constants/designConstants";
+import { ColorValue, PatternDefaults, TextDefaults } from "../constants/designConstants";
 import { getRowType } from "./nodeLogic";
 
 //#region Rendering Background
@@ -58,7 +58,7 @@ const renderBackgroundTiles = (canvas, nodesAcross, rowCount, addToLoadedCount) 
 
   // render inside rows
   for (let i = 0; i < rowCount; i++) {
-    renderTileRow(canvas, nodesAcross, ImageName.TILE, y, addToLoadedCount);
+    renderTileRow(canvas, nodesAcross, ImageName.TILE, y, addToLoadedCount, i + 1);
     y += ImageHeight.TILE;
   }
 
@@ -66,14 +66,23 @@ const renderBackgroundTiles = (canvas, nodesAcross, rowCount, addToLoadedCount) 
   renderTileRow(canvas, nodesAcross, ImageName.TILE_END, y, addToLoadedCount);
 }
 
-const renderTileRow = (canvas, nodesAcross, mainTileName, yCoord, addToLoadedCount) => {
+const renderTileRow = (canvas, nodesAcross, mainTileName, yCoord, addToLoadedCount, rowNumber = null) => {
   let y = yCoord;
   let x = 0;
 
   let info = getTileInfo(mainTileName);
 
   // render left tile
-  renderImage(canvas, info.leftName, x, y, info.leftWidth, info.leftHeight, addToLoadedCount);
+  let methodToPass = rowNumber !== null
+    ? drawNumberOnTile
+    : null;
+  let paramToPass = rowNumber !== null
+    ? {xTileStart: x, yTileStart: y, number: rowNumber, leftOrRight: LeftOrRight.LEFT}
+    : {x: null, y: null, number: null, leftOrRight: null};
+
+  renderImage(canvas, info.leftName, x, y,
+    info.leftWidth, info.leftHeight, addToLoadedCount,
+    methodToPass, paramToPass);
   x = info.leftWidth;
 
   // render between tiles
@@ -85,7 +94,12 @@ const renderTileRow = (canvas, nodesAcross, mainTileName, yCoord, addToLoadedCou
   }
 
   // render right tiles
-  renderImage(canvas, info.rightName, x, y, info.rightWidth, info.rightHeight, addToLoadedCount);
+  paramToPass = rowNumber !== null
+    ? {xTileStart: x, yTileStart: y, number: rowNumber, leftOrRight: LeftOrRight.RIGHT}
+    : {x: null, y: null, number: null, leftOrRight: null};
+  renderImage(canvas, info.rightName, x, y,
+    info.rightWidth, info.rightHeight, addToLoadedCount,
+    methodToPass, paramToPass);
 }
 
 const fillBackground = (canvas) => {
@@ -220,16 +234,27 @@ const getNodeImageName = (node, isColorCloserToBlack = false) => {
 
 //#endregion
 
-
 //#region Rendering Text
-export const drawText = (canvas, text, x, y) => {
+export const drawText = (canvas, text, x, y, color = TextDefaults.COLOR) => {
   let ctx = canvas.getContext("2d");
   ctx.beginPath();
-  ctx.fillStyle = TextDefaults.COLOR;
+  ctx.fillStyle = color;
   ctx.font = TextDefaults.FONT;
   ctx.closePath();
   ctx.fillText(text, x, y);
   ctx.fillText(text, x, y);
+}
+
+
+const drawNumberOnTile = ({canvas, xTileStart, yTileStart, number, leftOrRight}) => {
+  let yForNumber = yTileStart + TileTextOffset.Y_TILE;
+  console.log(`y for ${leftOrRight}: ${yForNumber}`);
+  let xForNumber = leftOrRight === LeftOrRight.LEFT
+    ? xTileStart + TileTextOffset.X_LEFT_TILE
+    : xTileStart + TileTextOffset.X_RIGHT_TILE;
+  if (number !== null) {
+    drawText(canvas, number, xForNumber, yForNumber, TextDefaults.TILE_NUMBER_COLOR);
+  }
 }
 
 const renderLeftTopStrandText = (canvas, strandLetter, strandX, strandY) => {
@@ -244,6 +269,36 @@ const renderRightTopStrandText = (canvas, strandLetter, strandX, strandY) => {
   let y = strandY + TextDefaults.Y_RIGHT_TOP_OFFSET;
 
   drawText(canvas, strandLetter, x, y);
+}
+
+//#endregion
+
+//#region Rendering Pattern
+
+export const renderPattern = (canvas, pattern) => {
+  
+  fillBackground(canvas);
+
+  let ctx = canvas.getContext("2d");
+
+  for (let x = 0; x <pattern.length; x++) {
+
+    let r = pattern[x];
+    for (let y = 0; y < r.length; y++) {
+      let t = r[y];
+      ctx.beginPath();
+      ctx.fillStyle = t.color;
+      ctx.fillRect(t.x, t.y, t.width, t.height);
+      ctx.lineWidth = PatternDefaults.LINE_THICKNESS;
+      ctx.strokeStyle = PatternDefaults.LINE_COLOR;
+      ctx.rect(t.x, t.y, t.width, t.height);
+      ctx.stroke();
+      //ctx.stroke();
+
+      ctx.closePath();
+
+    }
+  }
 }
 
 //#endregion
@@ -463,15 +518,23 @@ const getStrandImageNameAfterSetup = (leftOrRight, isLastSideLooseStrand, isLast
 
 //#region Rendering Images
 
-export const renderImage = (canvas, imageName, x, y, width, height, addToLoadedCount = null) => {
+export const renderImage = (canvas, imageName, x, y, width, height, addToLoadedCount = null, afterFunction = null, functionParam = null) => {
   let ctx = canvas.getContext("2d");
   let image = new Image();
   image.src = getImage(imageName);
   image.onload = () => {
     ctx.drawImage(image, x, y, width, height);
+
     if (addToLoadedCount !== null) {
       addToLoadedCount();
     }
+
+    // any function that is set to happen after drawing the image
+    if (afterFunction !== null) {
+      let params = {...functionParam, canvas}
+      afterFunction(params);
+    }
+    
   };
 }
 
