@@ -285,8 +285,11 @@ export const renderPattern = (canvas, pattern) => {
 
     let r = pattern[x];
     for (let y = 0; y < r.length; y++) {
+
       let t = r[y];
       ctx.beginPath();
+
+
       ctx.fillStyle = t.color;
       ctx.fillRect(t.x, t.y, t.width, t.height);
       ctx.lineWidth = PatternDefaults.LINE_THICKNESS;
@@ -294,12 +297,19 @@ export const renderPattern = (canvas, pattern) => {
       ctx.rect(t.x, t.y, t.width, t.height);
       ctx.stroke();
       //ctx.stroke();
-
       ctx.closePath();
-
+      ctx.restore();
     }
   }
 }
+
+// const rotateCtx = (ctx) => {
+//   // move the rotation point to the center of the rect
+//   ctx.translate( x+width/2, y+height/2 );
+
+//   // rotate the rect
+//   ctx.rotate(degrees*Math.PI/180);
+// }
 
 //#endregion
 

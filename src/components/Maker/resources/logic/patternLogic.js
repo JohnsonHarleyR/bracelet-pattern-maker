@@ -1,6 +1,7 @@
 
 import { PatternDefaults } from "../constants/designConstants";
 import { RowType } from "../constants/nodeConstants";
+import { LeftOrRight } from "../constants/stageConstants";
 import { getRowType } from "./nodeLogic";
 
 //#region Creation
@@ -27,10 +28,10 @@ export const createPatternFromNodes = (nodes) => {
         : nodes[x-1];
       let leftColor = rowType === RowType.LONG
         ? null
-        : prevRow[0].bottomLeftStrand.color;
+        : prevRow[0].getBottomStrandColor(LeftOrRight.LEFT)
       let rightColor = rowType === RowType.LONG
         ? null
-        : prevRow[prevRow.length - 1].bottomRightStrand.color;
+        : prevRow[prevRow.length - 1].getBottomStrandColor(LeftOrRight.RIGHT);
 
       let xPass = count === 0 ? x : x + 1;
       xStart = calculateXStartForPatternCol(xPass) + xStartBegin;
@@ -67,7 +68,7 @@ const createPatternColFromNodeRow = (rowType, xStart, row, vertWidth, leftColor,
       x: xStart,
       y: yStart,
       width: PatternDefaults.TILE_SIZE,
-      height: halfTileSize,
+      height: PatternDefaults.TILE_SIZE,
     });
   }
 
@@ -85,14 +86,14 @@ const createPatternColFromNodeRow = (rowType, xStart, row, vertWidth, leftColor,
 
 
   if (rowType === RowType.SHORT) {
-    yStart = yStart - halfTileSize;
+    yStart = -halfTileSize;
     // push right half tile
     newRow.push({
       color: rightColor,
       x: xStart,
-      y: 0,
+      y: yStart,
       width: PatternDefaults.TILE_SIZE,
-      height: halfTileSize
+      height: PatternDefaults.TILE_SIZE
     });
   }
 
