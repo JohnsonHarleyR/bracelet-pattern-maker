@@ -2,7 +2,7 @@
 export const NodeDefaults = {
   EMPTY_COLOR: "#ffffff",
   SHORT_ROW_X_OFFSET: 59,
-  ROWS_AFTER_SETUP: 4,
+  ROWS_AFTER_SETUP: 2,
 }
 
 export const NodeOffset = {

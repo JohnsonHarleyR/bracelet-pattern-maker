@@ -14,12 +14,13 @@ export const createPatternFromNodes = (nodes) => {
   let length = getXStartDist();
 
   let count = 0;
+  let expectedCount = PatternDefaults.TILES_LONG + nodes.length;
   let xStartBegin = 0;
   let xStart = -1 * (nodes.length * length);
   do {
 
     for (let x = 0; x < nodes.length; x++) {
-      if (count >= PatternDefaults.TILES_LONG) {
+      if (count >= expectedCount) {
         break;
       }
 
@@ -45,7 +46,7 @@ export const createPatternFromNodes = (nodes) => {
     count++;
     xStartBegin = xStart;
 
-  } while (count < PatternDefaults.TILES_LONG);
+  } while (count < expectedCount);
     // this pattern will be sidesways so switch x and y
 
 
