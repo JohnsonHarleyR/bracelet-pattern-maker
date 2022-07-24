@@ -5,7 +5,7 @@ export const ColorValue = {
 }
 
 export const PatternDefaults = {
-  TILE_SIZE: 7,
+  TILE_SIZE: 10,
   LINE_THICKNESS: .5,
   LINE_COLOR: "#000000",
   TILES_LONG: 100,

@@ -8,7 +8,7 @@ import {
   calculateNumberOfStrandImages,
   calculateNumberOfStrandImagesAfterSetup
 } from '../resources/logic/calculationLogic';
-import { renderBackground, renderCircleFill, renderNodes, renderPattern, renderStrands } from '../resources/logic/drawLogic';
+import { renderBackground, renderCircleFill, renderNodes, renderPattern, renderStrands, renderTest } from '../resources/logic/drawLogic';
 import { getNodeFromMouseClick, getStartStrandIndexFromMouseClick } from '../resources/logic/nodeLogic';
 import { ClickType, NodeDefaults } from '../resources/constants/nodeConstants';
 import { calculatePatternLength, calculatePatternThickness, createPatternFromNodes } from '../resources/logic/patternLogic';
@@ -75,6 +75,7 @@ const Stage = () => {
       console.log('rendering strands');
       renderStrands(canvasRef.current, nodes, rowCount, isSetupDecided, clearStrandLoadCount, addToStrandLoadCount);
     }
+
   },[isBgLoaded]);
 
   useEffect(() => {
@@ -298,6 +299,11 @@ const Stage = () => {
     }
 
   }
+
+  // const showMousePos = (evt) => {
+  //   let pos = getMousePos(testCanvasRef.current, evt);
+  //   console.log(pos);
+  // }
 
   const getMousePos = (canvas, evt) => {
     var rect = canvas.getBoundingClientRect();

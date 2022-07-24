@@ -188,6 +188,7 @@ export const renderNodes = (canvas, nodes) => {
       renderNode(canvas, row[x]);
     }
   }
+
 }
 
 const renderNode = (canvas, node) => {
@@ -285,22 +286,153 @@ export const renderPattern = (canvas, pattern) => {
 
     let r = pattern[x];
     for (let y = 0; y < r.length; y++) {
-
       let t = r[y];
       ctx.beginPath();
-
+      ctx.moveTo(t.yA.x, t.yA.y);
+      ctx.lineTo(t.xA.x, t.xA.y);
+      ctx.lineTo(t.yB.x, t.yB.y);
+      ctx.lineTo(t.xB.x, t.xB.y);
+      ctx.closePath();
 
       ctx.fillStyle = t.color;
-      ctx.fillRect(t.x, t.y, t.width, t.height);
+      ctx.fill();
       ctx.lineWidth = PatternDefaults.LINE_THICKNESS;
       ctx.strokeStyle = PatternDefaults.LINE_COLOR;
-      ctx.rect(t.x, t.y, t.width, t.height);
       ctx.stroke();
-      //ctx.stroke();
-      ctx.closePath();
       ctx.restore();
+      //ctx.stroke();
+      // ctx.fillStyle = t.color;
+      // ctx.fillRect(t.x, t.y, t.width, t.height);
+      // ctx.lineWidth = PatternDefaults.LINE_THICKNESS;
+      // ctx.strokeStyle = PatternDefaults.LINE_COLOR;
+      // ctx.rect(t.x, t.y, t.width, t.height);
+      // ctx.stroke();
+      // //ctx.stroke();
+      // ctx.closePath();
     }
   }
+}
+
+
+
+export const renderTest2 = (canvas, x, y, width, height, color) => {
+  //let color = "grey";
+
+  // draw original
+  let ctx = canvas.getContext("2d");
+  // ctx.fillStyle = color;
+  // ctx.fillRect(x, y, width, height);
+
+  // calculate new width
+  let newWidth = getNewLength(x, y, width, height);
+  console.log(`new width: ${newWidth}`);
+
+  // draw new square inside old one
+  let dif = width - newWidth;
+  let newX = x + (dif / 2);
+  let newY = y + (dif / 2);
+  // ctx.fillStyle = "cyan";
+  // ctx.fillRect(newX, newY, newWidth, newWidth);
+
+
+  // find center
+  let xCenter = newX + (newWidth / 2);
+  let yCenter = newY + (newWidth / 2);
+
+  // move canvas
+  ctx.translate(xCenter, yCenter);
+  //ctx.rotate(Math.PI / 2);
+  ctx.rotate(45*Math.PI/180);
+  ctx.translate(-xCenter, -yCenter);
+
+  // draw new
+  //color = "red";
+  ctx.fillStyle = color;
+  ctx.fillRect(newX, newY, newWidth, newWidth);
+  ctx.lineWidth = PatternDefaults.LINE_THICKNESS;
+  ctx.strokeStyle = PatternDefaults.LINE_COLOR;
+  ctx.rect(newX, newY, newWidth, newWidth);
+  ctx.stroke();
+  ctx.restore();
+}
+
+const getNewLength = (x, y, width, height) => {
+  let xStart = x + width / 2;
+  let xEnd = x + width;
+  let yStart = y;
+  let yEnd = y + height / 2;
+  let result = Math.hypot(xEnd - xStart, yEnd - yStart);
+  return result;
+}
+
+export const renderTest = (canvas) => {
+  fillBackground(canvas);
+  let xStart = 100;
+  let yStart = 0;
+  let width = 50;
+  let height = 50;
+
+  for (let i = 0; i < 10; i++) {
+    let isFirst = i === 0;
+    renderTest3(canvas, xStart, yStart, width, height, isFirst);
+    yStart += height;
+  }
+}
+
+const renderTest3 = (canvas, x, y, width, height, isFirst) => {
+  // fillBackground(canvas);
+  // let x = 200;
+  // let y = 150;
+  // let width = 50;
+  // let height = 50;
+  let color = "grey";
+
+  // draw original
+  let ctx = canvas.getContext("2d");
+
+  if (isFirst) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, width, height);
+  }
+
+
+  // calculate new width
+  let newWidth = getNewLength(x, y, width, height);
+  console.log(`new width: ${newWidth}`);
+
+  // draw new square inside old one
+  let dif = width - newWidth;
+  let newX = x + (dif / 2);
+  let newY = y + (dif / 2);
+  if (isFirst) {
+    ctx.fillStyle = "cyan";
+    ctx.fillRect(newX, newY, newWidth, newWidth);
+  }
+
+
+
+  // find center
+  let xCenter = newX + (newWidth / 2);
+  let yCenter = newY + (newWidth / 2);
+
+  // move canvas
+  if (isFirst) {
+    ctx.translate(xCenter, yCenter);
+    //ctx.rotate(Math.PI / 2);
+    ctx.rotate(45*Math.PI/180);
+    ctx.translate(-xCenter, -yCenter);
+  }
+
+  // draw new
+  color = "red";
+  ctx.fillStyle = color;
+  ctx.fillRect(newX, newY, newWidth, newWidth);
+
+  // back to original
+  //ctx.translate(-xCenter, -yCenter);
+  //ctx.rotate(-45*Math.PI/180);
+
+  //ctx.restore();
 }
 
 // const rotateCtx = (ctx) => {
