@@ -62,7 +62,8 @@ const Stage = () => {
       setAreStrandsLoaded(false);
 
       
-      patternCanvasRef.current.width = calculatePatternLength();
+      patternCanvasRef.current.width = canvasRef.current.width;
+      // patternCanvasRef.current.width = calculatePatternLength();
       patternCanvasRef.current.height = calculatePatternThickness(nodes);
 
       rowsAreaRef.current.style.display = "block";
