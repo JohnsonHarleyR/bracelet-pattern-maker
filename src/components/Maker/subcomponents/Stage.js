@@ -17,13 +17,17 @@ const Stage = () => {
 
   const canvasRef = useRef();
   const patternCanvasRef = useRef();
+  //TODO move add and remove buttons to own component
+  const rowsAreaRef = useRef();
+  const addButtonRef = useRef();
+  const removeButtonRef = useRef();
 
   const [canvasWidth, setCanvasWidth] = useState(0);
   const [canvasHeight, setCanvasHeight] = useState(0);
   const {
     isSetupDecided,
     nodesAcross,
-    rowCount,
+    rowCount, setRowCount,
     startStrandInfos, setStartStrandInfos,
     selectedColor,
     nodes, setNodes,
@@ -60,6 +64,10 @@ const Stage = () => {
       
       patternCanvasRef.current.width = calculatePatternLength();
       patternCanvasRef.current.height = calculatePatternThickness(nodes);
+
+      rowsAreaRef.current.style.display = "block";
+    } else {
+      rowsAreaRef.current.style.display = "none";
     }
   }, [isSetupDecided]);
 
@@ -101,6 +109,12 @@ const Stage = () => {
         setTotalStrandImages(calculateNumberOfStrandImages(nodesAcross, rowCount));
       } else {
         setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
+      }
+
+      if (canRemoveRows()) {
+        removeButtonRef.current.disabled = false;
+      } else {
+        removeButtonRef.current.disabled = true;
       }
     }
   }, [rowCount]);
@@ -223,6 +237,13 @@ const Stage = () => {
 
   //#region normal methods
 
+  const canRemoveRows = () => {
+    if (rowCount > NodeDefaults.MIN_ROWS) {
+      return true;
+    }
+    return false;
+  }
+
   const startRenderBg = () => {
     clearBgLoadCount();
     renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
@@ -260,9 +281,29 @@ const Stage = () => {
     }
   }
 
+  const addRows = () => {
+    setRowCount(rowCount + NodeDefaults.ROWS_AT_TIME);
+  }
+
+  const removeRows = () => {
+    let newRowCount = rowCount - NodeDefaults.ROWS_AT_TIME;
+    let copy = [...nodes];
+    copy = copy.splice(0, newRowCount);
+    setNodes(copy);
+    setRowCount(newRowCount);
+  }
+
   //#endregion
 
   //#region Event Methods
+
+  const clickAddButton = () => {
+    addRows();
+  }
+
+  const clickRemoveButton = () => {
+    removeRows();
+  }
 
   const rightClickCanvas = (evt) => {
     evt.preventDefault();
@@ -325,7 +366,22 @@ const Stage = () => {
         onClick={clickCanvas}
         onContextMenu={rightClickCanvas}/>
       <br></br>
-      test
+      <div className="add-remove-buttons" ref={rowsAreaRef}>
+        <button 
+          ref={addButtonRef}
+          className="button"
+          onClick={clickAddButton}
+        >
+          Add
+        </button>
+        <button
+          ref={removeButtonRef}
+          className="button"
+          onClick={clickRemoveButton}
+        >
+          Remove
+        </button>
+      </div>
     </div>
   );
 }

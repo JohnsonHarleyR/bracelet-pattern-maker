@@ -249,7 +249,7 @@ export const drawText = (canvas, text, x, y, color = TextDefaults.COLOR) => {
 
 const drawNumberOnTile = ({canvas, xTileStart, yTileStart, number, leftOrRight}) => {
   let yForNumber = yTileStart + TileTextOffset.Y_TILE;
-  console.log(`y for ${leftOrRight}: ${yForNumber}`);
+  //console.log(`y for ${leftOrRight}: ${yForNumber}`);
   let xForNumber = leftOrRight === LeftOrRight.LEFT
     ? xTileStart + TileTextOffset.X_LEFT_TILE
     : xTileStart + TileTextOffset.X_RIGHT_TILE;
