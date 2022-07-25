@@ -65,7 +65,7 @@ const renderNext = (canvas, index, array) => {
   if (array[index] === undefined) {
     return;
   }
-  
+
   let item = array[index];
 
   if (item.imageName === null) {
@@ -131,6 +131,28 @@ const addAllNodeImagesToArray = (canvas, nodes, array) => {
       addNodeImagesToArray(canvas, x, y, nodes, array);
     });
   });
+
+  nodes.forEach((row) => {
+    row.forEach((node) => {
+      addNodeCircleImageToArray(node, array);
+    });
+  });
+}
+
+const addNodeCircleImageToArray = (node, array) => {
+
+      // create actual node image and color
+      let color = node.getColor();
+      let isColorCloserToBlack = getClosestEndOfColorSpectrum(color) === ColorValue.BLACK
+      ? true : false;
+    // let xy = rowType === RowType.SHORT
+    //   ? calculateEvenNodeRenderingPosition(rowIndex, posIndex, nodes[rowIndex - 1])
+    //   : calculateOddNodeRenderingPosition(node, rowIndex);
+    let w = ImageWidth.CIRCLE_BLANK;
+    let h = ImageHeight.CIRCLE_BLANK;
+    let imageName = getNodeImageName(node, isColorCloserToBlack);
+    let nodeInfo = createImageInfoItem(color, imageName, node.xStart, node.yStart, w, h, true, null, null, null);
+    array.push(nodeInfo);
 }
 
 const addNodeImagesToArray = (canvas, posIndex, rowIndex, nodes, array) => {
@@ -187,7 +209,7 @@ const addNodeImagesToArray = (canvas, posIndex, rowIndex, nodes, array) => {
     let height = !isLastRow
       ? halfHeight
       : ImageHeight.STRAND_END_LEFT;
-    if (rowType === RowType.LONG 
+    if (rowType === RowType.LONG
       && ((isFirst && side === LeftOrRight.LEFT)
         || (isLast && side === LeftOrRight.RIGHT))) {
           height = ImageHeight.STRAND_LEFT;
@@ -196,20 +218,22 @@ const addNodeImagesToArray = (canvas, posIndex, rowIndex, nodes, array) => {
     let imageName = getStrandImageNameAfterSetup(side, isLooseStrand, isLastRow);
 
     array.push(createImageInfoItem(color, imageName, xStart, yStart, width, height, false, null, null, side));
+    
   });
 
+  //array.push(nodeInfo);
 
-  // add actual node image and color
-  let color = node.getColor();
-  let isColorCloserToBlack = getClosestEndOfColorSpectrum(color) === ColorValue.BLACK
-  ? true : false;
-// let xy = rowType === RowType.SHORT
-//   ? calculateEvenNodeRenderingPosition(rowIndex, posIndex, nodes[rowIndex - 1])
-//   : calculateOddNodeRenderingPosition(node, rowIndex);
-let w = ImageWidth.CIRCLE_BLANK;
-let h = ImageHeight.CIRCLE_BLANK;
-let imageName = getNodeImageName(node, isColorCloserToBlack);
-array.push(createImageInfoItem(color, imageName, node.xStart, node.yStart, w, h, true, null, null, null));
+//   // get actual node image and color
+//   let color = node.getColor();
+//   let isColorCloserToBlack = getClosestEndOfColorSpectrum(color) === ColorValue.BLACK
+//   ? true : false;
+// // let xy = rowType === RowType.SHORT
+// //   ? calculateEvenNodeRenderingPosition(rowIndex, posIndex, nodes[rowIndex - 1])
+// //   : calculateOddNodeRenderingPosition(node, rowIndex);
+// let w = ImageWidth.CIRCLE_BLANK;
+// let h = ImageHeight.CIRCLE_BLANK;
+// let imageName = getNodeImageName(node, isColorCloserToBlack);
+// array.push(createImageInfoItem(color, imageName, node.xStart, node.yStart, w, h, true, null, null, null));
 
 }
 
