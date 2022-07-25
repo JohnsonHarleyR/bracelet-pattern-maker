@@ -11,6 +11,14 @@ export const isEven = (number) => {
   return false;
 }
 
+export const countNodes = (nodes) => {
+  let count = 0;
+  nodes.forEach(row => {
+    count += row.length;
+  });
+  return count;
+}
+
 //#endregion
 
 //#region Index Calculations

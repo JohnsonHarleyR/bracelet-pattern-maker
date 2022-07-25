@@ -34,15 +34,14 @@ import { getRowType } from "./nodeLogic";
 
 //#region Render
 
-export const renderAll = (canvas, nodes, doRenderBackground = true, startingArray = []) => {
-  canvas.width = calculateCanvasWidth(nodes[0].length);
-  canvas.height = calculateCanvasHeight(nodes.length);
-
+export const renderAll = (canvas, nodes, includeBackground = true, startingArray = []) => {
   // add all image items to array
   let renderArray = [...startingArray];
 
   // bg images first
-  if (doRenderBackground) {
+  if (includeBackground) {
+    canvas.width = calculateCanvasWidth(nodes[0].length);
+    canvas.height = calculateCanvasHeight(nodes.length);
     addBgImagesToArray(canvas, nodes, renderArray);
   }
 
@@ -54,8 +53,19 @@ export const renderAll = (canvas, nodes, doRenderBackground = true, startingArra
 
 }
 
+export const getBgRenderArray = (canvas, nodes) => {
+  let renderArray = [];
+
+  // bg images first
+  addBgImagesToArray(canvas, nodes, renderArray);
+}
+
 // recursive method to render all image items in an array
 const renderNext = (canvas, index, array) => {
+  if (array[index] === undefined) {
+    return;
+  }
+  
   let item = array[index];
 
   if (item.imageName === null) {

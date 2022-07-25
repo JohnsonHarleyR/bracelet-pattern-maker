@@ -6,7 +6,8 @@ import {
   calculateCanvasWidth,
   calculateNumberOfBackgroundImages,
   calculateNumberOfStrandImages,
-  calculateNumberOfStrandImagesAfterSetup
+  calculateNumberOfStrandImagesAfterSetup,
+  countNodes
 } from '../resources/logic/calculationLogic';
 import { renderBackground, renderCircleFill, renderNodes, renderPattern, renderStrands, renderTest } from '../resources/logic/drawLogic';
 import { getNodeFromMouseClick, getStartStrandIndexFromMouseClick } from '../resources/logic/nodeLogic';
@@ -48,26 +49,20 @@ const Stage = () => {
   let loadedStrandImageCount = 0;
   const [strandLoadCount, setStrandLoadCount] = useState(0);
 
+  //const [bgRenderArray, setBgRenderArray] = useState([]);
+  const [prevNodeCount, setPrevNodeCount] = useState(0);
+
   //#region Effect Area
 
   useEffect(() => {
     if (isSetupDecided) {
-      // loadedBgImageCount = 0;
-      // loadedStrandImageCount = 0;
-      // //console.log(`calculate # of bg images`);
-      // setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
-      // setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
-      // setBgLoadCount(0);
-      // setStrandLoadCount(0);
-      // setIsBgLoaded(false);
-      // setAreStrandsLoaded(false);
 
       
       patternCanvasRef.current.width = canvasRef.current.width;
       // patternCanvasRef.current.width = calculatePatternLength();
       patternCanvasRef.current.height = calculatePatternThickness(nodes);
 
-      rowsAreaRef.current.style.display = "block";
+      rowsAreaRef.current.style.display = "flex";
     } else {
       rowsAreaRef.current.style.display = "none";
     }
@@ -75,10 +70,6 @@ const Stage = () => {
 
   useEffect(() => {
     console.log(`isBgLoaded: ${isBgLoaded}`);
-    // if (isSetupDecided && !isBgLoaded) {
-    //   console.log(`rendering bg`);
-    //   renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
-    // } else 
     if (!isSetupDecided &&
       isBgLoaded) {
       console.log('rendering strands');
@@ -114,12 +105,14 @@ const Stage = () => {
         // } else {
         //   setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
         // }
-      }
 
-      if (canRemoveRows()) {
-        removeButtonRef.current.disabled = false;
       } else {
-        removeButtonRef.current.disabled = true;
+        
+        if (canRemoveRows()) {
+          removeButtonRef.current.style.display = "flex";
+        } else {
+          removeButtonRef.current.style.display = "none";
+        }
       }
     }
   }, [rowCount]);
@@ -164,14 +157,21 @@ const Stage = () => {
 
   useEffect(() => {
     if (colors) {
+      let newNodeCount = nodes !== undefined
+        ? countNodes(nodes)
+        : 0;
+
       if (!isSetupDecided) {
         startRenderBg();
-      }
-      else {
+      } else {
         // also the pattern
         setPattern(createPatternFromNodes(nodes));
         // test render all
-        renderAll(canvasRef.current, nodes, true);
+        if (prevNodeCount !== newNodeCount) {
+          renderAll(canvasRef.current, nodes, true);
+        } else {
+          renderAll(canvasRef.current, nodes, false);
+        }
       }
 
       if (!isSetupDecided && isBgLoaded) {
@@ -182,6 +182,9 @@ const Stage = () => {
       // renderNodes(canvasRef.current, nodes);
       if (!isSetupDecided && areStrandsLoaded) {
         renderNodes(canvasRef.current, nodes);
+      }
+      if (nodes !== undefined) {
+        setPrevNodeCount(newNodeCount);
       }
     }
   }, [colors, nodes]);
@@ -217,7 +220,7 @@ const Stage = () => {
         //setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
 
         // test render all
-        // renderAll(canvasRef.current, nodes, true);
+        renderAll(canvasRef.current, nodes, true);
       }
       
       if (!isSetupDecided && canvasWidth) {
@@ -368,29 +371,31 @@ const Stage = () => {
 
   return (
     <div className="stage">
-      {!isSetupDecided
-        ? <></>
-        : <canvas className="pattern-canvas" ref={patternCanvasRef} />
-      }
-      <canvas ref={canvasRef} className="canvas-area"
-        onClick={clickCanvas}
-        onContextMenu={rightClickCanvas}/>
-      <br></br>
+      <div className="canvas-area">
+        {!isSetupDecided
+          ? <></>
+          : <canvas className="pattern-canvas" ref={patternCanvasRef} />
+        }
+        <canvas ref={canvasRef}
+          onClick={clickCanvas}
+          onContextMenu={rightClickCanvas}/>
+      </div>
+      
       <div className="add-remove-buttons" ref={rowsAreaRef}>
-        <button 
+        <div
           ref={addButtonRef}
-          className="button"
+          className="circle-button"
           onClick={clickAddButton}
         >
-          Add
-        </button>
-        <button
+          +
+        </div>
+        <div
           ref={removeButtonRef}
-          className="button"
+          className="circle-button"
           onClick={clickRemoveButton}
         >
-          Remove
-        </button>
+          -
+        </div>
       </div>
     </div>
   );
