@@ -52,15 +52,15 @@ const Stage = () => {
 
   useEffect(() => {
     if (isSetupDecided) {
-      loadedBgImageCount = 0;
-      loadedStrandImageCount = 0;
-      //console.log(`calculate # of bg images`);
-      setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
-      setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
-      setBgLoadCount(0);
-      setStrandLoadCount(0);
-      setIsBgLoaded(false);
-      setAreStrandsLoaded(false);
+      // loadedBgImageCount = 0;
+      // loadedStrandImageCount = 0;
+      // //console.log(`calculate # of bg images`);
+      // setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
+      // setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
+      // setBgLoadCount(0);
+      // setStrandLoadCount(0);
+      // setIsBgLoaded(false);
+      // setAreStrandsLoaded(false);
 
       
       patternCanvasRef.current.width = canvasRef.current.width;
@@ -79,8 +79,7 @@ const Stage = () => {
     //   console.log(`rendering bg`);
     //   renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
     // } else 
-    if (
-      // isSetupDecided &&
+    if (!isSetupDecided &&
       isBgLoaded) {
       console.log('rendering strands');
       renderStrands(canvasRef.current, nodes, rowCount, isSetupDecided, clearStrandLoadCount, addToStrandLoadCount);
@@ -89,7 +88,7 @@ const Stage = () => {
   },[isBgLoaded]);
 
   useEffect(() => {
-    if (nodesAcross) {
+    if (!isSetupDecided && nodesAcross) {
       setCanvasWidth(calculateCanvasWidth(nodesAcross));
       //console.log(`calculate # of bg images`);
       setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
@@ -105,12 +104,16 @@ const Stage = () => {
   useEffect(() => {
     if (rowCount) {
       setCanvasHeight(calculateCanvasHeight(rowCount));
-      //console.log(`calculate # of bg images`);
-      setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
       if (!isSetupDecided) {
+        
+        //console.log(`calculate # of bg images`);
+        setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
         setTotalStrandImages(calculateNumberOfStrandImages(nodesAcross, rowCount));
-      } else {
-        setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
+        // if (!isSetupDecided) {
+        //   setTotalStrandImages(calculateNumberOfStrandImages(nodesAcross, rowCount));
+        // } else {
+        //   setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
+        // }
       }
 
       if (canRemoveRows()) {
@@ -123,7 +126,7 @@ const Stage = () => {
 
   useEffect(() => {
     //console.log(`bgLoadCount: ${bgLoadCount}`);
-    if (bgLoadCount && bgLoadCount !== 0) {
+    if (!isSetupDecided && bgLoadCount && bgLoadCount !== 0) {
       //console.log(`loaded: ${bgLoadCount}/${totalBgImages}`);
       if (bgLoadCount === totalBgImages) {
         setIsBgLoaded(true);
@@ -133,7 +136,7 @@ const Stage = () => {
   }, [bgLoadCount]);
 
   useEffect(() => {
-    if (strandLoadCount && strandLoadCount !== 0) {
+    if (!isSetupDecided && strandLoadCount && strandLoadCount !== 0) {
       //console.log(`loaded: ${bgLoadCount}/${totalBgImages}`);
       if (strandLoadCount === totalStrandImages) {
         setAreStrandsLoaded(true);
@@ -154,7 +157,7 @@ const Stage = () => {
   // }, [isBgLoaded]);
 
   useEffect(() => {
-    if (areStrandsLoaded) {
+    if (!isSetupDecided && areStrandsLoaded) {
       renderNodes(canvasRef.current, nodes);
     }
   }, [areStrandsLoaded]);
@@ -167,15 +170,17 @@ const Stage = () => {
       else {
         // also the pattern
         setPattern(createPatternFromNodes(nodes));
+        // test render all
+        renderAll(canvasRef.current, nodes, true);
       }
 
-      if (isBgLoaded) {
+      if (!isSetupDecided && isBgLoaded) {
         console.log('rendering strands');
 
         renderStrands(canvasRef.current, nodes, rowCount, isSetupDecided, clearStrandLoadCount, addToStrandLoadCount);
       }
       // renderNodes(canvasRef.current, nodes);
-      if (areStrandsLoaded) {
+      if (!isSetupDecided && areStrandsLoaded) {
         renderNodes(canvasRef.current, nodes);
       }
     }
@@ -185,18 +190,18 @@ const Stage = () => {
     if (canvasWidth) {
       canvasRef.current.width = canvasWidth;
       
-      if (canvasHeight) {
+      if (!isSetupDecided && canvasHeight) {
         console.log(`rendering bg`);
         startRenderBg();
         //renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
       }
-      if (isBgLoaded) {
+      if (!isSetupDecided && isBgLoaded) {
         //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
         console.log('rendering strands');
         renderStrands(canvasRef.current, nodes, rowCount, isSetupDecided, clearStrandLoadCount, addToStrandLoadCount);
       }
 
-      if (areStrandsLoaded) {
+      if (!isSetupDecided && areStrandsLoaded) {
         renderNodes(canvasRef.current, nodes);
       }
     }
@@ -208,25 +213,25 @@ const Stage = () => {
 
       if (isSetupDecided) {
         //console.log(`calculate # of bg images`);
-        setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
-        setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
+        //setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
+        //setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
 
         // test render all
-        renderAll(canvasRef.current, nodes, true);
+        // renderAll(canvasRef.current, nodes, true);
       }
       
-      if (canvasWidth) {
+      if (!isSetupDecided && canvasWidth) {
         console.log(`rendering bg`);
         startRenderBg();
         //renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
       }
-      if (isBgLoaded) {
+      if (!isSetupDecided && isBgLoaded) {
         //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
         console.log('rendering strands');
         renderStrands(canvasRef.current, nodes, rowCount, isSetupDecided, clearStrandLoadCount, addToStrandLoadCount);
       }
 
-      if (areStrandsLoaded) {
+      if (!isSetupDecided && areStrandsLoaded) {
         renderNodes(canvasRef.current, nodes);
       }
     }
