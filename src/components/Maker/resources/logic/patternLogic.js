@@ -1,6 +1,6 @@
 
 import { PatternDefaults } from "../constants/designConstants";
-import { RowType } from "../constants/nodeConstants";
+import { NodeSymbol, RowType } from "../constants/nodeConstants";
 import { LeftOrRight } from "../constants/stageConstants";
 import { getRowType } from "./nodeLogic";
 
@@ -256,6 +256,77 @@ export const calculatePatternLength = () => {
 export const calculatePatternThickness = (nodes) => {
   let width = nodes[0].length * PatternDefaults.TILE_SIZE;
   return width;
+}
+
+//#endregion
+
+//#region Alignment
+
+export const doesPatternAlignCorrectly = (nodes) => {
+  // before anything, see if there are any nodes that are not set yet
+  if (hasUnsetNodes(nodes)) {
+    return false;
+  }
+
+  let startOrder = createStartStrandArray(nodes);
+  let endOrder = createEndStrandArray(nodes);
+
+  // compare
+  for (let i = 0; i < startOrder.length; i++) {
+    if (startOrder[i] !== endOrder[i]) {
+      return false;
+    }
+  }
+
+  return true;
+
+}
+
+const createStartStrandArray = (nodes) => {
+  let startOrder = [];
+  let firstRow = nodes[0];
+  firstRow.forEach(n => {
+    startOrder.push(n.topLeftStrand.color);
+    startOrder.push(n.topRightStrand.color);
+  });
+  return startOrder;
+}
+
+const createEndStrandArray = (nodes) => {
+  let endOrder = [];
+
+  let lastRow = nodes[nodes.length - 1];
+  let lastLongRow = nodes[nodes.length - 2];
+  // define first and last for long rows
+  let first = lastLongRow[0];
+  let last = lastLongRow[lastLongRow.length - 1];
+
+  // add first
+  endOrder.push(first.getBottomStrandColor(LeftOrRight.LEFT));
+
+  // cycle through last row and add
+  lastRow.forEach(n => {
+    endOrder.push(n.getBottomStrandColor(LeftOrRight.LEFT));
+    endOrder.push(n.getBottomStrandColor(LeftOrRight.RIGHT));
+  });
+
+  // add last
+  endOrder.push(last.getBottomStrandColor(LeftOrRight.RIGHT));
+
+  return endOrder;
+}
+
+const hasUnsetNodes = (nodes) => {
+  for (let y = 0; y < nodes.length; y++) {
+    let row = nodes[y];
+    for (let x = 0; x < row.length; x++) {
+      let node = row[x];
+      if (node.nodeSymbol === NodeSymbol.NONE) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 //#endregion

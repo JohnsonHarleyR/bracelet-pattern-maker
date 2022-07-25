@@ -41,3 +41,8 @@
   font-size: larger;
   font-family: monospace;
 }
+
+.does-align-message {
+  margin-top: 10px;
+  font-size: medium;
+}

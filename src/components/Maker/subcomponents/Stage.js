@@ -12,7 +12,7 @@ import {
 import { renderBackground, renderCircleFill, renderNodes, renderPattern, renderStrands, renderTest } from '../resources/logic/drawLogic';
 import { getNodeFromMouseClick, getStartStrandIndexFromMouseClick } from '../resources/logic/nodeLogic';
 import { ClickType, NodeDefaults } from '../resources/constants/nodeConstants';
-import { calculatePatternLength, calculatePatternThickness, createPatternFromNodes } from '../resources/logic/patternLogic';
+import { calculatePatternLength, calculatePatternThickness, createPatternFromNodes, doesPatternAlignCorrectly } from '../resources/logic/patternLogic';
 import { renderAll } from '../resources/logic/renderLogicV2';
 
 const Stage = () => {
@@ -23,6 +23,7 @@ const Stage = () => {
   const rowsAreaRef = useRef();
   const addButtonRef = useRef();
   const removeButtonRef = useRef();
+  const alignRef = useRef();
 
   const [canvasWidth, setCanvasWidth] = useState(0);
   const [canvasHeight, setCanvasHeight] = useState(0);
@@ -52,11 +53,13 @@ const Stage = () => {
   //const [bgRenderArray, setBgRenderArray] = useState([]);
   const [prevNodeCount, setPrevNodeCount] = useState(0);
 
+  const [doesPatternAlign, setDoesPatternAlign] = useState(false);
+
   //#region Effect Area
 
   useEffect(() => {
     if (isSetupDecided) {
-
+      alignRef.current.display = "flex";
       
       patternCanvasRef.current.width = canvasRef.current.width;
       // patternCanvasRef.current.width = calculatePatternLength();
@@ -64,6 +67,8 @@ const Stage = () => {
 
       rowsAreaRef.current.style.display = "flex";
     } else {
+      alignRef.current.display = "none";
+
       rowsAreaRef.current.style.display = "none";
     }
   }, [isSetupDecided]);
@@ -185,6 +190,11 @@ const Stage = () => {
       }
       if (nodes !== undefined) {
         setPrevNodeCount(newNodeCount);
+
+        if (isSetupDecided) {
+          console.log(`checking alignment`);
+          setDoesPatternAlign(doesPatternAlignCorrectly(nodes));
+        }
       }
     }
   }, [colors, nodes]);
@@ -379,6 +389,13 @@ const Stage = () => {
         <canvas ref={canvasRef}
           onClick={clickCanvas}
           onContextMenu={rightClickCanvas}/>
+      </div>
+
+      <div className="does-align-message" ref={alignRef}>
+        {doesPatternAlign === true
+          ? <>Pattern aligns properly.</>
+          : <>Strands at start and end of pattern do not yet align.</>
+        }
       </div>
       
       <div className="add-remove-buttons" ref={rowsAreaRef}>
