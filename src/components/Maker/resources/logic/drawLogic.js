@@ -108,7 +108,7 @@ const fillBackground = (canvas) => {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-const getTileInfo = (tileName) => {
+export const getTileInfo = (tileName) => {
   switch (tileName) {
     case ImageName.TILE:
       return {
@@ -171,7 +171,7 @@ export const renderCircleFill = (canvas, color, xTLC, yTLC) => {
   ctx.fill();
 }
 
-const renderSquareFill = (canvas, color, x, y, w, h) => {
+export const renderSquareFill = (canvas, color, x, y, w, h) => {
   let ctx = canvas.getContext("2d");
   ctx.fillStyle = color;
   ctx.fillRect(x, y, w, h);
@@ -210,7 +210,7 @@ const renderNode = (canvas, node) => {
   //renderImage(canvas, imageName, xy.x, xy.y, w, h);
 }
 
-const getNodeImageName = (node, isColorCloserToBlack = false) => {
+export const getNodeImageName = (node, isColorCloserToBlack = false) => {
   switch(node.nodeSymbol) {
     case NodeSymbol.NONE:
       return ImageName.CIRCLE_BLANK;
@@ -247,7 +247,7 @@ export const drawText = (canvas, text, x, y, color = TextDefaults.COLOR) => {
 }
 
 
-const drawNumberOnTile = ({canvas, xTileStart, yTileStart, number, leftOrRight}) => {
+export const drawNumberOnTile = ({canvas, xTileStart, yTileStart, number, leftOrRight}) => {
   let yForNumber = yTileStart + TileTextOffset.Y_TILE;
   //console.log(`y for ${leftOrRight}: ${yForNumber}`);
   let xForNumber = leftOrRight === LeftOrRight.LEFT
@@ -258,14 +258,14 @@ const drawNumberOnTile = ({canvas, xTileStart, yTileStart, number, leftOrRight})
   }
 }
 
-const renderLeftTopStrandText = (canvas, strandLetter, strandX, strandY) => {
+export const renderLeftTopStrandText = (canvas, strandLetter, strandX, strandY) => {
   let x = strandX + TextDefaults.X_LEFT_TOP_OFFSET;
   let y = strandY + TextDefaults.Y_LEFT_TOP_OFFSET;
 
   drawText(canvas, strandLetter, x, y);
 }
 
-const renderRightTopStrandText = (canvas, strandLetter, strandX, strandY) => {
+export const renderRightTopStrandText = (canvas, strandLetter, strandX, strandY) => {
   let x = strandX + TextDefaults.X_RIGHT_TOP_OFFSET;
   let y = strandY + TextDefaults.Y_RIGHT_TOP_OFFSET;
 
@@ -603,7 +603,7 @@ const renderStartOrEndStrand = (canvas, strandIndex, strandInfo, rowIndex, rowCo
   renderImageWithUnderFills(canvas, imageInfo, fillInfos, isStart, leftOrRight, text, addToLoadedCount);
 }
 
-const getStrandImageName = (positionIndex, rowIndex, rowCount, isStart = false) => {
+export const getStrandImageName = (positionIndex, rowIndex, rowCount, isStart = false) => {
   let relPosIndex = positionIndex + 1;
   let side = relPosIndex % 2 === 0
     ? LeftOrRight.RIGHT
@@ -636,7 +636,7 @@ const getStrandImageName = (positionIndex, rowIndex, rowCount, isStart = false) 
   throw `Error in finding a strand image name to render. (getStrandImageName: drawLogic.js)`;
 }
 
-const getStrandImageNameAfterSetup = (leftOrRight, isLastSideLooseStrand, isLastRow = false) => {
+export const getStrandImageNameAfterSetup = (leftOrRight, isLastSideLooseStrand, isLastRow = false) => {
   if (leftOrRight === LeftOrRight.LEFT) {
     if (isLastSideLooseStrand) {
       return ImageName.STRAND_LEFT_FINAL_EDGE;
@@ -721,7 +721,7 @@ const renderImageWithUnderFills = (canvas, imageInfo, fillInfos, isStart = false
   };
 }
 
-const getImage = (imageName) => {
+export const getImage = (imageName) => {
   switch (imageName) {
     case ImageName.TILE:
       return Tile;

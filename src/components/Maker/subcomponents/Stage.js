@@ -12,6 +12,7 @@ import { renderBackground, renderCircleFill, renderNodes, renderPattern, renderS
 import { getNodeFromMouseClick, getStartStrandIndexFromMouseClick } from '../resources/logic/nodeLogic';
 import { ClickType, NodeDefaults } from '../resources/constants/nodeConstants';
 import { calculatePatternLength, calculatePatternThickness, createPatternFromNodes } from '../resources/logic/patternLogic';
+import { renderAll } from '../resources/logic/renderLogicV2';
 
 const Stage = () => {
 
@@ -162,7 +163,6 @@ const Stage = () => {
     if (colors) {
       if (!isSetupDecided) {
         startRenderBg();
-      //renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
       }
       else {
         // also the pattern
@@ -171,6 +171,7 @@ const Stage = () => {
 
       if (isBgLoaded) {
         console.log('rendering strands');
+
         renderStrands(canvasRef.current, nodes, rowCount, isSetupDecided, clearStrandLoadCount, addToStrandLoadCount);
       }
       // renderNodes(canvasRef.current, nodes);
@@ -209,6 +210,9 @@ const Stage = () => {
         //console.log(`calculate # of bg images`);
         setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
         setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
+
+        // test render all
+        renderAll(canvasRef.current, nodes, true);
       }
       
       if (canvasWidth) {
@@ -361,7 +365,7 @@ const Stage = () => {
     <div className="stage">
       {!isSetupDecided
         ? <></>
-        : <><canvas ref={patternCanvasRef} /><br></br></>
+        : <canvas className="pattern-canvas" ref={patternCanvasRef} />
       }
       <canvas ref={canvasRef} className="canvas-area"
         onClick={clickCanvas}

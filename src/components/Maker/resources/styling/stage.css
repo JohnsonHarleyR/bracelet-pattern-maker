@@ -4,4 +4,11 @@
 
 .canvas-area {
   border: 2px solid black;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.pattern-canvas {
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
