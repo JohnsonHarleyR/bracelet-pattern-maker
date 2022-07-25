@@ -7,6 +7,7 @@ const Maker = () => {
 
   return (
     <div>
+      <h1>Bracelet Designer</h1>
       <Controls />
       <br></br>
       <Stage />
