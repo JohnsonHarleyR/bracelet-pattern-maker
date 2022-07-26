@@ -45,4 +45,5 @@
 .does-align-message {
   margin-top: 10px;
   font-size: medium;
+  justify-content: center;
 }

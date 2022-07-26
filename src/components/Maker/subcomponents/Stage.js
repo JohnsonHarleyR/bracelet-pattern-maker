@@ -12,7 +12,7 @@ import {
 import { renderBackground, renderCircleFill, renderNodes, renderPattern, renderStrands, renderTest } from '../resources/logic/drawLogic';
 import { getNodeFromMouseClick, getStartStrandIndexFromMouseClick } from '../resources/logic/nodeLogic';
 import { ClickType, NodeDefaults } from '../resources/constants/nodeConstants';
-import { calculatePatternLength, calculatePatternThickness, createPatternFromNodes, doesPatternAlignCorrectly } from '../resources/logic/patternLogic';
+import { calculatePatternLength, calculatePatternThickness, createImageOfCanvas, createPatternFromNodes, doesPatternAlignCorrectly } from '../resources/logic/patternLogic';
 import { renderAll } from '../resources/logic/renderLogicV2';
 
 const Stage = () => {
@@ -24,6 +24,7 @@ const Stage = () => {
   const addButtonRef = useRef();
   const removeButtonRef = useRef();
   const alignRef = useRef();
+  const saveBtnRef = useRef();
 
   const [canvasWidth, setCanvasWidth] = useState(0);
   const [canvasHeight, setCanvasHeight] = useState(0);
@@ -54,22 +55,27 @@ const Stage = () => {
   const [prevNodeCount, setPrevNodeCount] = useState(0);
 
   const [doesPatternAlign, setDoesPatternAlign] = useState(false);
+  const [patternHeight, setPatternHeight] = useState(0);
 
   //#region Effect Area
 
+
   useEffect(() => {
     if (isSetupDecided) {
-      alignRef.current.display = "flex";
+      alignRef.current.style.display = "flex";
       
       patternCanvasRef.current.width = canvasRef.current.width;
       // patternCanvasRef.current.width = calculatePatternLength();
+
       patternCanvasRef.current.height = calculatePatternThickness(nodes);
 
       rowsAreaRef.current.style.display = "flex";
+      saveBtnRef.current.style.display = "block";
     } else {
-      alignRef.current.display = "none";
+      alignRef.current.style.display = "none";
 
       rowsAreaRef.current.style.display = "none";
+      saveBtnRef.current.style.display = "none";
     }
   }, [isSetupDecided]);
 
@@ -168,14 +174,18 @@ const Stage = () => {
 
       if (!isSetupDecided) {
         startRenderBg();
+        if (nodes && nodes.length > 0) {
+          setPatternHeight(calculatePatternThickness(nodes));
+        }
+
       } else {
         // also the pattern
         setPattern(createPatternFromNodes(nodes));
         // test render all
         if (prevNodeCount !== newNodeCount) {
-          renderAll(canvasRef.current, nodes, true);
+          renderAll(canvasRef.current, nodes, patternHeight, true);
         } else {
-          renderAll(canvasRef.current, nodes, false);
+          renderAll(canvasRef.current, nodes, patternHeight, false);
         }
       }
 
@@ -230,7 +240,7 @@ const Stage = () => {
         //setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
 
         // test render all
-        renderAll(canvasRef.current, nodes, true);
+        renderAll(canvasRef.current, nodes, patternHeight, true);
       }
       
       if (!isSetupDecided && canvasWidth) {
@@ -252,7 +262,7 @@ const Stage = () => {
 
   useEffect(() => {
     if (pattern && isSetupDecided) {
-      renderPattern(patternCanvasRef.current, pattern);
+      renderPattern(canvasRef.current, patternHeight, pattern);
     }
   }, [pattern]);
 
@@ -335,6 +345,9 @@ const Stage = () => {
 
   const clickCanvas = (evt, isRightClick = false) => {
     let mousePos = getMousePos(canvasRef.current, evt);
+    if (isSetupDecided) {
+      mousePos.y -= patternHeight;
+    }
     console.log(`Mouse pos: {x: ${Math.round(mousePos.x)}, y: ${Math.round(mousePos.y)}}`);
 
     // do different checks depending on whether setup is complete or not
@@ -362,6 +375,10 @@ const Stage = () => {
       setNodes(nodesCopy);
     }
 
+  }
+
+  const clickSave = (evt) => {
+    let newImage = createImageOfCanvas(canvasRef.current);
   }
 
   // const showMousePos = (evt) => {
@@ -414,6 +431,7 @@ const Stage = () => {
           -
         </div>
       </div>
+      <button ref={saveBtnRef} onClick={clickSave}>Get Image</button>
     </div>
   );
 }

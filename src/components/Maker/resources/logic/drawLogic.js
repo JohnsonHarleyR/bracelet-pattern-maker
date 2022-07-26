@@ -276,11 +276,16 @@ export const renderRightTopStrandText = (canvas, strandLetter, strandX, strandY)
 
 //#region Rendering Pattern
 
-export const renderPattern = (canvas, pattern) => {
-  
-  fillBackground(canvas);
+export const renderPattern = (canvas, patternHeight, pattern) => {
 
   let ctx = canvas.getContext("2d");
+
+  ctx.beginPath();
+  ctx.fillStyle = StageDefaults.BG_COLOR;
+  ctx.fillRect(0, 0, canvas.width, patternHeight);
+  ctx.closePath();
+  
+  //fillBackground(canvas);
 
   for (let x = 0; x <pattern.length; x++) {
 
@@ -311,6 +316,11 @@ export const renderPattern = (canvas, pattern) => {
       // ctx.closePath();
     }
   }
+
+  ctx.beginPath();
+  ctx.fillStyle = StageDefaults.BG_COLOR;
+  ctx.fillRect(0, patternHeight, ImageWidth.TILE_START_LEFT, 20);
+  ctx.closePath();
 }
 
 

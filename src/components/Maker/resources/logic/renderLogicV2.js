@@ -34,19 +34,28 @@ import { getRowType } from "./nodeLogic";
 
 //#region Render
 
-export const renderAll = (canvas, nodes, includeBackground = true, startingArray = []) => {
+export const renderAll = (canvas, nodes, yOffset, includeBackground = true, startingArray = []) => {
   // add all image items to array
   let renderArray = [...startingArray];
 
   // bg images first
   if (includeBackground) {
+    let calculatedHeight = calculateCanvasHeight(nodes.length);
     canvas.width = calculateCanvasWidth(nodes[0].length);
-    canvas.height = calculateCanvasHeight(nodes.length);
-    addBgImagesToArray(canvas, nodes, renderArray);
+    canvas.height = calculatedHeight + yOffset;
+    addBgImagesToArray(canvas, calculatedHeight, nodes, yOffset, renderArray);
+  } else {
+
+    if (startingArray.length === 0) {
+      let info = getTileInfo(ImageName.TILE_START);
+      renderArray.push(createImageInfoItem(null, info.leftName, 0, yOffset, info.leftWidth, info.leftHeight, false, null, null, LeftOrRight.LEFT));
+      renderArray.push(createImageInfoItem(null, info.rightName, canvas.width - info.rightWidth, yOffset, info.rightWidth, info.rightHeight, false, null, null, LeftOrRight.RIGHT));
+    }
+    
   }
 
   // now nodes - including their strands
-  addAllNodeImagesToArray(canvas, nodes, renderArray);
+  addAllNodeImagesToArray(canvas, nodes, yOffset, renderArray);
 
   // now render everything in the array
   renderNext(canvas, 0, renderArray);
@@ -125,21 +134,21 @@ const renderNext = (canvas, index, array) => {
 
 //#region Put together
 
-const addAllNodeImagesToArray = (canvas, nodes, array) => {
+const addAllNodeImagesToArray = (canvas, nodes, yOffset, array) => {
   nodes.forEach((row, y) => {
     row.forEach((node, x) => {
-      addNodeImagesToArray(canvas, x, y, nodes, array);
+      addNodeImagesToArray(canvas, x, y, nodes, yOffset, array);
     });
   });
 
   nodes.forEach((row) => {
     row.forEach((node) => {
-      addNodeCircleImageToArray(node, array);
+      addNodeCircleImageToArray(node, yOffset, array);
     });
   });
 }
 
-const addNodeCircleImageToArray = (node, array) => {
+const addNodeCircleImageToArray = (node, yOffset, array) => {
 
       // create actual node image and color
       let color = node.getColor();
@@ -151,11 +160,11 @@ const addNodeCircleImageToArray = (node, array) => {
     let w = ImageWidth.CIRCLE_BLANK;
     let h = ImageHeight.CIRCLE_BLANK;
     let imageName = getNodeImageName(node, isColorCloserToBlack);
-    let nodeInfo = createImageInfoItem(color, imageName, node.xStart, node.yStart, w, h, true, null, null, null);
+    let nodeInfo = createImageInfoItem(color, imageName, node.xStart, node.yStart + yOffset, w, h, true, null, null, null);
     array.push(nodeInfo);
 }
 
-const addNodeImagesToArray = (canvas, posIndex, rowIndex, nodes, array) => {
+const addNodeImagesToArray = (canvas, posIndex, rowIndex, nodes, yOffset, array) => {
 
   let row = nodes[rowIndex];
   let node = row[posIndex];
@@ -171,7 +180,7 @@ const addNodeImagesToArray = (canvas, posIndex, rowIndex, nodes, array) => {
   if (isFirstRow) {
     strandSides.forEach(side => {
       // REMEMBER: render letters on top!!
-      array.push(createStartOrEndStrandItem(node, posIndex, rowIndex, nodes.length, true, side, canvas.height));
+      array.push(createStartOrEndStrandItem(node, posIndex, rowIndex, nodes.length, true, side, canvas.height, yOffset));
     });
   }
 
@@ -200,10 +209,10 @@ const addNodeImagesToArray = (canvas, posIndex, rowIndex, nodes, array) => {
       : node.xStart + StrandOffset.X_BOTTOM_RIGHT;
     let yStart = side === LeftOrRight.LEFT
       ? !isLastRow
-        ? node.yStart + StrandOffset.Y_BOTTOM_LEFT
+        ? node.yStart + StrandOffset.Y_BOTTOM_LEFT + yOffset
         : canvas.height - ImageHeight.STRAND_END_LEFT
       : !isLastRow
-        ? node.yStart + StrandOffset.Y_BOTTOM_RIGHT
+        ? node.yStart + StrandOffset.Y_BOTTOM_RIGHT + yOffset
         : canvas.height - ImageHeight.STRAND_END_RIGHT;
     let width = ImageWidth.STRAND_LEFT;
     let height = !isLastRow
@@ -237,13 +246,14 @@ const addNodeImagesToArray = (canvas, posIndex, rowIndex, nodes, array) => {
 
 }
 
-const addBgImagesToArray = (canvas, nodes, array) => {
+const addBgImagesToArray = (canvas, canvasHeight, nodes, yOffset, array) => {
+  let y = yOffset;
+  let x = 0;
+
   // first the fill
-  array.push(createImageInfoItem(StageDefaults.BG_COLOR, null, 0, 0, canvas.width, canvas.height, false, null, null, null));
+  array.push(createImageInfoItem(StageDefaults.BG_COLOR, null, x, y, canvas.width, canvasHeight, false, null, null, null));
 
   // now add all bg images
-  let y = 0;
-  let x = 0;
 
   // rstart row
   addTileRowItemsToArray(null, nodes[0].length, ImageName.TILE_START, y, array);
@@ -310,7 +320,7 @@ const createImageInfoItem = (fillColor, imageName, x, y, width, height,
     }
 }
 
-const createStartOrEndStrandItem = (node, posIndex, rowIndex, rowCount, isStart, side, canvasHeight) => {
+const createStartOrEndStrandItem = (node, posIndex, rowIndex, rowCount, isStart, side, canvasHeight, yOffset = 0) => {
   let wh = calculateStrandWidthAndHeight(posIndex, rowCount, isStart);
   let strandIndex = posIndex * 2;
   strandIndex += side === LeftOrRight.LEFT
@@ -329,7 +339,7 @@ const createStartOrEndStrandItem = (node, posIndex, rowIndex, rowCount, isStart,
       : node.topRightStrand.letter
     : null;
 
-  let newItem = createImageInfoItem(color, imageName, xy.x, xy.y, wh.width, wh.height, false, text, null, side);
+  let newItem = createImageInfoItem(color, imageName, xy.x, xy.y + yOffset, wh.width, wh.height, false, text, null, side);
   return newItem;
 }
 
