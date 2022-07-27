@@ -18,7 +18,6 @@ import { renderAll } from '../resources/logic/renderLogicV2';
 const Stage = () => {
 
   const canvasRef = useRef();
-  const patternCanvasRef = useRef();
   //TODO move add and remove buttons to own component
   const rowsAreaRef = useRef();
   const addButtonRef = useRef();
@@ -63,11 +62,6 @@ const Stage = () => {
   useEffect(() => {
     if (isSetupDecided) {
       alignRef.current.style.display = "flex";
-      
-      patternCanvasRef.current.width = canvasRef.current.width;
-      // patternCanvasRef.current.width = calculatePatternLength();
-
-      patternCanvasRef.current.height = calculatePatternThickness(nodes);
 
       rowsAreaRef.current.style.display = "flex";
       saveBtnRef.current.style.display = "block";
@@ -399,10 +393,6 @@ const Stage = () => {
   return (
     <div className="stage">
       <div className="canvas-area">
-        {!isSetupDecided
-          ? <></>
-          : <canvas className="pattern-canvas" ref={patternCanvasRef} />
-        }
         <canvas ref={canvasRef}
           onClick={clickCanvas}
           onContextMenu={rightClickCanvas}/>
