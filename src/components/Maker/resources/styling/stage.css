@@ -20,6 +20,26 @@
   margin-top: 10px;
 }
 
+.btn {
+  margin-top: 5px;
+  align-self: center;
+  cursor: pointer;
+  border: 2px solid black;
+  box-sizing: border-box;
+  border-radius: 7%;
+  background-color: #ffffff;
+  color: #000000;
+  height: 40px;
+  width: 125px;
+  display: flex;
+  font-weight: bold;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  font-size: large;
+  font-family: monospace;
+}
+
 .circle-button {
   margin-top: 0px;
   margin-left: 3px;

@@ -344,30 +344,4 @@ export const createImageOfCanvas = (nodeCanvas) => {
     win.document.write('<iframe src="' +image  + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen> </iframe>');
 }
 
-const combineCanvasesToOne = (patternCanvas, nodeCanvas) => {
-  let pWidth = patternCanvas.width;
-  let pHeight = patternCanvas.height;
-
-  let nWidth = nodeCanvas.width;
-  let nHeight = nodeCanvas.height;
-
-  let newHeight = pHeight + nHeight;
-  let newCanvas = document.createElement('canvas');
-  newCanvas.width = pWidth;
-  newCanvas.height = newHeight;
-
-  let newCtx = newCanvas.getContext("2d");
-  newCtx.drawImage(patternCanvas, 0, 0);
-
-  let nodesImageSrc = nodeCanvas.toDataURL("image/png");
-  let nodesImage = new Image();
-  nodesImage.src = nodesImageSrc;
-  nodesImage.onload = () => {
-    newCtx.drawImage(nodeCanvas, nWidth, pHeight);
-    return newCanvas;
-  }
-
-}
-
-
-//#region 
+//#endregion 
