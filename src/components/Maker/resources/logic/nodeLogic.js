@@ -131,6 +131,16 @@ const createRowOfNodesAfterSetupFirstComplete = (rowIndex, nodes, nodesAcross, r
 
 //#endregion
 
+//#region Update Nodes
+
+export const updateNodeStrands = (nodes) => {
+  let copy = [...nodes];
+
+  return copy;
+}
+
+//#endregion
+
 //#region Row Logic
 
 export const getRowType = (rowIndex) => {

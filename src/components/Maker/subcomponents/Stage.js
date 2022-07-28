@@ -349,15 +349,13 @@ const Stage = () => {
     let nodeClicked = getNodeFromMouseClick(mousePos, nodesCopy);
 
     if (nodeClicked === null) {
-      if (!isSetupDecided) {
-        // see if they clicked a start strand
-        let strandIndex = getStartStrandIndexFromMouseClick(mousePos, startStrandInfos);
-        if (strandIndex !== null) {
-          let copy = [...startStrandInfos];
-          copy[strandIndex].letter = selectedColor.letter;
-          copy[strandIndex].color = selectedColor.color;
-          setStartStrandInfos(copy);
-        }
+      // see if they clicked a start strand
+      let strandIndex = getStartStrandIndexFromMouseClick(mousePos, startStrandInfos);
+      if (strandIndex !== null) {
+        let copy = [...startStrandInfos];
+        copy[strandIndex].letter = selectedColor.letter;
+        copy[strandIndex].color = selectedColor.color;
+        setStartStrandInfos(copy);
       }
     } else {
       console.log(`node clicked`);
