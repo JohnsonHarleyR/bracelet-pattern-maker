@@ -20,7 +20,8 @@ const Colors = () => {
 
   const [inputColor, setInputColor] = useState(selectedColor);
   const [colorsDisplayArray, setColorsDisplayArray] = useState([]);
-  const [showPresets, setShowPresets] = useState(true);
+  const [showPresets, setShowPresets] = useState(false);
+  const [presetToggleText, setPresetToggleText] = useState('');
 
   //#region  effects
 
@@ -56,6 +57,14 @@ const Colors = () => {
       selectorRef.current.value=inputColor;
     }
   }, [inputColor]);
+
+  useEffect(() => {
+    if (showPresets) {
+      setPresetToggleText('^');
+    } else {
+      setPresetToggleText('v');
+    }
+  }, [showPresets]);
 
   //#endregion
 
@@ -119,6 +128,14 @@ const Colors = () => {
     removeColor();
   }
 
+  const clickTogglePresets = () => {
+    if (showPresets) {
+      setShowPresets(false);
+    } else {
+      setShowPresets(true);
+    }
+  }
+
   //#endregion
 
   return (
@@ -129,6 +146,7 @@ const Colors = () => {
         <button ref={deleteRef} onClick={clickRemoveButton}>Remove</button>
       </div>
       <div className="changer">
+        <div className='preset-toggle' onClick={clickTogglePresets}>{presetToggleText}</div>
         <input type="color" ref={selectorRef} onChange={changeInputColor} />
         <button ref={addRef} onClick={clickAddButton}>Add</button>
         <button onClick={changeSelectedColorHex}>Change</button>

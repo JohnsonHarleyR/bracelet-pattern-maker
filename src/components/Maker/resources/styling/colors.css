@@ -21,3 +21,12 @@
 .select {
   border: 2px solid cyan;
 }
+
+.preset-toggle {
+  cursor: pointer;
+  border: 2px solid gray;
+  color: cyan;
+  font-size: medium;
+  font-weight: bold;
+  width: 20px;
+}
