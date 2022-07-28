@@ -3,6 +3,7 @@ import { MakerContext } from '../../../MakerContext';
 import { addNewColorReturnSuccess, alterColorHex, doesSelectedColorExist, getSelectedColor, removeColorReturnSuccess } from '../resources/logic/controlLogic';
 import '../resources/styling/colors.css';
 import ColorSquare from './ColorSquare';
+import ColorPresets from './ColorPresets';
 
 const Colors = () => {
 
@@ -19,6 +20,7 @@ const Colors = () => {
 
   const [inputColor, setInputColor] = useState(selectedColor);
   const [colorsDisplayArray, setColorsDisplayArray] = useState([]);
+  const [showPresets, setShowPresets] = useState(true);
 
   //#region  effects
 
@@ -48,6 +50,12 @@ const Colors = () => {
       setColorsDisplayArray(createColorsDisplay());
     }
   }, [colors]);
+
+  useEffect(() => {
+    if (inputColor && inputColor !== selectorRef.current.value) {
+      selectorRef.current.value=inputColor;
+    }
+  }, [inputColor]);
 
   //#endregion
 
@@ -124,6 +132,12 @@ const Colors = () => {
         <input type="color" ref={selectorRef} onChange={changeInputColor} />
         <button ref={addRef} onClick={clickAddButton}>Add</button>
         <button onClick={changeSelectedColorHex}>Change</button>
+      </div>
+      <div>
+        <ColorPresets
+          showPresets={showPresets}
+          setInputColor={setInputColor}
+        />
       </div>
     </div>
   );

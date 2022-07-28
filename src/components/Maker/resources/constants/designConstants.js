@@ -4,6 +4,10 @@ export const ColorValue = {
   WHITE: "WHITE",
 }
 
+export const PresetHexValues = [
+  ['#f7f7f7', '#8f8f8f', '#363636'],
+];
+
 export const PatternDefaults = {
   TILE_SIZE: 10,
   LINE_THICKNESS: .5,
