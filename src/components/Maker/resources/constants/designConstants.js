@@ -6,6 +6,7 @@ export const ColorValue = {
 
 export const PresetHexValues = [
   ['#f7f7f7', '#8f8f8f', '#363636'],
+  ['#c4a384', '#8c5f3c', '#4d300b'],
 ];
 
 export const PatternDefaults = {

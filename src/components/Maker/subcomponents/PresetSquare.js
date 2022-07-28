@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import '../resources/styling/colors.css';
+import '../resources/styling/color-presets.css';
 
 const PresetSquare = ({color, setInputColor}) => {
 
@@ -33,7 +33,7 @@ const PresetSquare = ({color, setInputColor}) => {
   //#endregion
 
   return (
-    <div className="color-square" ref={colorRef} onClick={clickColor}>
+    <div className="preset-square" ref={colorRef} onClick={clickColor}>
     </div>
   );
 }

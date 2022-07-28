@@ -2,9 +2,17 @@
 
 .container {
   display: flex;
+  border: 2px solid grey;
 }
 
 .col {
   display: flex;
   flex-direction: column;
+}
+
+.preset-square {
+  width: 17px;
+  height: 17px;
+  border: 2px solid black;
+  margin:0;
 }
