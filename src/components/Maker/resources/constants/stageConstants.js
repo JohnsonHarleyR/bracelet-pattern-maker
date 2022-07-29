@@ -1,3 +1,4 @@
+import { StrandOffset } from "./nodeConstants"
 
 export const StageDefaults = {
   BG_COLOR: "#ffffff",
@@ -108,6 +109,13 @@ export const TileTextOffset = {
   Y_TILE: 25.5,
 }
 
+export const ImageCategory = {
+  CIRCLE: 'CIRCLE',
+  STRAND: 'STRAND',
+  TILE: 'TILE',
+  NONE: 'NONE',
+}
+
 export const ImageType = {
   CIRCLE_BLANK: 'CIRCLE_BLANK',
   CIRCLE_POINT_LEFT: 'CIRCLE_POINT_LEFT',
@@ -147,16 +155,26 @@ export const ImageType = {
   TILE_END_RIGHT: 'TILE_END_RIGHT',
 }
 
-export const SheetInfo = {
+export const RenderInfo = {
   CIRCLE_BLANK: {
     sheet: "circle-sheet.png",
     x: 0,
     y: 0,
     width: ImageWidth.CIRCLE_BLANK,
     height: ImageHeight.CIRCLE_BLANK,
+    category: ImageCategory.CIRCLE,
+    getXStart: (node) => {
+      return node.xStart;
+    },
+    getYStart: (node) => {
+      return node.yStart;
+    },
     getColor: (node) => {
       return node.getColor();
     },
+    getText: () => {
+      return null;
+    }
   },
   CIRCLE_POINT_LEFT: {
     sheet: "circle-sheet.png",
@@ -164,9 +182,19 @@ export const SheetInfo = {
     y: 0,
     width: ImageWidth.CIRCLE_POINT_LEFT,
     height: ImageHeight.CIRCLE_POINT_LEFT,
+    category: ImageCategory.CIRCLE,
+    getXStart: (node) => {
+      return node.xStart;
+    },
+    getYStart: (node) => {
+      return node.yStart;
+    },
     getColor: (node) => {
       return node.getColor();
     },
+    getText: () => {
+      return null;
+    }
   },
   CIRCLE_POINT_LEFT_WHITE: {
     sheet: "circle-sheet.png",
@@ -174,9 +202,19 @@ export const SheetInfo = {
     y: 0,
     width: ImageWidth.CIRCLE_POINT_LEFT,
     height: ImageHeight.CIRCLE_POINT_LEFT,
+    category: ImageCategory.CIRCLE,
+    getXStart: (node) => {
+      return node.xStart;
+    },
+    getYStart: (node) => {
+      return node.yStart;
+    },
     getColor: (node) => {
       return node.getColor();
     },
+    getText: () => {
+      return null;
+    }
   },
   CIRCLE_CURVE_LEFT: {
     sheet: "circle-sheet.png",
@@ -184,9 +222,19 @@ export const SheetInfo = {
     y: ImageHeight.CIRCLE_CURVE_LEFT,
     width: ImageWidth.CIRCLE_CURVE_LEFT,
     height: ImageHeight.CIRCLE_CURVE_LEFT,
+    category: ImageCategory.CIRCLE,
+    getXStart: (node) => {
+      return node.xStart;
+    },
+    getYStart: (node) => {
+      return node.yStart;
+    },
     getColor: (node) => {
       return node.getColor();
     },
+    getText: () => {
+      return null;
+    }
   },
   CIRCLE_CURVE_LEFT_WHITE: {
     sheet: "circle-sheet.png",
@@ -194,9 +242,19 @@ export const SheetInfo = {
     y: ImageHeight.CIRCLE_CURVE_LEFT,
     width: ImageWidth.CIRCLE_CURVE_LEFT,
     height: ImageHeight.CIRCLE_CURVE_LEFT,
+    category: ImageCategory.CIRCLE,
+    getXStart: (node) => {
+      return node.xStart;
+    },
+    getYStart: (node) => {
+      return node.yStart;
+    },
     getColor: (node) => {
       return node.getColor();
     },
+    getText: () => {
+      return null;
+    }
   },
   CIRCLE_POINT_RIGHT: {
     sheet: "circle-sheet.png",
@@ -204,9 +262,19 @@ export const SheetInfo = {
     y: ImageHeight.CIRCLE_POINT_RIGHT,
     width: ImageWidth.CIRCLE_POINT_RIGHT,
     height: ImageHeight.CIRCLE_POINT_RIGHT,
+    category: ImageCategory.CIRCLE,
+    getXStart: (node) => {
+      return node.xStart;
+    },
+    getYStart: (node) => {
+      return node.yStart;
+    },
     getColor: (node) => {
       return node.getColor();
     },
+    getText: () => {
+      return null;
+    }
   },
   CIRCLE_POINT_RIGHT_WHITE: {
     sheet: "circle-sheet.png",
@@ -214,9 +282,19 @@ export const SheetInfo = {
     y: 2 * ImageHeight.CIRCLE_POINT_RIGHT,
     width: ImageWidth.CIRCLE_POINT_RIGHT,
     height: ImageHeight.CIRCLE_POINT_RIGHT,
+    category: ImageCategory.CIRCLE,
+    getXStart: (node) => {
+      return node.xStart;
+    },
+    getYStart: (node) => {
+      return node.yStart;
+    },
     getColor: (node) => {
       return node.getColor();
     },
+    getText: () => {
+      return null;
+    }
   },
   CIRCLE_CURVE_RIGHT: {
     sheet: "circle-sheet.png",
@@ -224,9 +302,19 @@ export const SheetInfo = {
     y: 2 * ImageHeight.CIRCLE_CURVE_RIGHT,
     width: ImageWidth.CIRCLE_CURVE_RIGHT,
     height: ImageHeight.CIRCLE_CURVE_RIGHT,
+    category: ImageCategory.CIRCLE,
+    getXStart: (node) => {
+      return node.xStart;
+    },
+    getYStart: (node) => {
+      return node.yStart;
+    },
     getColor: (node) => {
       return node.getColor();
     },
+    getText: () => {
+      return null;
+    }
   },
   CIRCLE_CURVE_RIGHT_WHITE: {
     sheet: "circle-sheet.png",
@@ -234,9 +322,19 @@ export const SheetInfo = {
     y: 2 * ImageHeight.CIRCLE_CURVE_RIGHT,
     width: ImageWidth.CIRCLE_CURVE_RIGHT,
     height: ImageHeight.CIRCLE_CURVE_RIGHT,
+    category: ImageCategory.CIRCLE,
+    getXStart: (node) => {
+      return node.xStart;
+    },
+    getYStart: (node) => {
+      return node.yStart;
+    },
     getColor: (node) => {
       return node.getColor();
     },
+    getText: () => {
+      return null;
+    }
   },
 
   STRAND_START_LEFT: {
@@ -245,9 +343,19 @@ export const SheetInfo = {
     y: 0,
     width: ImageWidth.STRAND_START_LEFT,
     height: ImageHeight.STRAND_START_LEFT,
+    category: ImageCategory.STRAND,
+    getXStart: (node) => {
+      return node.xStart + StrandOffset.X_START_LEFT;
+    },
+    getYStart: (node) => {
+      return node.yStart + StrandOffset.Y_START_LEFT;
+    },
     getColor: (node) => {
       return node.topLeftStrand.color;
     },
+    getText: (node) => {
+      return node.topLeftStrand.letter;
+    }
   },
   STRAND_START_RIGHT: {
     sheet: "strand-sheet.png",
@@ -255,9 +363,19 @@ export const SheetInfo = {
     y: 0,
     width: ImageWidth.STRAND_START_RIGHT,
     height: ImageHeight.STRAND_START_RIGHT,
+    category: ImageCategory.STRAND,
+    getXStart: (node) => {
+      return node.xStart + StrandOffset.X_START_RIGHT;
+    },
+    getYStart: (node) => {
+      return node.yStart + StrandOffset.Y_START_RIGHT;
+    },
     getColor: (node) => {
       return node.topRightStrand.color;
     },
+    getText: (node) => {
+      return node.topRightStrand.letter;
+    }
   },
 
   STRAND_LEFT: {
@@ -266,9 +384,19 @@ export const SheetInfo = {
     y: ImageHeight.STRAND_START_LEFT,
     width: ImageWidth.STRAND_LEFT,
     height: ImageHeight.STRAND_LEFT,
+    category: ImageCategory.STRAND,
+    getXStart: (node) => {
+      return node.xStart + StrandOffset.X_BOTTOM_LEFT;
+    },
+    getYStart: (node) => {
+      return node.yStart + StrandOffset.Y_BOTTOM_LEFT;
+    },
     getColor: (node) => {
       return node.getBottomStrandColor(LeftOrRight.LEFT);
     },
+    getText: () => {
+      return null;
+    }
   },
   STRAND_RIGHT:  {
     sheet: "strand-sheet.png",
@@ -276,9 +404,19 @@ export const SheetInfo = {
     y: ImageHeight.STRAND_START_RIGHT,
     width: ImageWidth.STRAND_RIGHT,
     height: ImageHeight.STRAND_RIGHT,
+    category: ImageCategory.STRAND,
+    getXStart: (node) => {
+      return node.xStart + StrandOffset.X_BOTTOM_RIGHT;
+    },
+    getYStart: (node) => {
+      return node.yStart + StrandOffset.Y_BOTTOM_RIGHT;
+    },
     getColor: (node) => {
       return node.getBottomStrandColor(LeftOrRight.RIGHT);
     },
+    getText: () => {
+      return null;
+    }
   },
 
   STRAND_BOTTOM_LEFT: {
@@ -287,9 +425,19 @@ export const SheetInfo = {
     y: ImageHeight.STRAND_START_LEFT + ImageHeight.STRAND_LEFT / 2,
     width: ImageWidth.STRAND_LEFT,
     height: ImageHeight.STRAND_LEFT / 2,
+    category: ImageCategory.STRAND,
+    getXStart: (node) => {
+      return node.xStart + StrandOffset.X_BOTTOM_LEFT;
+    },
+    getYStart: (node) => {
+      return node.yStart + StrandOffset.Y_BOTTOM_LEFT;
+    },
     getColor: (node) => {
       return node.getBottomStrandColor(LeftOrRight.LEFT);
     },
+    getText: () => {
+      return null;
+    }
   },
   STRAND_BOTTOM_RIGHT:  {
     sheet: "strand-sheet.png",
@@ -297,9 +445,19 @@ export const SheetInfo = {
     y: ImageHeight.STRAND_START_RIGHT + ImageHeight.STRAND_RIGHT / 2,
     width: ImageWidth.STRAND_RIGHT,
     height: ImageHeight.STRAND_RIGHT / 2,
+    category: ImageCategory.STRAND,
+    getXStart: (node) => {
+      return node.xStart + StrandOffset.X_BOTTOM_RIGHT;
+    },
+    getYStart: (node) => {
+      return node.yStart + StrandOffset.Y_BOTTOM_RIGHT;
+    },
     getColor: (node) => {
       return node.getBottomStrandColor(LeftOrRight.RIGHT);
     },
+    getText: () => {
+      return null;
+    }
   },
 
   STRAND_LEFT_FINAL_EDGE: {
@@ -308,9 +466,19 @@ export const SheetInfo = {
     y: ImageHeight.STRAND_START_LEFT + ImageHeight.STRAND_LEFT,
     width: ImageWidth.STRAND_LEFT_FINAL_EDGE,
     height: ImageHeight.STRAND_LEFT_FINAL_EDGE,
+    category: ImageCategory.STRAND,
+    getXStart: (node) => {
+      return node.xStart + StrandOffset.X_BOTTOM_LEFT;
+    },
+    getYStart: (node) => {
+      return node.yStart + StrandOffset.Y_BOTTOM_LEFT;
+    },
     getColor: (node) => {
       return node.getBottomStrandColor(LeftOrRight.LEFT);
     },
+    getText: () => {
+      return null;
+    }
   },
   STRAND_RIGHT_FINAL_EDGE: {
     sheet: "strand-sheet.png",
@@ -318,9 +486,19 @@ export const SheetInfo = {
     y: ImageHeight.STRAND_START_RIGHT + ImageHeight.STRAND_RIGHT,
     width: ImageWidth.STRAND_RIGHT_FINAL_EDGE,
     height: ImageHeight.STRAND_RIGHT_FINAL_EDGE,
+    category: ImageCategory.STRAND,
+    getXStart: (node) => {
+      return node.xStart + StrandOffset.X_BOTTOM_RIGHT;
+    },
+    getYStart: (node) => {
+      return node.yStart + StrandOffset.Y_BOTTOM_RIGHT;
+    },
     getColor: (node) => {
       return node.getBottomStrandColor(LeftOrRight.RIGHT);
     },
+    getText: () => {
+      return null;
+    }
   },
 
   STRAND_END_LEFT: {
@@ -329,9 +507,19 @@ export const SheetInfo = {
     y: ImageHeight.STRAND_START_LEFT + ImageHeight.STRAND_LEFT + ImageHeight.STRAND_LEFT_FINAL_EDGE,
     width: ImageWidth.STRAND_END_LEFT,
     height: ImageHeight.STRAND_END_LEFT,
+    category: ImageCategory.STRAND,
+    getXStart: (node) => {
+      return node.xStart + StrandOffset.X_BOTTOM_LEFT;
+    },
+    getYStart: (node) => {
+      return node.yStart + StrandOffset.Y_BOTTOM_LEFT;
+    },
     getColor: (node) => {
       return node.getBottomStrandColor(LeftOrRight.LEFT);
     },
+    getText: () => {
+      return null;
+    }
   },
   STRAND_END_RIGHT: {
     sheet: "strand-sheet.png",
@@ -339,9 +527,19 @@ export const SheetInfo = {
     y: ImageHeight.STRAND_START_RIGHT + ImageHeight.STRAND_RIGHT + ImageHeight.STRAND_RIGHT_FINAL_EDGE,
     width: ImageWidth.STRAND_END_RIGHT,
     height: ImageHeight.STRAND_END_RIGHT,
+    category: ImageCategory.STRAND,
+    getXStart: (node) => {
+      return node.xStart + StrandOffset.X_BOTTOM_RIGHT;
+    },
+    getYStart: (node) => {
+      return node.yStart + StrandOffset.Y_BOTTOM_RIGHT;
+    },
     getColor: (node) => {
       return node.getBottomStrandColor(LeftOrRight.RIGHT);
     },
+    getText: () => {
+      return null;
+    }
   },
 
   TILE_START_LEFT: {
@@ -350,9 +548,19 @@ export const SheetInfo = {
     y: 0,
     width: ImageWidth.TILE_START_LEFT,
     height: ImageHeight.TILE_START_LEFT,
+    category: ImageCategory.TILE,
+    getXStart: (xIndex, nodesAcross) => {
+      return 0;
+    },
+    getYStart: (yOffset, yIndex, rowCount) => {
+      return yOffset;
+    },
     getColor: () => {
       return null;
     },
+    getText: () => {
+      return null;
+    }
   },
   TILE_START: {
     sheet: "tile-sheet.png",
@@ -360,9 +568,19 @@ export const SheetInfo = {
     y: 0,
     width: ImageWidth.TILE_START,
     height: ImageHeight.TILE_START,
+    category: ImageCategory.TILE,
+    getXStart: (xIndex, nodesAcross) => {
+      return ImageWidth.TILE_START_LEFT + (xIndex * ImageWidth.TILE_START);
+    },
+    getYStart: (yOffset, yIndex, rowCount) => {
+      return yOffset;
+    },
     getColor: () => {
       return null;
     },
+    getText: () => {
+      return null;
+    }
   },
   TILE_START_RIGHT: {
     sheet: "tile-sheet.png",
@@ -370,9 +588,19 @@ export const SheetInfo = {
     y: 0,
     width: ImageWidth.TILE_START_RIGHT,
     height: ImageHeight.TILE_START_RIGHT,
+    category: ImageCategory.TILE,
+    getXStart: (xIndex, nodesAcross) => {
+      return ImageWidth.TILE_START_LEFT + (nodesAcross * ImageWidth.TILE_START);
+    },
+    getYStart: (yOffset, yIndex, rowCount) => {
+      return yOffset;
+    },
     getColor: () => {
       return null;
     },
+    getText: () => {
+      return null;
+    }
   },
 
   TILE_LEFT: {
@@ -381,9 +609,19 @@ export const SheetInfo = {
     y: ImageHeight.TILE_START_LEFT,
     width: ImageWidth.TILE_LEFT,
     height: ImageHeight.TILE_LEFT,
+    category: ImageCategory.TILE,
+    getXStart: (xIndex, nodesAcross) => {
+      return 0;
+    },
+    getYStart: (yOffset, yIndex, rowCount) => {
+      return yOffset + ImageHeight.TILE_START_LEFT + (yIndex * ImageHeight.TILE_LEFT);
+    },
     getColor: () => {
       return null;
     },
+    getText: (yIndex) => {
+      return yIndex + 1;
+    }
   },
   TILE: {
     sheet: "tile-sheet.png",
@@ -391,9 +629,19 @@ export const SheetInfo = {
     y: ImageHeight.TILE_START,
     width: ImageWidth.TILE,
     height: ImageHeight.TILE,
+    category: ImageCategory.TILE,
+    getXStart: (xIndex, nodesAcross) => {
+      return ImageWidth.TILE_LEFT + (xIndex * ImageWidth.TILE);
+    },
+    getYStart: (yOffset, yIndex, rowCount) => {
+      return yOffset + ImageHeight.TILE_START + (yIndex * ImageHeight.TILE);
+    },
     getColor: () => {
       return null;
     },
+    getText: () => {
+      return null;
+    }
   },
   TILE_RIGHT: {
     sheet: "tile-sheet.png",
@@ -401,9 +649,19 @@ export const SheetInfo = {
     y: ImageHeight.TILE_START_RIGHT,
     width: ImageWidth.TILE_RIGHT,
     height: ImageHeight.TILE_RIGHT,
+    category: ImageCategory.TILE,
+    getXStart: (xIndex, nodesAcross) => {
+      return ImageWidth.TILE_LEFT + (nodesAcross * ImageWidth.TILE);
+    },
+    getYStart: (yOffset, yIndex, rowCount) => {
+      return yOffset + ImageHeight.TILE_START_RIGHT + (yIndex * ImageHeight.TILE_RIGHT);
+    },
     getColor: () => {
       return null;
     },
+    getText: (yIndex) => {
+      return yIndex + 1;
+    }
   },
   
   TILE_END_LEFT: {
@@ -412,9 +670,19 @@ export const SheetInfo = {
     y: ImageHeight.TILE_START_LEFT + ImageHeight.TILE_LEFT,
     width: ImageWidth.TILE_END_LEFT,
     height: ImageHeight.TILE_END_LEFT,
+    category: ImageCategory.TILE,
+    getXStart: (xIndex, nodesAcross) => {
+      return 0;
+    },
+    getYStart: (yOffset, yIndex, rowCount) => {
+      return yOffset + ImageHeight.TILE_START_LEFT + (rowCount * ImageHeight.TILE_LEFT);
+    },
     getColor: () => {
       return null;
     },
+    getText: () => {
+      return null;
+    }
   },
   TILE_END: {
     sheet: "tile-sheet.png",
@@ -422,9 +690,19 @@ export const SheetInfo = {
     y: ImageHeight.TILE_START + ImageHeight.TILE,
     width: ImageWidth.TILE_END,
     height: ImageHeight.TILE_END,
+    category: ImageCategory.TILE,
+    getXStart: (xIndex, nodesAcross) => {
+      return ImageWidth.TILE_END_LEFT + (xIndex * ImageWidth.TILE_END);
+    },
+    getYStart: (yOffset, yIndex, rowCount) => {
+      return yOffset + ImageHeight.TILE_START + (rowCount * ImageHeight.TILE);
+    },
     getColor: () => {
       return null;
     },
+    getText: () => {
+      return null;
+    }
   },
   TILE_END_RIGHT: {
     sheet: "tile-sheet.png",
@@ -432,9 +710,19 @@ export const SheetInfo = {
     y: ImageHeight.TILE_START_RIGHT + ImageHeight.TILE_RIGHT,
     width: ImageWidth.TILE_END_RIGHT,
     height: ImageHeight.TILE_END_RIGHT,
+    category: ImageCategory.TILE,
+    getXStart: (xIndex, nodesAcross) => {
+      return ImageWidth.TILE_END_LEFT + (nodesAcross * ImageWidth.TILE_END);
+    },
+    getYStart: (yOffset, yIndex, rowCount) => {
+      return yOffset + ImageHeight.TILE_START_LEFT + (rowCount * ImageHeight.TILE);
+    },
     getColor: () => {
       return null;
     },
+    getText: () => {
+      return null;
+    }
   },
 }
 

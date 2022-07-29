@@ -556,12 +556,32 @@ const renderBottomStrand = (canvas, fillColor, imageName, xStart, yStart, width,
 }
 
 const renderFirstStrandRow = (canvas, firstNodeRow, rowCount, addToLoadedCount) => {
+  console.log('Logging top start strand offsets');
+  let lXOffset = 0;
+  let lYOffset = 0;
+  let rXOffset = 0;
+  let rYOffset = 0;
   firstNodeRow.forEach((n, i) => {
-    renderStartOrEndStrand(canvas, i * 2, n.topLeftStrand, 0, rowCount, LeftOrRight.LEFT, addToLoadedCount);
+    let lPos = renderStartOrEndStrand(canvas, i * 2, n.topLeftStrand, 0, rowCount, LeftOrRight.LEFT, addToLoadedCount);
+    let prevLXOffset = lXOffset;
+    let prevLYOffset = lYOffset;
+    lXOffset = lPos.x - n.xStart;
+    lYOffset = lPos.y - n.yStart;
+    if (i !== 0 && (prevLXOffset !== lXOffset || prevLYOffset !== lYOffset)) {
+      console.log(`WARNING: Left offsets not consistent`);
+    }
 
-    renderStartOrEndStrand(canvas, i * 2 + 1, n.topRightStrand, 0, rowCount, LeftOrRight.RIGHT, addToLoadedCount);
-    //renderRightTopStrandText(canvas, n.topRightStrand, xy.x, xy.y);
-  })
+    let rPos = renderStartOrEndStrand(canvas, i * 2 + 1, n.topRightStrand, 0, rowCount, LeftOrRight.RIGHT, addToLoadedCount);
+    let prevRXOffset = rXOffset;
+    let prevRYOffset = rYOffset;
+    rXOffset = rPos.x - n.xStart;
+    rYOffset = rPos.y - n.yStart;
+    if (i !== 0 && (prevRXOffset !== rXOffset || prevRYOffset !== rYOffset)) {
+      console.log(`WARNING: Right offsets not consistent`);
+    }
+  });
+  console.log(`Left strand offsets: {x: ${lXOffset}, y: ${lYOffset}}`);
+  console.log(`Right strand offsets: {x: ${rXOffset}, y: ${rYOffset}}`);
 }
 
 const renderLastStrandRow = (canvas, lastNodeRow, rowCount, addToLoadedCount) => {
@@ -611,6 +631,9 @@ const renderStartOrEndStrand = (canvas, strandIndex, strandInfo, rowIndex, rowCo
     ? strandInfo.letter
     : "";
   renderImageWithUnderFills(canvas, imageInfo, fillInfos, isStart, leftOrRight, text, addToLoadedCount);
+
+  // for logging purposes
+  return xy;
 }
 
 export const getStrandImageName = (positionIndex, rowIndex, rowCount, isStart = false) => {

@@ -19,6 +19,10 @@ export const StrandOffset = {
   Y_BOTTOM_LEFT: 26,
   X_BOTTOM_RIGHT: 22,
   Y_BOTTOM_RIGHT: 26,
+  X_START_LEFT: -37,
+  Y_START_LEFT: -44,
+  X_START_RIGHT: 22,
+  Y_START_RIGHT: -44,
 }
 
 export const NodeSymbol = {
