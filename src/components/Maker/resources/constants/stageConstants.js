@@ -10,7 +10,7 @@ export const StageDefaults = {
   COPYRIGHT_TEXT: "ⒸHarlee's Creation Tools 2022",
   COPYRIGHT_TEXT_COLOR: "#9B9B9B",
   COPYRIGHT_TEXT_FONT: '14px monospace',
-  COPYRIGHT_Y_OFFSET: 10,
+  COPYRIGHT_Y_OFFSET: 14,
   RENDER_METHOD: OldOrNew.NEW,
   CANVAS_END_EXTRA: 15,
   CANVAS_END_BG_EXTRA: 15,
