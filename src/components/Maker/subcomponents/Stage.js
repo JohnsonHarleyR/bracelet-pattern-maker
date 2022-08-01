@@ -15,6 +15,7 @@ import { ClickType, NodeDefaults } from '../resources/constants/nodeConstants';
 import { calculatePatternLength, calculatePatternThickness, createImageOfCanvas, createPatternFromNodes, doesPatternAlignCorrectly } from '../resources/logic/patternLogic';
 import { renderAll } from '../resources/logic/renderLogicV2';
 import { renderAllV2, renderEverything } from '../resources/logic/renderLogicV3';
+import { StageDefaults } from '../resources/constants/stageConstants';
 
 const Stage = () => {
 
@@ -229,7 +230,9 @@ const Stage = () => {
 
   useEffect(() => {
     if (canvasHeight) {
-      canvasRef.current.height = canvasHeight;
+      canvasRef.current.height = !isSetupDecided
+        ? canvasHeight
+        : canvasHeight + patternHeight + StageDefaults.CANVAS_END_EXTRA;
 
       if (isSetupDecided) {
         //console.log(`calculate # of bg images`);

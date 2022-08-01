@@ -1,7 +1,7 @@
 import { ColorValue } from "../constants/designConstants";
 import { NodeSymbol } from "../constants/nodeConstants";
 import { RenderCategory, ImageType, LeftOrRight, RenderInfo, OldOrNew, StageDefaults } from "../constants/stageConstants";
-import { drawNumberOnTile, drawText, renderCircleFill, renderLeftTopStrandText, renderRightTopStrandText, renderSquareFill } from "./drawLogic";
+import { drawNumberOnTile, drawText, drawCopyrightTextCentered, renderCircleFill, renderLeftTopStrandText, renderRightTopStrandText, renderSquareFill } from "./drawLogic";
 import { getClosestEndOfColorSpectrum } from "./hexLogic";
 import Tiles from "../images/tile-sheet.png";
 import Circles from "../images/circle-sheet.png";
@@ -28,13 +28,14 @@ export const renderAllV2 = (canvas, nodes, yOffset, isSetupDecided, includeBackg
   if (includeBackground) {
     let calculatedHeight = calculateCanvasHeight(nodes.length);
     canvas.width = calculateCanvasWidth(nodes[0].length);
-    canvas.height = calculatedHeight + yOffset;
+    canvas.height = calculatedHeight + yOffset  + StageDefaults.CANVAS_END_EXTRA;
     addBgImagesToArrayV2(canvas, nodes, yOffset, isSetupDecided, renderArray);
   } else {
 
     if (startingArray.length === 0) {
       renderArray.push(createRenderArrayItem(ImageType.TILE_START_LEFT, 0, 0, nodes, canvas, isSetupDecided, yOffset));
       renderArray.push(createRenderArrayItem(ImageType.TILE_START_RIGHT, 0, nodes[0].length * 2 -1, nodes, canvas, isSetupDecided, yOffset));
+      renderArray.push(createRenderArrayItem(ImageType.OVER_TEXT_BG, null, null, nodes, canvas, isSetupDecided, yOffset));
       // let info = getTileInfo(ImageName.TILE_START);
       // renderArray.push(createImageInfoItem(null, info.leftName, 0, yOffset, info.leftWidth, info.leftHeight, false, null, null, LeftOrRight.LEFT));
       // renderArray.push(createImageInfoItem(null, info.rightName, canvas.width - info.rightWidth, yOffset, info.rightWidth, info.rightHeight, false, null, null, LeftOrRight.RIGHT));
@@ -61,7 +62,13 @@ const renderNextV2 = (canvas, index, array) => {
   let item = array[index];
 
   if (item.imageName === null) {
-    renderSquareFill(canvas, item.color, item.cX, item.cY, item.cW, item.cH);
+    if (item.color) {
+      renderSquareFill(canvas, item.color, item.cX, item.cY, item.cW, item.cH);
+    }
+
+    if (item.text) {
+      drawCopyrightTextCentered(canvas, item.text, item.cX, item.cY, item.color);
+    }
 
     // if it's not the last item in the array, render next item
     if (index !== array.length - 1) {
@@ -113,11 +120,6 @@ const renderNextV2 = (canvas, index, array) => {
           renderNextV2(canvas, index + 1, array);
         }
 
-      }
-    } else {
-      drawText(canvas, item.text, item.cX, item.cY, item.color);
-      if (index !== array.length - 1) {
-        renderNextV2(canvas, index + 1, array);
       }
     }
     
@@ -207,7 +209,7 @@ const addTileRowItemsToArrayV2 = (mainImageType, nodes, canvas, yIndex, array, y
   array.push(createRenderArrayItemFromInfo(leftInfo, yIndex, 0, nodes, canvas, null, yOffset));
 
   // middle images
-  let totalAcross = nodesAcross * 2 - 1;
+  let totalAcross = (nodesAcross - 1) * 2;
   for (let i = 0; i < totalAcross; i++) {
     array.push(createRenderArrayItemFromInfo(mainInfo, yIndex, i, nodes, canvas, null, yOffset));
   }
@@ -265,6 +267,19 @@ export const createRenderArrayItemFromInfo = (info, yIndex, xIndex, nodes, canva
       cX = info.getXStart(nodeS);
       cY = info.getYStart(nodeS, yOffset);
       color = info.getColor(nodeS);
+      break;
+    case RenderCategory.OVER_TEXT:
+      text = info.getText();
+      cX = info.getXStart(canvas);
+      cY = info.getYStart(canvas);
+      color = info.getColor();
+      break;
+    case RenderCategory.OVER_TEXT_BG:
+      text = info.getText();
+      cX = info.getXStart(canvas);
+      cY = info.getYStart(canvas);
+      color = info.getColor();
+      cW = canvas.width;
       break;
   }
 

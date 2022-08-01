@@ -246,6 +246,17 @@ export const drawText = (canvas, text, x, y, color = TextDefaults.COLOR) => {
   ctx.fillText(text, x, y);
 }
 
+export const drawCopyrightTextCentered = (canvas, text, x, y, color = TextDefaults.COLOR) => {
+  let ctx = canvas.getContext("2d");
+  ctx.beginPath();
+  ctx.fillStyle = color;
+  ctx.font = StageDefaults.COPYRIGHT_TEXT_FONT;
+  ctx.closePath();
+  ctx.textAlign = 'center';
+  ctx.fillText(text, x, y);
+  ctx.fillText(text, x, y);
+}
+
 
 export const drawNumberOnTile = ({canvas, xTileStart, yTileStart, number, leftOrRight}) => {
   let yForNumber = yTileStart + TileTextOffset.Y_TILE;

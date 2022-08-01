@@ -7,10 +7,13 @@ export const OldOrNew = {
 
 export const StageDefaults = {
   BG_COLOR: "#ffffff",
-  COPYRIGHT_TEXT: "Made with Harlee's Creation Tools 2022",
-  COPYRIGHT_TEXT_COLOR: "Grey",
-  COPYRIGHT_TEXT_SIZE: 14,
+  COPYRIGHT_TEXT: "ⒸHarlee's Creation Tools 2022",
+  COPYRIGHT_TEXT_COLOR: "#9B9B9B",
+  COPYRIGHT_TEXT_FONT: '16px serif',
+  COPYRIGHT_Y_OFFSET: 10,
   RENDER_METHOD: OldOrNew.NEW,
+  CANVAS_END_EXTRA: 15,
+  CANVAS_END_BG_EXTRA: 15,
 }
 
 export const ImageName = {
@@ -124,6 +127,7 @@ export const RenderCategory = {
   TILE: 'TILE',
   BG_FILL: 'BG_FILL',
   OVER_TEXT: 'OVER_TEXT',
+  OVER_TEXT_BG: 'OVER_TEXT_BG',
   NONE: 'NONE',
 }
 
@@ -167,6 +171,7 @@ export const ImageType = {
 
   BG_FILL: 'BG_FILL',
   OVER_TEXT: 'OVER_TEXT',
+  OVER_TEXT_BG: 'OVER_TEXT_BG',
   NONE: 'NONE',
 }
 
@@ -771,16 +776,36 @@ export const RenderInfo = {
     height: null,
     category: RenderCategory.OVER_TEXT,
     getXStart: (canvas) => {
-      return canvas.width - ImageWidth.TILE_END_RIGHT;
+      return canvas.width / 2;
     },
     getYStart: (canvas) => {
-      return canvas.height - ImageHeight.TILE_END_RIGHT / 2;
+      return canvas.height - StageDefaults.COPYRIGHT_Y_OFFSET;
     },
     getColor: () => {
       return StageDefaults.COPYRIGHT_TEXT_COLOR;
     },
     getText: () => {
-      return StageDefaults.COPYRIGHT_TEXT_SIZE;
+      return StageDefaults.COPYRIGHT_TEXT;
+    }
+  },
+  OVER_TEXT_BG: {
+    sheet: null,
+    x: null,
+    y: null,
+    width: null,
+    height: StageDefaults.COPYRIGHT_Y_OFFSET + StageDefaults.CANVAS_END_BG_EXTRA,
+    category: RenderCategory.OVER_TEXT_BG,
+    getXStart: (canvas) => {
+      return 0;
+    },
+    getYStart: (canvas) => {
+      return canvas.height - StageDefaults.COPYRIGHT_Y_OFFSET - StageDefaults.CANVAS_END_BG_EXTRA;
+    },
+    getColor: () => {
+      return StageDefaults.BG_COLOR;
+    },
+    getText: () => {
+      return null;
     }
   },
 }
