@@ -2,6 +2,9 @@ import { StrandOffset } from "./nodeConstants"
 
 export const StageDefaults = {
   BG_COLOR: "#ffffff",
+  COPYRIGHT_TEXT: "Made with Harlee's Creation Tools 2022",
+  COPYRIGHT_TEXT_COLOR: "Grey",
+  COPYRIGHT_TEXT_SIZE: 14,
 }
 
 export const ImageName = {
@@ -109,10 +112,12 @@ export const TileTextOffset = {
   Y_TILE: 25.5,
 }
 
-export const ImageCategory = {
+export const RenderCategory = {
   CIRCLE: 'CIRCLE',
   STRAND: 'STRAND',
   TILE: 'TILE',
+  BG_FILL: 'BG_FILL',
+  OVER_TEXT: 'OVER_TEXT',
   NONE: 'NONE',
 }
 
@@ -153,6 +158,10 @@ export const ImageType = {
   TILE_END_LEFT: 'TILE_END_LEFT',
   TILE_END: 'TILE_END',
   TILE_END_RIGHT: 'TILE_END_RIGHT',
+
+  BG_FILL: 'BG_FILL',
+  OVER_TEXT: 'OVER_TEXT',
+  NONE: 'NONE',
 }
 
 export const RenderInfo = {
@@ -162,7 +171,7 @@ export const RenderInfo = {
     y: 0,
     width: ImageWidth.CIRCLE_BLANK,
     height: ImageHeight.CIRCLE_BLANK,
-    category: ImageCategory.CIRCLE,
+    category: RenderCategory.CIRCLE,
     getXStart: (node) => {
       return node.xStart;
     },
@@ -182,7 +191,7 @@ export const RenderInfo = {
     y: 0,
     width: ImageWidth.CIRCLE_POINT_LEFT,
     height: ImageHeight.CIRCLE_POINT_LEFT,
-    category: ImageCategory.CIRCLE,
+    category: RenderCategory.CIRCLE,
     getXStart: (node) => {
       return node.xStart;
     },
@@ -202,7 +211,7 @@ export const RenderInfo = {
     y: 0,
     width: ImageWidth.CIRCLE_POINT_LEFT,
     height: ImageHeight.CIRCLE_POINT_LEFT,
-    category: ImageCategory.CIRCLE,
+    category: RenderCategory.CIRCLE,
     getXStart: (node) => {
       return node.xStart;
     },
@@ -222,7 +231,7 @@ export const RenderInfo = {
     y: ImageHeight.CIRCLE_CURVE_LEFT,
     width: ImageWidth.CIRCLE_CURVE_LEFT,
     height: ImageHeight.CIRCLE_CURVE_LEFT,
-    category: ImageCategory.CIRCLE,
+    category: RenderCategory.CIRCLE,
     getXStart: (node) => {
       return node.xStart;
     },
@@ -242,7 +251,7 @@ export const RenderInfo = {
     y: ImageHeight.CIRCLE_CURVE_LEFT,
     width: ImageWidth.CIRCLE_CURVE_LEFT,
     height: ImageHeight.CIRCLE_CURVE_LEFT,
-    category: ImageCategory.CIRCLE,
+    category: RenderCategory.CIRCLE,
     getXStart: (node) => {
       return node.xStart;
     },
@@ -262,7 +271,7 @@ export const RenderInfo = {
     y: ImageHeight.CIRCLE_POINT_RIGHT,
     width: ImageWidth.CIRCLE_POINT_RIGHT,
     height: ImageHeight.CIRCLE_POINT_RIGHT,
-    category: ImageCategory.CIRCLE,
+    category: RenderCategory.CIRCLE,
     getXStart: (node) => {
       return node.xStart;
     },
@@ -282,7 +291,7 @@ export const RenderInfo = {
     y: 2 * ImageHeight.CIRCLE_POINT_RIGHT,
     width: ImageWidth.CIRCLE_POINT_RIGHT,
     height: ImageHeight.CIRCLE_POINT_RIGHT,
-    category: ImageCategory.CIRCLE,
+    category: RenderCategory.CIRCLE,
     getXStart: (node) => {
       return node.xStart;
     },
@@ -302,7 +311,7 @@ export const RenderInfo = {
     y: 2 * ImageHeight.CIRCLE_CURVE_RIGHT,
     width: ImageWidth.CIRCLE_CURVE_RIGHT,
     height: ImageHeight.CIRCLE_CURVE_RIGHT,
-    category: ImageCategory.CIRCLE,
+    category: RenderCategory.CIRCLE,
     getXStart: (node) => {
       return node.xStart;
     },
@@ -322,7 +331,7 @@ export const RenderInfo = {
     y: 2 * ImageHeight.CIRCLE_CURVE_RIGHT,
     width: ImageWidth.CIRCLE_CURVE_RIGHT,
     height: ImageHeight.CIRCLE_CURVE_RIGHT,
-    category: ImageCategory.CIRCLE,
+    category: RenderCategory.CIRCLE,
     getXStart: (node) => {
       return node.xStart;
     },
@@ -343,7 +352,7 @@ export const RenderInfo = {
     y: 0,
     width: ImageWidth.STRAND_START_LEFT,
     height: ImageHeight.STRAND_START_LEFT,
-    category: ImageCategory.STRAND,
+    category: RenderCategory.STRAND,
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_START_LEFT;
     },
@@ -363,7 +372,7 @@ export const RenderInfo = {
     y: 0,
     width: ImageWidth.STRAND_START_RIGHT,
     height: ImageHeight.STRAND_START_RIGHT,
-    category: ImageCategory.STRAND,
+    category: RenderCategory.STRAND,
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_START_RIGHT;
     },
@@ -384,7 +393,7 @@ export const RenderInfo = {
     y: ImageHeight.STRAND_START_LEFT,
     width: ImageWidth.STRAND_LEFT,
     height: ImageHeight.STRAND_LEFT,
-    category: ImageCategory.STRAND,
+    category: RenderCategory.STRAND,
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_BOTTOM_LEFT;
     },
@@ -404,7 +413,7 @@ export const RenderInfo = {
     y: ImageHeight.STRAND_START_RIGHT,
     width: ImageWidth.STRAND_RIGHT,
     height: ImageHeight.STRAND_RIGHT,
-    category: ImageCategory.STRAND,
+    category: RenderCategory.STRAND,
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_BOTTOM_RIGHT;
     },
@@ -425,7 +434,7 @@ export const RenderInfo = {
     y: ImageHeight.STRAND_START_LEFT + ImageHeight.STRAND_LEFT / 2,
     width: ImageWidth.STRAND_LEFT,
     height: ImageHeight.STRAND_LEFT / 2,
-    category: ImageCategory.STRAND,
+    category: RenderCategory.STRAND,
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_BOTTOM_LEFT;
     },
@@ -445,7 +454,7 @@ export const RenderInfo = {
     y: ImageHeight.STRAND_START_RIGHT + ImageHeight.STRAND_RIGHT / 2,
     width: ImageWidth.STRAND_RIGHT,
     height: ImageHeight.STRAND_RIGHT / 2,
-    category: ImageCategory.STRAND,
+    category: RenderCategory.STRAND,
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_BOTTOM_RIGHT;
     },
@@ -466,7 +475,7 @@ export const RenderInfo = {
     y: ImageHeight.STRAND_START_LEFT + ImageHeight.STRAND_LEFT,
     width: ImageWidth.STRAND_LEFT_FINAL_EDGE,
     height: ImageHeight.STRAND_LEFT_FINAL_EDGE,
-    category: ImageCategory.STRAND,
+    category: RenderCategory.STRAND,
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_BOTTOM_LEFT;
     },
@@ -486,7 +495,7 @@ export const RenderInfo = {
     y: ImageHeight.STRAND_START_RIGHT + ImageHeight.STRAND_RIGHT,
     width: ImageWidth.STRAND_RIGHT_FINAL_EDGE,
     height: ImageHeight.STRAND_RIGHT_FINAL_EDGE,
-    category: ImageCategory.STRAND,
+    category: RenderCategory.STRAND,
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_BOTTOM_RIGHT;
     },
@@ -507,7 +516,7 @@ export const RenderInfo = {
     y: ImageHeight.STRAND_START_LEFT + ImageHeight.STRAND_LEFT + ImageHeight.STRAND_LEFT_FINAL_EDGE,
     width: ImageWidth.STRAND_END_LEFT,
     height: ImageHeight.STRAND_END_LEFT,
-    category: ImageCategory.STRAND,
+    category: RenderCategory.STRAND,
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_BOTTOM_LEFT;
     },
@@ -527,7 +536,7 @@ export const RenderInfo = {
     y: ImageHeight.STRAND_START_RIGHT + ImageHeight.STRAND_RIGHT + ImageHeight.STRAND_RIGHT_FINAL_EDGE,
     width: ImageWidth.STRAND_END_RIGHT,
     height: ImageHeight.STRAND_END_RIGHT,
-    category: ImageCategory.STRAND,
+    category: RenderCategory.STRAND,
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_BOTTOM_RIGHT;
     },
@@ -548,7 +557,7 @@ export const RenderInfo = {
     y: 0,
     width: ImageWidth.TILE_START_LEFT,
     height: ImageHeight.TILE_START_LEFT,
-    category: ImageCategory.TILE,
+    category: RenderCategory.TILE,
     getXStart: (xIndex, nodesAcross) => {
       return 0;
     },
@@ -568,9 +577,9 @@ export const RenderInfo = {
     y: 0,
     width: ImageWidth.TILE_START,
     height: ImageHeight.TILE_START,
-    category: ImageCategory.TILE,
-    getXStart: (xIndex, nodesAcross) => {
-      return ImageWidth.TILE_START_LEFT + (xIndex * ImageWidth.TILE_START);
+    category: RenderCategory.TILE,
+    getXStart: (count) => {
+      return ImageWidth.TILE_START_LEFT + (count * ImageWidth.TILE_START);
     },
     getYStart: (yOffset, yIndex, rowCount) => {
       return yOffset;
@@ -588,9 +597,9 @@ export const RenderInfo = {
     y: 0,
     width: ImageWidth.TILE_START_RIGHT,
     height: ImageHeight.TILE_START_RIGHT,
-    category: ImageCategory.TILE,
-    getXStart: (xIndex, nodesAcross) => {
-      return ImageWidth.TILE_START_LEFT + (nodesAcross * ImageWidth.TILE_START);
+    category: RenderCategory.TILE,
+    getXStart: (nodesAcross) => {
+      return ImageWidth.TILE_START_LEFT + (nodesAcross * 2 * ImageWidth.TILE_START);
     },
     getYStart: (yOffset, yIndex, rowCount) => {
       return yOffset;
@@ -609,7 +618,7 @@ export const RenderInfo = {
     y: ImageHeight.TILE_START_LEFT,
     width: ImageWidth.TILE_LEFT,
     height: ImageHeight.TILE_LEFT,
-    category: ImageCategory.TILE,
+    category: RenderCategory.TILE,
     getXStart: (xIndex, nodesAcross) => {
       return 0;
     },
@@ -629,9 +638,9 @@ export const RenderInfo = {
     y: ImageHeight.TILE_START,
     width: ImageWidth.TILE,
     height: ImageHeight.TILE,
-    category: ImageCategory.TILE,
-    getXStart: (xIndex, nodesAcross) => {
-      return ImageWidth.TILE_LEFT + (xIndex * ImageWidth.TILE);
+    category: RenderCategory.TILE,
+    getXStart: (nodesAcross, count) => {
+      return ImageWidth.TILE_LEFT + (count * ImageWidth.TILE);
     },
     getYStart: (yOffset, yIndex, rowCount) => {
       return yOffset + ImageHeight.TILE_START + (yIndex * ImageHeight.TILE);
@@ -649,9 +658,9 @@ export const RenderInfo = {
     y: ImageHeight.TILE_START_RIGHT,
     width: ImageWidth.TILE_RIGHT,
     height: ImageHeight.TILE_RIGHT,
-    category: ImageCategory.TILE,
-    getXStart: (xIndex, nodesAcross) => {
-      return ImageWidth.TILE_LEFT + (nodesAcross * ImageWidth.TILE);
+    category: RenderCategory.TILE,
+    getXStart: (nodesAcross) => {
+      return ImageWidth.TILE_LEFT + (nodesAcross * 2 * ImageWidth.TILE);
     },
     getYStart: (yOffset, yIndex, rowCount) => {
       return yOffset + ImageHeight.TILE_START_RIGHT + (yIndex * ImageHeight.TILE_RIGHT);
@@ -670,8 +679,8 @@ export const RenderInfo = {
     y: ImageHeight.TILE_START_LEFT + ImageHeight.TILE_LEFT,
     width: ImageWidth.TILE_END_LEFT,
     height: ImageHeight.TILE_END_LEFT,
-    category: ImageCategory.TILE,
-    getXStart: (xIndex, nodesAcross) => {
+    category: RenderCategory.TILE,
+    getXStart: (nodesAcross) => {
       return 0;
     },
     getYStart: (yOffset, yIndex, rowCount) => {
@@ -690,9 +699,9 @@ export const RenderInfo = {
     y: ImageHeight.TILE_START + ImageHeight.TILE,
     width: ImageWidth.TILE_END,
     height: ImageHeight.TILE_END,
-    category: ImageCategory.TILE,
-    getXStart: (xIndex, nodesAcross) => {
-      return ImageWidth.TILE_END_LEFT + (xIndex * ImageWidth.TILE_END);
+    category: RenderCategory.TILE,
+    getXStart: (count) => {
+      return ImageWidth.TILE_END_LEFT + (count * ImageWidth.TILE_END);
     },
     getYStart: (yOffset, yIndex, rowCount) => {
       return yOffset + ImageHeight.TILE_START + (rowCount * ImageHeight.TILE);
@@ -710,9 +719,9 @@ export const RenderInfo = {
     y: ImageHeight.TILE_START_RIGHT + ImageHeight.TILE_RIGHT,
     width: ImageWidth.TILE_END_RIGHT,
     height: ImageHeight.TILE_END_RIGHT,
-    category: ImageCategory.TILE,
+    category: RenderCategory.TILE,
     getXStart: (xIndex, nodesAcross) => {
-      return ImageWidth.TILE_END_LEFT + (nodesAcross * ImageWidth.TILE_END);
+      return ImageWidth.TILE_END_LEFT + (nodesAcross * 2 * ImageWidth.TILE_END);
     },
     getYStart: (yOffset, yIndex, rowCount) => {
       return yOffset + ImageHeight.TILE_START_LEFT + (rowCount * ImageHeight.TILE);
@@ -722,6 +731,46 @@ export const RenderInfo = {
     },
     getText: () => {
       return null;
+    }
+  },
+  BG_FILL: {
+    sheet: null,
+    x: null,
+    y: null,
+    width: null,
+    height: null,
+    category: RenderCategory.TILE,
+    getXStart: () => {
+      return 0;
+    },
+    getYStart: () => {
+      return 0;
+    },
+    getColor: () => {
+      return StageDefaults.BG_COLOR;
+    },
+    getText: () => {
+      return '';
+    }
+  },
+  OVER_TEXT: {
+    sheet: null,
+    x: null,
+    y: null,
+    width: null,
+    height: null,
+    category: RenderCategory.OVER_TEXT,
+    getXStart: (canvas) => {
+      return canvas.width - ImageWidth.TILE_END_RIGHT;
+    },
+    getYStart: (canvas) => {
+      return canvas.height - ImageHeight.TILE_END_RIGHT / 2;
+    },
+    getColor: () => {
+      return StageDefaults.COPYRIGHT_TEXT_COLOR;
+    },
+    getText: () => {
+      return StageDefaults.COPYRIGHT_TEXT_SIZE;
     }
   },
 }
