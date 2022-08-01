@@ -28,14 +28,20 @@ export const renderAllV2 = (canvas, nodes, yOffset, isSetupDecided, includeBackg
   if (includeBackground) {
     let calculatedHeight = calculateCanvasHeight(nodes.length);
     canvas.width = calculateCanvasWidth(nodes[0].length);
-    canvas.height = calculatedHeight + yOffset  + StageDefaults.CANVAS_END_EXTRA;
+    if (StageDefaults.SHOW_COPYRIGHT) {
+      canvas.height = calculatedHeight + yOffset + StageDefaults.CANVAS_END_EXTRA;
+    } else {
+      canvas.height = calculatedHeight + yOffset;
+    }
     addBgImagesToArrayV2(canvas, nodes, yOffset, isSetupDecided, renderArray);
   } else {
 
     if (startingArray.length === 0) {
       renderArray.push(createRenderArrayItem(ImageType.TILE_START_LEFT, 0, 0, nodes, canvas, isSetupDecided, yOffset));
       renderArray.push(createRenderArrayItem(ImageType.TILE_START_RIGHT, 0, nodes[0].length * 2 -1, nodes, canvas, isSetupDecided, yOffset));
-      renderArray.push(createRenderArrayItem(ImageType.OVER_TEXT_BG, null, null, nodes, canvas, isSetupDecided, yOffset));
+      if (StageDefaults.SHOW_COPYRIGHT) {
+        renderArray.push(createRenderArrayItem(ImageType.OVER_TEXT_BG, null, null, nodes, canvas, isSetupDecided, yOffset));
+      }
       // let info = getTileInfo(ImageName.TILE_START);
       // renderArray.push(createImageInfoItem(null, info.leftName, 0, yOffset, info.leftWidth, info.leftHeight, false, null, null, LeftOrRight.LEFT));
       // renderArray.push(createImageInfoItem(null, info.rightName, canvas.width - info.rightWidth, yOffset, info.rightWidth, info.rightHeight, false, null, null, LeftOrRight.RIGHT));
@@ -47,7 +53,9 @@ export const renderAllV2 = (canvas, nodes, yOffset, isSetupDecided, includeBackg
   addAllNodeImagesToArrayV2(canvas, nodes, yOffset, isSetupDecided, renderArray);
 
   // add over text
-  renderArray.push(createRenderArrayItemFromInfo(RenderInfo.OVER_TEXT, null, null, nodes, canvas, isSetupDecided, yOffset));
+  if (StageDefaults.SHOW_COPYRIGHT) {
+    renderArray.push(createRenderArrayItemFromInfo(RenderInfo.OVER_TEXT, null, null, nodes, canvas, isSetupDecided, yOffset));
+  }
 
   // now render everything in the array
   renderNextV2(canvas, 0, renderArray);

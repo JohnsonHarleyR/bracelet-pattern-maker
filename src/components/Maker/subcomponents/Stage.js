@@ -232,7 +232,9 @@ const Stage = () => {
     if (canvasHeight) {
       canvasRef.current.height = !isSetupDecided
         ? canvasHeight
-        : canvasHeight + patternHeight + StageDefaults.CANVAS_END_EXTRA;
+        : StageDefaults.SHOW_COPYRIGHT
+          ? canvasHeight + patternHeight + StageDefaults.CANVAS_END_EXTRA
+          : canvasHeight + patternHeight;
 
       if (isSetupDecided) {
         //console.log(`calculate # of bg images`);
