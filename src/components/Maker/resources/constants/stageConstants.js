@@ -1,10 +1,16 @@
 import { StrandOffset } from "./nodeConstants"
 
+export const OldOrNew = {
+  OLD: 'OLD',
+  NEW: 'NEW',
+}
+
 export const StageDefaults = {
   BG_COLOR: "#ffffff",
   COPYRIGHT_TEXT: "Made with Harlee's Creation Tools 2022",
   COPYRIGHT_TEXT_COLOR: "Grey",
   COPYRIGHT_TEXT_SIZE: 14,
+  RENDER_METHOD: OldOrNew.NEW,
 }
 
 export const ImageName = {
@@ -175,8 +181,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart;
     },
-    getYStart: (node) => {
-      return node.yStart;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart;
     },
     getColor: (node) => {
       return node.getColor();
@@ -195,8 +201,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart;
     },
-    getYStart: (node) => {
-      return node.yStart;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart;
     },
     getColor: (node) => {
       return node.getColor();
@@ -215,8 +221,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart;
     },
-    getYStart: (node) => {
-      return node.yStart;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart;
     },
     getColor: (node) => {
       return node.getColor();
@@ -235,8 +241,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart;
     },
-    getYStart: (node) => {
-      return node.yStart;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart;
     },
     getColor: (node) => {
       return node.getColor();
@@ -255,8 +261,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart;
     },
-    getYStart: (node) => {
-      return node.yStart;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart;
     },
     getColor: (node) => {
       return node.getColor();
@@ -275,8 +281,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart;
     },
-    getYStart: (node) => {
-      return node.yStart;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart;
     },
     getColor: (node) => {
       return node.getColor();
@@ -295,8 +301,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart;
     },
-    getYStart: (node) => {
-      return node.yStart;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart;
     },
     getColor: (node) => {
       return node.getColor();
@@ -315,8 +321,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart;
     },
-    getYStart: (node) => {
-      return node.yStart;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart;
     },
     getColor: (node) => {
       return node.getColor();
@@ -335,8 +341,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart;
     },
-    getYStart: (node) => {
-      return node.yStart;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart;
     },
     getColor: (node) => {
       return node.getColor();
@@ -357,8 +363,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_START_LEFT;
     },
-    getYStart: (node) => {
-      return node.yStart + StrandOffset.Y_START_LEFT;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart + StrandOffset.Y_START_LEFT;
     },
     getColor: (node) => {
       return node.topLeftStrand.color;
@@ -378,8 +384,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_START_RIGHT;
     },
-    getYStart: (node) => {
-      return node.yStart + StrandOffset.Y_START_RIGHT;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart + StrandOffset.Y_START_RIGHT;
     },
     getColor: (node) => {
       return node.topRightStrand.color;
@@ -399,8 +405,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_BOTTOM_LEFT;
     },
-    getYStart: (node) => {
-      return node.yStart + StrandOffset.Y_BOTTOM_LEFT;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart + StrandOffset.Y_BOTTOM_LEFT;
     },
     getColor: (node) => {
       return node.getBottomStrandColor(LeftOrRight.LEFT);
@@ -419,8 +425,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_BOTTOM_RIGHT;
     },
-    getYStart: (node) => {
-      return node.yStart + StrandOffset.Y_BOTTOM_RIGHT;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart + StrandOffset.Y_BOTTOM_RIGHT;
     },
     getColor: (node) => {
       return node.getBottomStrandColor(LeftOrRight.RIGHT);
@@ -433,15 +439,15 @@ export const RenderInfo = {
   STRAND_BOTTOM_LEFT: {
     sheet: "strand-sheet.png",
     x: 0,
-    y: ImageHeight.STRAND_START_LEFT + ImageHeight.STRAND_LEFT / 2,
+    y: ImageHeight.STRAND_START_LEFT,
     width: ImageWidth.STRAND_LEFT,
     height: ImageHeight.STRAND_LEFT / 2,
     category: RenderCategory.STRAND,
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_BOTTOM_LEFT;
     },
-    getYStart: (node) => {
-      return node.yStart + StrandOffset.Y_BOTTOM_LEFT;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart + StrandOffset.Y_BOTTOM_LEFT;
     },
     getColor: (node) => {
       return node.getBottomStrandColor(LeftOrRight.LEFT);
@@ -453,15 +459,15 @@ export const RenderInfo = {
   STRAND_BOTTOM_RIGHT:  {
     sheet: "strand-sheet.png",
     x: ImageWidth.STRAND_LEFT,
-    y: ImageHeight.STRAND_START_RIGHT + ImageHeight.STRAND_RIGHT / 2,
+    y: ImageHeight.STRAND_START_RIGHT,
     width: ImageWidth.STRAND_RIGHT,
     height: ImageHeight.STRAND_RIGHT / 2,
     category: RenderCategory.STRAND,
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_BOTTOM_RIGHT;
     },
-    getYStart: (node) => {
-      return node.yStart + StrandOffset.Y_BOTTOM_RIGHT;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart + StrandOffset.Y_BOTTOM_RIGHT;
     },
     getColor: (node) => {
       return node.getBottomStrandColor(LeftOrRight.RIGHT);
@@ -481,8 +487,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_BOTTOM_LEFT;
     },
-    getYStart: (node) => {
-      return node.yStart + StrandOffset.Y_BOTTOM_LEFT;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart + StrandOffset.Y_BOTTOM_LEFT;
     },
     getColor: (node) => {
       return node.getBottomStrandColor(LeftOrRight.LEFT);
@@ -501,8 +507,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_BOTTOM_RIGHT;
     },
-    getYStart: (node) => {
-      return node.yStart + StrandOffset.Y_BOTTOM_RIGHT;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart + StrandOffset.Y_BOTTOM_RIGHT;
     },
     getColor: (node) => {
       return node.getBottomStrandColor(LeftOrRight.RIGHT);
@@ -522,8 +528,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_BOTTOM_LEFT;
     },
-    getYStart: (node) => {
-      return node.yStart + StrandOffset.Y_BOTTOM_LEFT;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart + StrandOffset.Y_BOTTOM_LEFT - 5;
     },
     getColor: (node) => {
       return node.getBottomStrandColor(LeftOrRight.LEFT);
@@ -542,8 +548,8 @@ export const RenderInfo = {
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_BOTTOM_RIGHT;
     },
-    getYStart: (node) => {
-      return node.yStart + StrandOffset.Y_BOTTOM_RIGHT;
+    getYStart: (node, yOffset) => {
+      return yOffset + node.yStart + StrandOffset.Y_BOTTOM_RIGHT - 5;
     },
     getColor: (node) => {
       return node.getBottomStrandColor(LeftOrRight.RIGHT);

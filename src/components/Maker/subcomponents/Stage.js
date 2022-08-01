@@ -14,6 +14,7 @@ import { getNodeFromMouseClick, getStartStrandIndexFromMouseClick } from '../res
 import { ClickType, NodeDefaults } from '../resources/constants/nodeConstants';
 import { calculatePatternLength, calculatePatternThickness, createImageOfCanvas, createPatternFromNodes, doesPatternAlignCorrectly } from '../resources/logic/patternLogic';
 import { renderAll } from '../resources/logic/renderLogicV2';
+import { renderAllV2, renderEverything } from '../resources/logic/renderLogicV3';
 
 const Stage = () => {
 
@@ -177,9 +178,11 @@ const Stage = () => {
         setPattern(createPatternFromNodes(nodes));
         // test render all
         if (prevNodeCount !== newNodeCount) {
-          renderAll(canvasRef.current, nodes, patternHeight, true);
+          renderEverything(canvasRef.current, nodes, patternHeight, isSetupDecided, true);
+          //renderAll(canvasRef.current, nodes, patternHeight, true);
         } else {
-          renderAll(canvasRef.current, nodes, patternHeight, false);
+          renderEverything(canvasRef.current, nodes, patternHeight, isSetupDecided, false);
+          //renderAll(canvasRef.current, nodes, patternHeight, false);
         }
       }
 
@@ -234,7 +237,8 @@ const Stage = () => {
         //setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
 
         // test render all
-        renderAll(canvasRef.current, nodes, patternHeight, true);
+        renderEverything(canvasRef.current, nodes, patternHeight, isSetupDecided, true);
+        //renderAll(canvasRef.current, nodes, patternHeight, true);
       }
       
       if (!isSetupDecided && canvasWidth) {
