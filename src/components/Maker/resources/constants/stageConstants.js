@@ -743,12 +743,12 @@ export const RenderInfo = {
     y: null,
     width: null,
     height: null,
-    category: RenderCategory.TILE,
+    category: RenderCategory.BG_FILL,
     getXStart: () => {
       return 0;
     },
-    getYStart: () => {
-      return 0;
+    getYStart: (yOffset) => {
+      return yOffset;
     },
     getColor: () => {
       return StageDefaults.BG_COLOR;
