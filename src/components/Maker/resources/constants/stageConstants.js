@@ -353,6 +353,7 @@ export const RenderInfo = {
     width: ImageWidth.STRAND_START_LEFT,
     height: ImageHeight.STRAND_START_LEFT,
     category: RenderCategory.STRAND,
+    leftOrRight: LeftOrRight.LEFT,
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_START_LEFT;
     },
@@ -373,6 +374,7 @@ export const RenderInfo = {
     width: ImageWidth.STRAND_START_RIGHT,
     height: ImageHeight.STRAND_START_RIGHT,
     category: RenderCategory.STRAND,
+    leftOrRight: LeftOrRight.RIGHT,
     getXStart: (node) => {
       return node.xStart + StrandOffset.X_START_RIGHT;
     },
@@ -558,7 +560,7 @@ export const RenderInfo = {
     width: ImageWidth.TILE_START_LEFT,
     height: ImageHeight.TILE_START_LEFT,
     category: RenderCategory.TILE,
-    getXStart: (xIndex, nodesAcross) => {
+    getXStart: (xIndex) => {
       return 0;
     },
     getYStart: (yOffset, yIndex, rowCount) => {
@@ -578,8 +580,8 @@ export const RenderInfo = {
     width: ImageWidth.TILE_START,
     height: ImageHeight.TILE_START,
     category: RenderCategory.TILE,
-    getXStart: (count) => {
-      return ImageWidth.TILE_START_LEFT + (count * ImageWidth.TILE_START);
+    getXStart: (xIndex) => {
+      return ImageWidth.TILE_START_LEFT + (xIndex * ImageWidth.TILE_START);
     },
     getYStart: (yOffset, yIndex, rowCount) => {
       return yOffset;
@@ -598,8 +600,8 @@ export const RenderInfo = {
     width: ImageWidth.TILE_START_RIGHT,
     height: ImageHeight.TILE_START_RIGHT,
     category: RenderCategory.TILE,
-    getXStart: (nodesAcross) => {
-      return ImageWidth.TILE_START_LEFT + (nodesAcross * 2 * ImageWidth.TILE_START);
+    getXStart: (xIndex) => {
+      return ImageWidth.TILE_START_LEFT + (xIndex * ImageWidth.TILE_START);
     },
     getYStart: (yOffset, yIndex, rowCount) => {
       return yOffset;
@@ -619,7 +621,8 @@ export const RenderInfo = {
     width: ImageWidth.TILE_LEFT,
     height: ImageHeight.TILE_LEFT,
     category: RenderCategory.TILE,
-    getXStart: (xIndex, nodesAcross) => {
+    leftOrRight: LeftOrRight.LEFT,
+    getXStart: (xIndex) => {
       return 0;
     },
     getYStart: (yOffset, yIndex, rowCount) => {
@@ -639,8 +642,8 @@ export const RenderInfo = {
     width: ImageWidth.TILE,
     height: ImageHeight.TILE,
     category: RenderCategory.TILE,
-    getXStart: (nodesAcross, count) => {
-      return ImageWidth.TILE_LEFT + (count * ImageWidth.TILE);
+    getXStart: (xIndex) => {
+      return ImageWidth.TILE_LEFT + (xIndex * ImageWidth.TILE);
     },
     getYStart: (yOffset, yIndex, rowCount) => {
       return yOffset + ImageHeight.TILE_START + (yIndex * ImageHeight.TILE);
@@ -659,8 +662,9 @@ export const RenderInfo = {
     width: ImageWidth.TILE_RIGHT,
     height: ImageHeight.TILE_RIGHT,
     category: RenderCategory.TILE,
-    getXStart: (nodesAcross) => {
-      return ImageWidth.TILE_LEFT + (nodesAcross * 2 * ImageWidth.TILE);
+    leftOrRight: LeftOrRight.RIGHT,
+    getXStart: (xIndex) => {
+      return ImageWidth.TILE_LEFT + (xIndex * ImageWidth.TILE);
     },
     getYStart: (yOffset, yIndex, rowCount) => {
       return yOffset + ImageHeight.TILE_START_RIGHT + (yIndex * ImageHeight.TILE_RIGHT);
@@ -680,7 +684,7 @@ export const RenderInfo = {
     width: ImageWidth.TILE_END_LEFT,
     height: ImageHeight.TILE_END_LEFT,
     category: RenderCategory.TILE,
-    getXStart: (nodesAcross) => {
+    getXStart: (xIndex) => {
       return 0;
     },
     getYStart: (yOffset, yIndex, rowCount) => {
@@ -700,8 +704,8 @@ export const RenderInfo = {
     width: ImageWidth.TILE_END,
     height: ImageHeight.TILE_END,
     category: RenderCategory.TILE,
-    getXStart: (count) => {
-      return ImageWidth.TILE_END_LEFT + (count * ImageWidth.TILE_END);
+    getXStart: (xIndex) => {
+      return ImageWidth.TILE_END_LEFT + (xIndex * ImageWidth.TILE_END);
     },
     getYStart: (yOffset, yIndex, rowCount) => {
       return yOffset + ImageHeight.TILE_START + (rowCount * ImageHeight.TILE);
@@ -720,8 +724,8 @@ export const RenderInfo = {
     width: ImageWidth.TILE_END_RIGHT,
     height: ImageHeight.TILE_END_RIGHT,
     category: RenderCategory.TILE,
-    getXStart: (xIndex, nodesAcross) => {
-      return ImageWidth.TILE_END_LEFT + (nodesAcross * 2 * ImageWidth.TILE_END);
+    getXStart: (xIndex) => {
+      return ImageWidth.TILE_END_LEFT + (xIndex * ImageWidth.TILE_END);
     },
     getYStart: (yOffset, yIndex, rowCount) => {
       return yOffset + ImageHeight.TILE_START_LEFT + (rowCount * ImageHeight.TILE);
