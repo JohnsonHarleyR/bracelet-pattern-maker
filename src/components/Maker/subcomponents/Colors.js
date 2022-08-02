@@ -139,46 +139,50 @@ const Colors = () => {
   //#endregion
 
   return (
-    <div className="colors-area">
+    <div className='full-container'>
+      <div className="colors-area">
 
-      <div className="colors-display">
-        {colorsDisplayArray}
-        <button
-          className='btn setup-item'
-          ref={deleteRef}
-          onClick={clickRemoveButton}>
-            Remove
-        </button>
+        <div className="colors-display">
+          {colorsDisplayArray}
+        </div>
+                  <button
+            className='btn setup-item remove'
+            ref={deleteRef}
+            onClick={clickRemoveButton}>
+              Remove Selected
+          </button>
+        <div className="changer">
+          <div className='preset-toggle' onClick={clickTogglePresets}>{presetToggleText}</div>
+          <input
+            type="color"
+            ref={selectorRef}
+            onChange={changeInputColor}
+            className="setup-item"
+          />
+          <button
+            className='btn setup-item add'
+            ref={addRef}
+            onClick={clickAddButton}
+          >
+            Add
+          </button>
+          <button
+          className='btn setup-item change'
+            onClick={changeSelectedColorHex}
+          >
+            Change
+          </button>
+          <div className='preset-toggle' onClick={clickTogglePresets}>{presetToggleText}</div>
+        </div>
       </div>
-      <div className="changer">
-        <div className='preset-toggle' onClick={clickTogglePresets}>{presetToggleText}</div>
-        <input
-          type="color"
-          ref={selectorRef}
-          onChange={changeInputColor}
-          className="setup-item"
-        />
-        <button
-          className='btn setup-item'
-          ref={addRef}
-          onClick={clickAddButton}
-        >
-          Add
-        </button>
-        <button
-        className='btn setup-item'
-          onClick={changeSelectedColorHex}
-        >
-          Change
-        </button>
-      </div>
-      <div>
-        <ColorPresets
-          showPresets={showPresets}
-          setInputColor={setInputColor}
-        />
+      <div className='preset-area'>
+          <ColorPresets
+            showPresets={showPresets}
+            setInputColor={setInputColor}
+          />
       </div>
     </div>
+    
   );
 }
 

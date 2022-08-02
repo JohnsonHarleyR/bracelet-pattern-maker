@@ -1,21 +1,49 @@
+:root {
+  --square-size: 30px;
+}
+
+.full-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .colors-area {
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .colors-display {
   display: flex;
+  justify-content: center;
+}
+
+.preset-area {
+  display: flex;
+  justify-content: center;
 }
 
 .changer {
   display: flex;
+  justify-content: center;
+}
+
+.square-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+  font-size: 16px;
+  font-family: monospace;
 }
 
 .color-square {
-  width: 20px;
-  height: 20px;
+  width: var(--square-size);
+  height: var(--square-size);
   border: 2px solid black;
   margin-left: 2px;
+  box-sizing: border-box;
 }
 
 .select {

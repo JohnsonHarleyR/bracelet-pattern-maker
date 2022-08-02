@@ -62,6 +62,21 @@
   height: var(--setup-item-height);
 }
 
+.add,.change {
+  width: 70px;
+}
+
+.remove {
+  width: 140px;
+}
+
+.complete {
+  width: 250px;
+  font-size: x-large;
+  height: 40px;
+
+}
+
 .circle-button {
   margin-top: 0px;
   margin-left: 3px;

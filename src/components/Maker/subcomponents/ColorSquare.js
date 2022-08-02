@@ -88,7 +88,10 @@ const ColorSquare = ({id}) => {
   //#endregion
 
   return (
-    <div className="color-square" ref={colorRef} onClick={clickColor}>
+    <div className="square-container">
+      <span>{id}</span>
+      <div className="color-square" ref={colorRef} onClick={clickColor}>
+      </div>
     </div>
   );
 }

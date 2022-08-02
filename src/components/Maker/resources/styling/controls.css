@@ -10,6 +10,19 @@
   display: flex;
 }
 
+.middle-div {
+  display: flex;
+  justify-content: center;
+  margin-top: 0;
+}
+
+.strand-select {
+  width: 250px;
+  text-align: center;
+  font-family: monospace;
+
+}
+
 .bottom-div {
   display: flex;
   justify-content: center;

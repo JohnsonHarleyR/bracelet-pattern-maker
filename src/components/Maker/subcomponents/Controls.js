@@ -90,11 +90,13 @@ const Controls = () => {
   return (
     <div className="controls">
       <div className="top-div">
-        <div className="strand-count" ref={strandCountDivRef}>
+        <Colors />
+      </div>
+      <div className="strand-count" ref={strandCountDivRef}>
           <select
             ref={strandCountRef}
             onChange={changeStrandCount}
-            className="setup-item"
+            className="setup-item strand-select"
           >
             <option value={4}>4 Strands</option>
             <option value={6}>6 Strands</option>
@@ -106,12 +108,10 @@ const Controls = () => {
             <option value={18}>18 Strands</option>
             <option value={20}>20 Strands</option>
           </select>
-        </div>
-        <Colors />
       </div>
       <div className="bottom-div">
         <button
-          className='btn setup-item'
+          className='btn setup-item complete'
           ref={completeSetupRef}
           onClick={clickCompleteSetup}
         >
