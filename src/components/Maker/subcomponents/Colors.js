@@ -143,13 +143,34 @@ const Colors = () => {
 
       <div className="colors-display">
         {colorsDisplayArray}
-        <button ref={deleteRef} onClick={clickRemoveButton}>Remove</button>
+        <button
+          className='btn setup-item'
+          ref={deleteRef}
+          onClick={clickRemoveButton}>
+            Remove
+        </button>
       </div>
       <div className="changer">
         <div className='preset-toggle' onClick={clickTogglePresets}>{presetToggleText}</div>
-        <input type="color" ref={selectorRef} onChange={changeInputColor} />
-        <button ref={addRef} onClick={clickAddButton}>Add</button>
-        <button onClick={changeSelectedColorHex}>Change</button>
+        <input
+          type="color"
+          ref={selectorRef}
+          onChange={changeInputColor}
+          className="setup-item"
+        />
+        <button
+          className='btn setup-item'
+          ref={addRef}
+          onClick={clickAddButton}
+        >
+          Add
+        </button>
+        <button
+        className='btn setup-item'
+          onClick={changeSelectedColorHex}
+        >
+          Change
+        </button>
       </div>
       <div>
         <ColorPresets

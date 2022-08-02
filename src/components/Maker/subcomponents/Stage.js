@@ -428,7 +428,7 @@ const Stage = () => {
           -
         </div>
       </div>
-      <button className="btn" ref={saveBtnRef} onClick={clickSave}>Get Image</button>
+      <button className="get-image btn" ref={saveBtnRef} onClick={clickSave}>Get Image</button>
     </div>
   );
 }
