@@ -1,0 +1,104 @@
+:root {
+  --bg-color: #fefefe;
+  --text-color: #000000;
+  --border-color: #000000;
+  --close-color: grey;
+  --symbol-color: rgba(25, 146, 146, 1.0);
+  --symbol-color-hide: rgba(25, 146, 146, 0.0);
+  --border-width: 3px;
+}
+
+
+/* The Modal (background) */
+.modal-container {
+  display: none; /* Hidden by default */
+  justify-content: center;
+  align-items: center;
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100vw; /* Full width */
+  height: 100vh; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal {
+  width: 30vw;
+  min-width: 350px;
+  background-color: var(--bg-color);
+  border-radius: 5%;
+  display: flex;
+  flex-direction: column;
+  color: var(--text-color);
+}
+
+.modal-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.title-nav-div {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.title-hide {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: var(--symbol-color-hide);
+}
+
+.page-number {
+  color: var(--close-color);
+  font-size: .7em;
+  margin-top: .3em;
+}
+
+.nav-symbol {
+  color: var(--symbol-color);
+  margin-left: 7px;
+  margin-right: 7px;
+  
+  cursor: pointer;
+  user-select: none;
+}
+
+.nav-symbol-hide {
+  color: var(--symbol-color-hide);
+  margin-left: 7px;
+  margin-right: 7px;
+  cursor: auto;
+  user-select: none;
+}
+
+.modal-body {
+  border: 1px solid cyan;
+}
+
+
+/* The Close Button */
+.close {
+  color: var(--close-color);
+  margin-right: 10px;
+  align-self: flex-end;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
