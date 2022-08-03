@@ -3,6 +3,7 @@ import '../resources/styling/stage.css';
 import { MakerContext } from '../../../MakerContext';
 import {
   calculateCanvasHeight,
+  calculateCanvasScale,
   calculateCanvasWidth,
   calculateNumberOfBackgroundImages,
   calculateNumberOfStrandImages,
@@ -164,6 +165,8 @@ const Stage = () => {
 
   useEffect(() => {
     if (colors) {
+      console.log(`canvas width: ${canvasRef.current.width}`);
+      console.log(`canvas height: ${canvasRef.current.height}`);
       let newNodeCount = nodes !== undefined
         ? countNodes(nodes)
         : 0;
@@ -389,9 +392,11 @@ const Stage = () => {
 
   const getMousePos = (canvas, evt) => {
     var rect = canvas.getBoundingClientRect();
+    let xScale =  canvas.width / rect.width;
+    let yScale =  canvas.height / rect.height;
     return {
-      x: evt.clientX - rect.left,
-      y: evt.clientY - rect.top
+      x: (evt.clientX - rect.left) * xScale,
+      y: (evt.clientY - rect.top) * yScale
     };
   }
 
