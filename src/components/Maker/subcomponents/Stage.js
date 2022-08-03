@@ -8,7 +8,8 @@ import {
   calculateNumberOfBackgroundImages,
   calculateNumberOfStrandImages,
   calculateNumberOfStrandImagesAfterSetup,
-  countNodes
+  countNodes,
+  isCanvasScaledUp
 } from '../resources/logic/calculationLogic';
 import { renderBackground, renderCircleFill, renderNodes, renderPattern, renderStrands, renderTest } from '../resources/logic/drawLogic';
 import { getNodeFromMouseClick, getStartStrandIndexFromMouseClick } from '../resources/logic/nodeLogic';
@@ -21,6 +22,7 @@ import { StageDefaults } from '../resources/constants/stageConstants';
 const Stage = () => {
 
   const canvasRef = useRef();
+  const canvasAreaRef = useRef();
   //TODO move add and remove buttons to own component
   const rowsAreaRef = useRef();
   const addButtonRef = useRef();
@@ -59,6 +61,8 @@ const Stage = () => {
   const [doesPatternAlign, setDoesPatternAlign] = useState(false);
   const [patternHeight, setPatternHeight] = useState(0);
 
+  const [doScaleCanvas, setDoScaleCanvas] = useState(true);
+
   //#region Effect Area
 
 
@@ -77,6 +81,17 @@ const Stage = () => {
   }, [isSetupDecided]);
 
   useEffect(() => {
+    if (doScaleCanvas) {
+      // double check
+      canvasAreaRef.current.style.alignItems = "normal";
+    } else {
+      canvasAreaRef.current.style.alignItems = "center";
+    }
+
+  }, [doScaleCanvas]);
+
+
+  useEffect(() => {
     console.log(`isBgLoaded: ${isBgLoaded}`);
     if (!isSetupDecided &&
       isBgLoaded) {
@@ -88,6 +103,9 @@ const Stage = () => {
 
   useEffect(() => {
     if (!isSetupDecided && nodesAcross) {
+
+      setDoScaleCanvas(true); // start with it as true in order to determine whether to keep it that way
+
       setCanvasWidth(calculateCanvasWidth(nodesAcross));
       //console.log(`calculate # of bg images`);
       setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
@@ -113,6 +131,8 @@ const Stage = () => {
         // } else {
         //   setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
         // }
+
+        // determine whether or not to scale canvas or not
 
       } else {
         
@@ -215,6 +235,10 @@ const Stage = () => {
       canvasRef.current.width = canvasWidth;
       
       if (!isSetupDecided && canvasHeight) {
+
+        // decide whether to scale the canvas or not
+        setDoScaleCanvas(!isCanvasScaledUp(canvasRef.current));
+
         console.log(`rendering bg`);
         startRenderBg();
         //renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
@@ -404,7 +428,7 @@ const Stage = () => {
 
   return (
     <div className="stage">
-      <div className="canvas-area">
+      <div ref={canvasAreaRef} className="canvas-area">
         <canvas ref={canvasRef}
           onClick={clickCanvas}
           onContextMenu={rightClickCanvas}/>

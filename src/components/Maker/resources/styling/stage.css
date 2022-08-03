@@ -21,6 +21,9 @@
   padding-top: 0;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  /* align-items: normal; */
+  /* align-items: center; */
 }
 
 .pattern-canvas {

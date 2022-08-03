@@ -151,6 +151,29 @@ export const showRenderPositionDifferences = (nodes) => {
 
 //#region Size Calculations
 
+export const isCanvasScaledUp = (canvas) => {
+  var rect = canvas.getBoundingClientRect();
+  let actualWidth = rect.width;
+  let calcWidth = canvas.width;
+  let widthScale =  actualWidth / calcWidth;
+
+  return widthScale > 1;
+}
+
+// export const calculateCanvasScaleIncrease = (canvas, nodes) => {
+//   var rect1 = canvas.getBoundingClientRect();
+
+//   let actualWidth = rect1.width;
+//   let calcWidth = canvas.width;
+//   let widthScale =  actualWidth / calcWidth;
+//   console.log(`calc width: ${calcWidth}, actual: ${actualWidth}, scale: ${widthScale}`);
+
+//   let actualHeight = rect1.height;
+//   let calcHeight = canvas.height;
+//   let heightScale = actualHeight / calcHeight;
+//   console.log(`calc height: ${calcHeight}, actual: ${actualHeight}, scale: ${heightScale}`);
+// }
+
 export const calculateCanvasWidth = (nodesAcross) => {
   let endWidths = ImageWidth.TILE_LEFT + ImageWidth.TILE_RIGHT;
   let nodeAreaWidth = ImageWidth.STRAND_LEFT + ImageWidth.STRAND_RIGHT;
