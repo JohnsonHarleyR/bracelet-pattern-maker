@@ -1,5 +1,5 @@
 import { ClickType, NodeDefaults, NodeSymbol, NodeSymbolType as NodeSymbolShape } from "../constants/nodeConstants";
-import { ImageHeight, ImageWidth, LeftOrRight } from "../constants/stageConstants";
+import { ImageHeight, ImageWidth, LeftOrRight, OldOrNew, StageDefaults } from "../constants/stageConstants";
 
 
 export default class NodeModel {
@@ -16,15 +16,25 @@ export default class NodeModel {
 
     // center position?
 
-    this.nodeSymbol = NodeSymbol.NONE;
-    this.nodeSymbolShape = NodeSymbolShape.NONE;
-    this.prevClickType = ClickType.NONE;
+    this.nodeSymbol = StageDefaults.NODE_AND_PATTERN_METHOD === OldOrNew.OLD
+      ? NodeSymbol.NONE
+      : NodeSymbol.LEFT;
+    this.nodeSymbolShape = StageDefaults.NODE_AND_PATTERN_METHOD === OldOrNew.OLD
+      ? NodeSymbolShape.NONE
+      : NodeSymbolShape.POINT;
+    this.prevClickType = StageDefaults.NODE_AND_PATTERN_METHOD === OldOrNew.OLD
+      ? ClickType.NONE
+      : ClickType.LEFT;
 
     this.xStart = 0;
     this.yStart = 0;
 
     this.isLeftLongEdge = isLeftLongEdge;
     this.isRightLongEdge = isRightLongEdge;
+
+    if (StageDefaults.NODE_AND_PATTERN_METHOD === OldOrNew.NEW) {
+      this.changeBottomStrands();
+    }
   }
 
   clickNode = (clickType) => {

@@ -8,6 +8,7 @@ export const OldOrNew = {
 export const StageDefaults = {
   BG_COLOR: "#ffffff",
   RENDER_METHOD: OldOrNew.NEW,
+  NODE_AND_PATTERN_METHOD: OldOrNew.NEW,
   SHOW_COPYRIGHT: true,
   //COPYRIGHT_TEXT: "Made with Harlee's Creation Tools 2022",
   COPYRIGHT_TEXT: "ⒸHarlee's Creation Tools 2022",

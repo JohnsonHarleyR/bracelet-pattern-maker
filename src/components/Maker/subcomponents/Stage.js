@@ -61,7 +61,7 @@ const Stage = () => {
   const [doesPatternAlign, setDoesPatternAlign] = useState(false);
   const [patternHeight, setPatternHeight] = useState(0);
 
-  const [doScaleCanvas, setDoScaleCanvas] = useState(true);
+  const [doScaleCanvas, setDoScaleCanvas] = useState(false);
 
   //#region Effect Area
 
