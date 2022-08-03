@@ -8,8 +8,11 @@
   --setup-item-height: 30px;
 }
 
+/* canvas {
+  position: relative;
+} */
+
 .stage {
-  margin-top: -30px;
   display: flex;
   flex-direction: column;
 }
