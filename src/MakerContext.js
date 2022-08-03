@@ -6,6 +6,8 @@ const MakerContext = createContext({});
 
 const MakerProvider = ({children}) => {
 
+  const [deviceType, setDeviceType] = useState("Desktop");
+
   const [isSetupDecided, setIsSetupDecided] = useState(false);
 
   const [nodesAcross, setNodesAcross] = useState(3);
@@ -64,6 +66,7 @@ const MakerProvider = ({children}) => {
 
     return (
         <MakerContext.Provider value={{
+          deviceType, setDeviceType,
           isSetupDecided, setIsSetupDecided,
           nodesAcross, setNodesAcross,
           strandsAcross, setStrandsAcross,
