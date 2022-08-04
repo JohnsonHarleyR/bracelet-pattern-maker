@@ -50,11 +50,12 @@ export default class NodeModel {
     this.prevClickType = clickType;
 
     // now decide which symbol to change to
-    let symbol = NodeSymbol.NONE;
+    let symbol;
 
     // Dont allow left or right symbols if the top strands are null
     if (this.topLeftStrand !== null && this.topRightStrand !== null) {
       switch(clickType) {
+        default:
         case ClickType.LEFT:
           symbol = this.getLeftClickSymbolBySymbolType();
           break;

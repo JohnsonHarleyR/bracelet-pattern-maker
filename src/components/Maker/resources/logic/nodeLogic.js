@@ -136,6 +136,12 @@ export const createDeepNodeCopy = (node) => {
 export const updateNodeStrands = (nodes) => {
   let copy = [...nodes];
 
+  copy.forEach(r => {
+    r.forEach(n => {
+      n.refreshStrands();
+    });
+  })
+
   return copy;
 }
 

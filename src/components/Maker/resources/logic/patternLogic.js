@@ -206,7 +206,7 @@ const createPatternFromNodesNewMethod = (nodes) => {
             // }
 
             artNode.topLeftStrand = topStrands.topLeftStrand;
-            artNode.topRightStrand = topStrands.LEFT_RIGHTtopRightStrand;
+            artNode.topRightStrand = topStrands.topRightStrand;
 
             // artNode.topLeftStrand = leftStrandInfo;
             // artNode.topRightStrand = rightStrandInfo;
@@ -228,7 +228,6 @@ const createPatternFromNodesNewMethod = (nodes) => {
               otherStrand = artNode.topLeftStrand;
               artNode.bottomLeftStrand = grabStrand;
               artNode.bottomRightStrand = otherStrand;
-
               break;
             case NodeSymbol.LEFT_RIGHT:
               grabStrand = artNode.topRightStrand;
@@ -249,7 +248,6 @@ const createPatternFromNodesNewMethod = (nodes) => {
               artNode.bottomRightStrand = otherStrand;
               break;
           }
-
           artNode.color = grabStrand.color;
 
           // if it's the last row OR 2nd to last and either the left or right end strand,
