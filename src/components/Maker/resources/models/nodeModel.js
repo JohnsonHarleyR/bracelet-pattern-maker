@@ -1,6 +1,6 @@
-import { ClickType, NodeDefaults, NodeSymbol, NodeSymbolType as NodeSymbolShape } from "../constants/nodeConstants";
+import { ClickType, NodeDefaults, NodeSymbol, NodeSymbolType as NodeSymbolShape, NodeSymbolType } from "../constants/nodeConstants";
 import { ImageHeight, ImageWidth, LeftOrRight, OldOrNew, StageDefaults } from "../constants/stageConstants";
-
+import { isMobile } from "react-device-detect";
 
 export default class NodeModel {
   constructor(id, leftNodeAbove, rightNodeAbove, isLeftLongEdge, isRightLongEdge, topLeftStrand = null, topRightStrand = null) {
@@ -39,32 +39,79 @@ export default class NodeModel {
 
   clickNode = (clickType) => {
 
-    this.checkForNullStrands();
+    if (!isMobile) {
+      this.checkForNullStrands();
     
-    // first cycle symbol type
-    if (this.prevClickType === ClickType.NONE ||
-      this.prevClickType === clickType) {
-        this.cycleNodeSymbolType();
-    }
-
-    this.prevClickType = clickType;
-
-    // now decide which symbol to change to
-    let symbol;
-
-    // Dont allow left or right symbols if the top strands are null
-    if (this.topLeftStrand !== null && this.topRightStrand !== null) {
-      switch(clickType) {
-        default:
-        case ClickType.LEFT:
-          symbol = this.getLeftClickSymbolBySymbolType();
-          break;
-        case ClickType.RIGHT:
-          symbol = this.getRightClickSymbolBySymbolType();
+      // first cycle symbol type
+      if (this.prevClickType === ClickType.NONE ||
+        this.prevClickType === clickType) {
+          this.cycleNodeSymbolType();
       }
+  
+      this.prevClickType = clickType;
+  
+      // now decide which symbol to change to
+      let symbol;
+  
+      // Dont allow left or right symbols if the top strands are null
+      if (this.topLeftStrand !== null && this.topRightStrand !== null) {
+        switch(clickType) {
+          default:
+          case ClickType.LEFT:
+            symbol = this.getLeftClickSymbolBySymbolType();
+            break;
+          case ClickType.RIGHT:
+            symbol = this.getRightClickSymbolBySymbolType();
+        }
+      }
+  
+      this.changeNodeSymbol(symbol);
+    } else {
+      this.changeNodeSymbolMobile();
     }
 
-    this.changeNodeSymbol(symbol);
+
+  }
+
+  changeNodeSymbolMobile = () => {
+    this.prevClickType = ClickType.LEFT;
+
+    if (this.nodeSymbol === NodeSymbol.NONE) {
+      this.nodeSymbolType = NodeSymbolType.POINT;
+      let symbol = NodeSymbol.LEFT;
+      this.changeNodeSymbol(symbol);
+
+    } else {
+      // if it's a curve symbol, then switch from right to left or vice versa
+      let symbol = NodeSymbol.NONE;
+      switch (this.nodeSymbol) {
+        case NodeSymbol.LEFT:
+          this.nodeSymbolType = NodeSymbolType.CURVE;
+          this.nodeSymbolShape = NodeSymbolShape.CURVE;
+          this.clickType = ClickType.LEFT;
+          symbol = NodeSymbol.RIGHT_LEFT;
+          break;
+        case NodeSymbol.RIGHT_LEFT:
+          this.nodeSymbolType = NodeSymbolType.POINT;
+          this.nodeSymbolShape = NodeSymbolShape.POINT;
+          this.clickType = ClickType.RIGHT;
+          symbol = NodeSymbol.RIGHT;
+          break;
+        case NodeSymbol.RIGHT:
+          this.nodeSymbolType = NodeSymbolType.CURVE;
+          this.nodeSymbolShape = NodeSymbolShape.CURVE;
+          this.clickType = ClickType.RIGHT;
+          symbol = NodeSymbol.LEFT_RIGHT;
+          break;
+        case NodeSymbol.LEFT_RIGHT:
+          this.nodeSymbolType = NodeSymbolType.POINT;
+          this.nodeSymbolShape = NodeSymbolShape.POINT;
+          this.clickType = ClickType.LEFT;
+          symbol = NodeSymbol.LEFT;
+          break;
+      }
+      this.changeNodeSymbol(symbol);
+    }
   }
 
   getColor = () => {
