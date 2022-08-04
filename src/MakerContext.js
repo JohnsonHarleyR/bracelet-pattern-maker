@@ -21,17 +21,22 @@ const MakerProvider = ({children}) => {
 
   const [selectedColor, setSelectedColor] = useState({
     letter: "A",
-    color: "#ff00ff"
+    color: "#01e0c1"
   });
   const [colors, setColors] = useState([
     {
       letter: "A",
-      color: "#ff00ff",
+      color: "#01e0c1",
       isSelected: true
     },
     {
       letter: "B",
-      color: "#000000",
+      color: "#f7f7f7",
+      isSelected: false
+    },
+    {
+      letter: "C",
+      color: "#3463f1",
       isSelected: false
     },
   ]);

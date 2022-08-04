@@ -68,10 +68,10 @@ const PatternCoder = ({showCode, setShowCode}) => {
     hexCodes.forEach((h, i) => {
 
       array.push(
-        <>
+        <div key={`hexdiv${i}`}>
           <span key={`hex${i}`}>{h.letter}: {h.hex}</span>
           <button key={`hex-btn${i}`} onClick={(evt) => {copyText(h.hex, evt)}}>Copy</button>
-        </>
+        </div>
       );
 
       if ((i + 1) % 2 === 0) {

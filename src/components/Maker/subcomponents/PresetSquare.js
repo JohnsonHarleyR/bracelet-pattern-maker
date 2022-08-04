@@ -26,7 +26,7 @@ const PresetSquare = ({color, setInputColor}) => {
   //#region event methods
 
   const clickColor = () => {
-    console.log(`preset ${color}`);
+    //console.log(`preset ${color}`);
     setInputColor(color);
   }
 

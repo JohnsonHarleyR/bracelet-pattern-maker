@@ -107,11 +107,6 @@ const createPatternFromNodesNewMethod = (nodes) => {
       row.forEach((n, i) => {
         let doDecideTopStrands = true;
 
-        
-        if (!isFirstLoop && x === 0 && i === 2) {
-          console.log('stop here');
-        }
-
           if (isFirstLoop && x === 0) {
             artStrandInfos.push({
               index: n.topLeftStrand.index,

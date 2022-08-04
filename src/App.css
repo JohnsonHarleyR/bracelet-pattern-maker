@@ -40,3 +40,18 @@ html,body
     transform: rotate(360deg);
   }
 }
+
+h1 {
+  margin-bottom: 0;
+  font-size: 2.5em;
+}
+
+@media (orientation: landscape ) {
+  h1 {
+    font-size: 10vh;
+  }
+}
+
+.instruction-div {
+  margin-bottom: 30px;
+}

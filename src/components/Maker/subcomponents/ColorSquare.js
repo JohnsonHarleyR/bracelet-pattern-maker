@@ -80,9 +80,9 @@ const ColorSquare = ({id}) => {
 
   // TODO change mouse when hovering over square
   const clickColor = () => {
-    console.log(`classname before: ${colorRef.current.className}`);
+    //console.log(`classname before: ${colorRef.current.className}`);
     selectColor(id);
-    console.log(`color ${color} clicked (id=${id})`);
+    //console.log(`color ${color} clicked (id=${id})`);
   }
 
   //#endregion

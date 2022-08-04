@@ -437,6 +437,7 @@ const Stage = () => {
 
   return (
     <div className="stage">
+      
       <div ref={canvasAreaRef} className="canvas-area">
         <canvas ref={canvasRef}
           onClick={clickCanvas}
