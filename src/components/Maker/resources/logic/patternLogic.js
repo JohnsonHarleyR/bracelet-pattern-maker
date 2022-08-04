@@ -158,53 +158,58 @@ const createPatternFromNodesNewMethod = (nodes) => {
 
           if (doDecideTopStrands) {
 
-            let nodeCount = i + 1;
-            let leftStrandCount = nodeCount * 2 - 1;
-            let rightStrandCount = nodeCount * 2;
-            let leftStrandIndex = leftStrandCount - 1;
-            let rightStrandIndex = rightStrandCount - 1;
+            let topStrands = determineTopStrandsForNode(x, i, artNodes, artStrandInfos);
 
-            let leftStrandInfo = x === 0
-              ? artStrandInfos[leftStrandIndex]
-              : null;
-            let rightStrandInfo = x === 0
-              ? artStrandInfos[rightStrandIndex]
-              : null;
+            // let nodeCount = i + 1;
+            // let leftStrandCount = nodeCount * 2 - 1;
+            // let rightStrandCount = nodeCount * 2;
+            // let leftStrandIndex = leftStrandCount - 1;
+            // let rightStrandIndex = rightStrandCount - 1;
 
-            let secondLastRowIndex = x - 2 >= 0
-            ? x - 2
-            : nodes.length - 2;
-            let secondLastRow = artNodes[secondLastRowIndex];
+            // let leftStrandInfo = x === 0
+            //   ? artStrandInfos[leftStrandIndex]
+            //   : null;
+            // let rightStrandInfo = x === 0
+            //   ? artStrandInfos[rightStrandIndex]
+            //   : null;
 
-            if (leftStrandInfo === null) {
-              leftStrandInfo = {};
-              let strandToCopyForLeft;
-              if (isLongRow) {
-                strandToCopyForLeft = secondLastRow[0].bottomLeftStrand;
-              } else {
-                strandToCopyForLeft = lastRow[i].bottomRightStrand;
-              }
-              leftStrandInfo.index = strandToCopyForLeft.index;
-              leftStrandInfo.letter = strandToCopyForLeft.letter;
-              leftStrandInfo.color = strandToCopyForLeft.color;
-            }
+            // let secondLastRowIndex = x - 2 >= 0
+            // ? x - 2
+            // : nodes.length - 2;
+            // let secondLastRow = artNodes[secondLastRowIndex];
 
-            if (rightStrandInfo === null) {
-              rightStrandInfo = {};
-              let endIndex = row.length;
-              let strandToCopyForRight;
-              if (isLongRow) {
-                strandToCopyForRight = secondLastRow[endIndex - 1].bottomRightStrand;
-              } else {
-                strandToCopyForRight = lastRow[endIndex].bottomLeftStrand;
-              }
-              rightStrandInfo.index = strandToCopyForRight.index;
-              rightStrandInfo.letter = strandToCopyForRight.letter;
-              rightStrandInfo.color = strandToCopyForRight.color;
-            }
+            // if (leftStrandInfo === null) {
+            //   leftStrandInfo = {};
+            //   let strandToCopyForLeft;
+            //   if (isLongRow) {
+            //     strandToCopyForLeft = secondLastRow[0].bottomLeftStrand;
+            //   } else {
+            //     strandToCopyForLeft = lastRow[i].bottomRightStrand;
+            //   }
+            //   leftStrandInfo.index = strandToCopyForLeft.index;
+            //   leftStrandInfo.letter = strandToCopyForLeft.letter;
+            //   leftStrandInfo.color = strandToCopyForLeft.color;
+            // }
 
-            artNode.topLeftStrand = leftStrandInfo;
-            artNode.topRightStrand = rightStrandInfo;
+            // if (rightStrandInfo === null) {
+            //   rightStrandInfo = {};
+            //   let endIndex = row.length;
+            //   let strandToCopyForRight;
+            //   if (isLongRow) {
+            //     strandToCopyForRight = secondLastRow[endIndex - 1].bottomRightStrand;
+            //   } else {
+            //     strandToCopyForRight = lastRow[endIndex].bottomLeftStrand;
+            //   }
+            //   rightStrandInfo.index = strandToCopyForRight.index;
+            //   rightStrandInfo.letter = strandToCopyForRight.letter;
+            //   rightStrandInfo.color = strandToCopyForRight.color;
+            // }
+
+            artNode.topLeftStrand = topStrands.topLeftStrand;
+            artNode.topRightStrand = topStrands.LEFT_RIGHTtopRightStrand;
+
+            // artNode.topLeftStrand = leftStrandInfo;
+            // artNode.topRightStrand = rightStrandInfo;
 
           }
 
@@ -525,6 +530,76 @@ export const calculatePatternLength = () => {
 export const calculatePatternThickness = (nodes) => {
   let width = nodes[0].length * PatternDefaults.TILE_SIZE;
   return width;
+}
+
+//#endregion
+
+//#region Decisions/Determining
+
+const determineTopStrandsForNode = (y, x, artNodes, artStrandInfos) => {
+  let topLeft = null;
+  let topRight = null;
+
+  let rowType = getRowType(y);
+  let nodesInRow = rowType === RowType.LONG
+    ? artNodes[0].length
+    : artNodes[0].length - 1;
+
+  // if it's the first row
+  if (y === 0) {
+    let relXIndex = (x + 1) * 2;
+    let relRightStrandIndex = relXIndex;
+
+    let rightStrandIndex = relRightStrandIndex - 1;
+    let leftStrandIndex = rightStrandIndex - 1;
+
+    topLeft = artStrandInfos[leftStrandIndex];
+    topRight = artStrandInfos[rightStrandIndex];
+
+  } else if (rowType === RowType.SHORT) {   // otherwise if it's a short row
+    let prevRow = artNodes[y - 1];
+
+    let leftTopNode = prevRow[x];
+    topLeft = leftTopNode.bottomRightStrand;
+
+    let rightTopNode = prevRow[x + 1];
+    topRight = rightTopNode.bottomLeftStrand;
+
+  } else {   // otherwise if it's a long row
+    let isFirstInRow = x === 0;
+    let isLastInRow = x === nodesInRow - 1;
+
+    let prevRow = artNodes[y - 1];
+    if (isFirstInRow) {
+      let prevLong = artNodes[y - 2];
+
+      let leftTopNode = prevLong[0];
+      topLeft = leftTopNode.bottomLeftStrand;
+
+      let rightTopNode = prevRow[x];
+      topRight = rightTopNode.bottomLeftStrand;
+
+    } else if (isLastInRow) {
+      let prevLong = artNodes[y - 2];
+
+      let rightTopNode = prevLong[x];
+      topRight = rightTopNode.bottomRightStrand;
+
+      let leftTopNode = prevRow[x - 1];
+      topLeft = leftTopNode.bottomRightStrand;
+    } else {
+      let leftTopNode = prevRow[x - 1];
+      topLeft = leftTopNode.bottomRightStrand;
+
+      let rightTopNode = prevRow[x];
+      topRight = rightTopNode.bottomLeftStrand;
+    }
+  }
+
+  return {
+    topLeftStrand: topLeft,
+    topRightStrand: topRight,
+  }
 }
 
 //#endregion
