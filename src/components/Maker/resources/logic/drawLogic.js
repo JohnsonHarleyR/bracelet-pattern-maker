@@ -46,7 +46,7 @@ export const renderBackground = (canvas, nodesAcross, rowCount, clearLoadedCount
   //renderCircleFill(canvas, "#ffff00", 5, 5);
 
   // TODO now draw forefront images
-  console.log(`bg rendered`);
+  //console.log(`bg rendered`);
 }
 
 const renderBackgroundTiles = (canvas, nodesAcross, rowCount, addToLoadedCount) => {
@@ -568,7 +568,7 @@ const renderBottomStrand = (canvas, fillColor, imageName, xStart, yStart, width,
 }
 
 const renderFirstStrandRow = (canvas, firstNodeRow, rowCount, addToLoadedCount) => {
-  console.log('Logging top start strand offsets');
+  //console.log('Logging top start strand offsets');
   let lXOffset = 0;
   let lYOffset = 0;
   let rXOffset = 0;
@@ -579,21 +579,21 @@ const renderFirstStrandRow = (canvas, firstNodeRow, rowCount, addToLoadedCount) 
     let prevLYOffset = lYOffset;
     lXOffset = lPos.x - n.xStart;
     lYOffset = lPos.y - n.yStart;
-    if (i !== 0 && (prevLXOffset !== lXOffset || prevLYOffset !== lYOffset)) {
-      console.log(`WARNING: Left offsets not consistent`);
-    }
+    // if (i !== 0 && (prevLXOffset !== lXOffset || prevLYOffset !== lYOffset)) {
+    //   console.log(`WARNING: Left offsets not consistent`);
+    // }
 
     let rPos = renderStartOrEndStrand(canvas, i * 2 + 1, n.topRightStrand, 0, rowCount, LeftOrRight.RIGHT, addToLoadedCount);
     let prevRXOffset = rXOffset;
     let prevRYOffset = rYOffset;
     rXOffset = rPos.x - n.xStart;
     rYOffset = rPos.y - n.yStart;
-    if (i !== 0 && (prevRXOffset !== rXOffset || prevRYOffset !== rYOffset)) {
-      console.log(`WARNING: Right offsets not consistent`);
-    }
+    // if (i !== 0 && (prevRXOffset !== rXOffset || prevRYOffset !== rYOffset)) {
+    //   console.log(`WARNING: Right offsets not consistent`);
+    // }
   });
-  console.log(`Left strand offsets: {x: ${lXOffset}, y: ${lYOffset}}`);
-  console.log(`Right strand offsets: {x: ${rXOffset}, y: ${rYOffset}}`);
+  //console.log(`Left strand offsets: {x: ${lXOffset}, y: ${lYOffset}}`);
+  //console.log(`Right strand offsets: {x: ${rXOffset}, y: ${rYOffset}}`);
 }
 
 const renderLastStrandRow = (canvas, lastNodeRow, rowCount, addToLoadedCount) => {

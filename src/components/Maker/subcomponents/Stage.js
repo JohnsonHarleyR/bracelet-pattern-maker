@@ -97,10 +97,10 @@ const Stage = () => {
 
 
   useEffect(() => {
-    console.log(`isBgLoaded: ${isBgLoaded}`);
+    //console.log(`isBgLoaded: ${isBgLoaded}`);
     if (!isSetupDecided &&
       isBgLoaded) {
-      console.log('rendering strands');
+      //console.log('rendering strands');
       renderStrands(canvasRef.current, nodes, rowCount, isSetupDecided, clearStrandLoadCount, addToStrandLoadCount);
     }
 
@@ -156,7 +156,7 @@ const Stage = () => {
       //console.log(`loaded: ${bgLoadCount}/${totalBgImages}`);
       if (bgLoadCount === totalBgImages) {
         setIsBgLoaded(true);
-        console.log(`bg images loaded`);
+        //console.log(`bg images loaded`);
       }
     }
   }, [bgLoadCount]);
@@ -190,8 +190,8 @@ const Stage = () => {
 
   useEffect(() => {
     if (colors) {
-      console.log(`canvas width: ${canvasRef.current.width}`);
-      console.log(`canvas height: ${canvasRef.current.height}`);
+      //console.log(`canvas width: ${canvasRef.current.width}`);
+      //console.log(`canvas height: ${canvasRef.current.height}`);
       let newNodeCount = nodes !== undefined
         ? countNodes(nodes)
         : 0;
@@ -216,7 +216,7 @@ const Stage = () => {
       }
 
       if (!isSetupDecided && isBgLoaded) {
-        console.log('rendering strands');
+        //console.log('rendering strands');
 
         renderStrands(canvasRef.current, nodes, rowCount, isSetupDecided, clearStrandLoadCount, addToStrandLoadCount);
       }
@@ -228,7 +228,7 @@ const Stage = () => {
         setPrevNodeCount(newNodeCount);
 
         if (isSetupDecided) {
-          console.log(`checking alignment`);
+          //console.log(`checking alignment`);
           setDoesPatternAlign(doesPatternAlignCorrectly(nodes));
         }
       }
@@ -244,13 +244,13 @@ const Stage = () => {
         // decide whether to scale the canvas or not
         setDoScaleCanvas(!isCanvasScaledUp(canvasRef.current));
 
-        console.log(`rendering bg`);
+        //console.log(`rendering bg`);
         startRenderBg();
         //renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
       }
       if (!isSetupDecided && isBgLoaded) {
         //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
-        console.log('rendering strands');
+        //console.log('rendering strands');
         renderStrands(canvasRef.current, nodes, rowCount, isSetupDecided, clearStrandLoadCount, addToStrandLoadCount);
       }
 
@@ -279,13 +279,13 @@ const Stage = () => {
       }
       
       if (!isSetupDecided && canvasWidth) {
-        console.log(`rendering bg`);
+        //console.log(`rendering bg`);
         startRenderBg();
         //renderBackground(canvasRef.current, nodesAcross, rowCount, clearBgLoadCount, addToBgLoadCount);
       }
       if (!isSetupDecided && isBgLoaded) {
         //renderStartStrandRow(canvasRef.current, startStrandInfos, rowCount, clearStrandLoadCount, addToStrandLoadCount);
-        console.log('rendering strands');
+        //console.log('rendering strands');
         renderStrands(canvasRef.current, nodes, rowCount, isSetupDecided, clearStrandLoadCount, addToStrandLoadCount);
       }
 
@@ -335,7 +335,7 @@ const Stage = () => {
     //console.log(`loaded bg images: ${loadedBgImageCount}/${totalBgImages}`);
     //console.log(`adding to loaded count: ${loadedBgImageCount}`);
     if (loadedBgImageCount >= totalBgImages) {
-      console.log('done Loading');
+      //console.log('done Loading');
       setBgLoadCount(loadedBgImageCount);
       loadedBgImageCount = 0;
     }
@@ -383,7 +383,7 @@ const Stage = () => {
     if (isSetupDecided) {
       mousePos.y -= patternHeight;
     }
-    console.log(`Mouse pos: {x: ${Math.round(mousePos.x)}, y: ${Math.round(mousePos.y)}}`);
+    //console.log(`Mouse pos: {x: ${Math.round(mousePos.x)}, y: ${Math.round(mousePos.y)}}`);
 
     // do different checks depending on whether setup is complete or not
     let nodesCopy = [...nodes];
@@ -399,7 +399,7 @@ const Stage = () => {
         setStartStrandInfos(copy);
       }
     } else {
-      console.log(`node clicked`);
+      //console.log(`node clicked`);
       if (isRightClick) {
         nodeClicked.clickNode(ClickType.RIGHT);
       } else {

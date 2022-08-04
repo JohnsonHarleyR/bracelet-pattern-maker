@@ -31,7 +31,7 @@ const Controls = () => {
     if (colors) {
       if (startStrandInfos !== undefined) {
         let newStrandInfos = createNewDefaultStrandInfosArray(strandsAcross, selectedColor, colors, startStrandInfos);
-        console.log(`new strand infos: ${JSON.stringify(newStrandInfos)}`);
+        //console.log(`new strand infos: ${JSON.stringify(newStrandInfos)}`);
         setStartStrandInfos(newStrandInfos);
       }
     }

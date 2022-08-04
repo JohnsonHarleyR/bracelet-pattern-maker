@@ -126,14 +126,14 @@ const PatternCoder = ({showCode, setShowCode}) => {
           <span className="close" onClick={closeModal}>&times;</span>
         </div>
         <div className="modal-body">
-          <div>
+          <div className='code-section'>
             {hexDisplay}
           </div>
-          <div ref={strandStringRef}>
+          <div className='code-section' ref={strandStringRef}>
             {strandString}
           </div>
           <button onClick={copyStrandString}>Copy</button>
-          <div ref={nodesStringRef}>
+          <div className='code-section' ref={nodesStringRef}>
             {nodeCodeDisplay}
           </div>
           <button onClick={copyNodesString}>Copy</button>
