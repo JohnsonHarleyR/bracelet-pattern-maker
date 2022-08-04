@@ -90,11 +90,6 @@ const renderNextV2 = (canvas, index, array) => {
       image.src = src;
       image.onload = () => {
 
-        // test
-        if (!item.imageName.includes('tile')) {
-          console.log(`test - not a tile`);
-        }
-
         // check for any fill
         if (item.color !== null) {
           if (item.category === RenderCategory.STRAND) {
