@@ -330,7 +330,8 @@ export const renderPattern = (canvas, patternHeight, pattern) => {
 
   ctx.beginPath();
   ctx.fillStyle = StageDefaults.BG_COLOR;
-  ctx.fillRect(0, patternHeight, ImageWidth.TILE_START_LEFT, 20);
+  ctx.fillRect(0, patternHeight, canvas.width, PatternDefaults.TILE_SIZE);
+  // ctx.fillRect(0, patternHeight, ImageWidth.TILE_START_LEFT, 20);
   ctx.closePath();
 }
 
