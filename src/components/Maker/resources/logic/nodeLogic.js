@@ -56,10 +56,6 @@ export const createAllNodesAfterSetup = (nodes, nodesAcross, rowCount) => {
 
 }
 
-const createRowOfNodesAfterFirstTwo = (rowType, rowIndex, nodes) => {
-
-}
-
 const createRowOfNodesAfterSetupFirstComplete = (rowIndex, nodes, nodesAcross, rowCount) => {
   // get existing or create new row
   let nodeRow = rowCount >= rowIndex + 1 && nodes.length < rowCount
@@ -127,6 +123,10 @@ const createRowOfNodesAfterSetupFirstComplete = (rowIndex, nodes, nodesAcross, r
   }
 
   return nodeRow;
+}
+
+export const createDeepNodeCopy = (node) => {
+  let nodeCopy = new NodeModel(node.id, node.leftNodeAbove)
 }
 
 //#endregion

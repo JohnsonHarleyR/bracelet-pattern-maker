@@ -116,6 +116,18 @@ export default class NodeModel {
     // }
   }
 
+  getBottomStrand = (leftOrRight) => {
+    this.refreshStrands();
+    if (this.nodeSymbol === NodeSymbol.NONE) {
+      return null;
+    }
+    if (leftOrRight === LeftOrRight.LEFT) {
+      return this.bottomLeftStrand;
+    } else {
+      return this.bottomRightStrand;
+    }
+  }
+
   isMouseOnCircle = (position) => {
     let xEnd = this.xStart + ImageWidth.CIRCLE_BLANK;
     let yEnd = this.yStart + ImageHeight.CIRCLE_BLANK;
