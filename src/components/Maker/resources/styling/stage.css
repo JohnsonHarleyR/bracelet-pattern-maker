@@ -36,6 +36,12 @@
   margin-top: 10px;
 }
 
+.bottom-btns-div {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+
 .btn {
   align-self: center;
   cursor: pointer;

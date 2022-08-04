@@ -18,6 +18,7 @@ import { calculatePatternLength, calculatePatternThickness, createImageOfCanvas,
 import { renderAll } from '../resources/logic/renderLogicV2';
 import { renderAllV2, renderEverything } from '../resources/logic/renderLogicV3';
 import { StageDefaults } from '../resources/constants/stageConstants';
+import PatternCoder from './PatternCoder';
 
 const Stage = () => {
 
@@ -29,6 +30,7 @@ const Stage = () => {
   const removeButtonRef = useRef();
   const alignRef = useRef();
   const saveBtnRef = useRef();
+  const codeBtnRef = useRef();
 
   const [canvasWidth, setCanvasWidth] = useState(0);
   const [canvasHeight, setCanvasHeight] = useState(0);
@@ -62,6 +64,7 @@ const Stage = () => {
   const [patternHeight, setPatternHeight] = useState(0);
 
   const [doScaleCanvas, setDoScaleCanvas] = useState(false);
+  const [showPatternCode, setShowPatternCode] = useState(false);
 
   //#region Effect Area
 
@@ -72,11 +75,13 @@ const Stage = () => {
 
       rowsAreaRef.current.style.display = "flex";
       saveBtnRef.current.style.display = "block";
+      codeBtnRef.current.style.display = "block";
     } else {
       alignRef.current.style.display = "none";
 
       rowsAreaRef.current.style.display = "none";
       saveBtnRef.current.style.display = "none";
+      codeBtnRef.current.style.display = "none";
     }
   }, [isSetupDecided]);
 
@@ -405,6 +410,10 @@ const Stage = () => {
 
   }
 
+  const clickShowCode = () => {
+    setShowPatternCode(true);
+  }
+
   const clickSave = (evt) => {
     let newImage = createImageOfCanvas(canvasRef.current);
   }
@@ -457,7 +466,14 @@ const Stage = () => {
           -
         </div>
       </div>
-      <button className="get-image btn" ref={saveBtnRef} onClick={clickSave}>Get Image</button>
+      <div className='bottom-btns-div'>
+        <button className="get-image btn" ref={saveBtnRef} onClick={clickSave}>Get Image</button>
+        <button className="get-image btn" ref={codeBtnRef} onClick={clickShowCode}>Show Code</button>
+      </div>
+        <PatternCoder
+          showCode={showPatternCode}
+          setShowCode={setShowPatternCode}
+        />
     </div>
   );
 }
