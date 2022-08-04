@@ -446,7 +446,7 @@ const Stage = () => {
       <div className="does-align-message" ref={alignRef}>
         {doesPatternAlign === true
           ? <>Pattern aligns properly.</>
-          : <>Strands at start and end of pattern do not yet align.</>
+          : <>Strands at start and end of pattern are not aligned.</>
         }
       </div>
       
