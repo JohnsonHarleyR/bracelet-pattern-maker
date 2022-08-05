@@ -123,7 +123,6 @@ const ModalPage = ({showModal, pages, index, setIndex, setShowModal}) => {
   //#region Event Handlers
 
   const closeModal = () => {
-    console.log('click close modal');
     setShowModal(false);
     setIndex(0);
   }

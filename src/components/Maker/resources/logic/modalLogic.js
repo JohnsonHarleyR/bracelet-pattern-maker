@@ -1,4 +1,7 @@
-import { ContentType } from "../constants/instructionConstants";
+import AddRemoveColors from '../images/instructions/add-remove-colors.gif';
+import SetupOptions from '../images/instructions/setup-options.png';
+
+import { XAlignment, ContentType, InstructionImageName, YAlignment } from "../constants/instructionConstants";
 
 //#region Navigation Page
 
@@ -54,12 +57,90 @@ export const createPageContentArray = (content, setIndex) => {
         items.push(navList);
       default:
       case ContentType.PARAGRAPH:
-        items.push(<span key={`c-text${i}`}>{c.text}</span>);
+        items.push(createParagraphContent(c, i));
         break;
     }
   });
 
   return items;
+}
+
+const createParagraphContent = (contentItem, i) => {
+  let text = contentItem.text;
+  let img = null;
+  let textClass = 'p-text';
+  let imgClass = 'instruct-img';
+
+  if (contentItem.image !== null) {
+    img = getImageByType(contentItem.image);
+    switch (contentItem.imageXAlign) {
+      case XAlignment.LEFT:
+        imgClass += ' left';
+        break;
+      case XAlignment.RIGHT:
+        imgClass += ' right';
+        break;
+      case XAlignment.CENTER:
+        imgClass += ' xCenter';
+        break;
+      default:
+        break;
+    }
+  }
+
+  if (!img) {
+    return (<p key={`c-text${i}`} className={textClass}>{text}</p>);
+  } else {
+
+    let inside = <></>;
+    switch (contentItem.imageYAlign) {
+      case YAlignment.TOP:
+        inside = 
+          <>
+            <img className={imgClass} src={img} />
+            <br></br>
+            {text}
+          </>;
+        break;
+      case YAlignment.BOTTOM:
+        inside = 
+          <>
+            {text}
+            <br></br>
+            <img className={imgClass} src={img} />
+          </>;
+        break;
+      case YAlignment.CENTER:
+        imgClass += ' yCenter';
+        inside = 
+        <>
+          <img className={imgClass} src={img} />
+          {text}
+        </>;
+        break;
+      default:
+        break;
+    }
+
+    return (<p key={`c-text${i}`} className={textClass} >
+      {inside}
+    </p>);
+  }
+}
+
+//#endregion
+
+//#region Getting Images
+
+const getImageByType = (type) => {
+  switch (type) {
+    default:
+      return null;
+    case InstructionImageName.SETUP_OPTIONS:
+      return SetupOptions;
+    case InstructionImageName.ADD_REMOVE_COLORS:
+      return AddRemoveColors;
+  }
 }
 
 //#endregion
