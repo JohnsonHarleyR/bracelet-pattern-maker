@@ -1,5 +1,6 @@
 import AddRemoveColors from '../images/instructions/add-remove-colors.gif';
 import SetupOptions from '../images/instructions/setup-options.png';
+import ChangeStrandCount from '../images/instructions/change-strand-count.gif';
 
 import { XAlignment, ContentType, InstructionImageName, YAlignment } from "../constants/instructionConstants";
 
@@ -140,6 +141,8 @@ const getImageByType = (type) => {
       return SetupOptions;
     case InstructionImageName.ADD_REMOVE_COLORS:
       return AddRemoveColors;
+    case InstructionImageName.CHANGE_STRAND_COUNT:
+      return ChangeStrandCount;
   }
 }
 

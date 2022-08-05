@@ -8,7 +8,7 @@ import { NodeSymbol } from "../constants/nodeConstants";
 export const generateHexCodes = (colors) => {
   let array = [];
   colors.forEach(c => {
-    let letter = c.letter.toLowerCase();
+    let letter = c.letter;
     let hex = c.color.substring(1);
     array.push({
       letter: letter,

@@ -66,17 +66,17 @@ const PatternCoder = ({showCode, setShowCode}) => {
   const generateHexDisplay = () => {
     let array = [];
     hexCodes.forEach((h, i) => {
-
+      let toolTipId = `hex-tip-${i}`;
       array.push(
-        <div key={`hexdiv${i}`}>
-          <span key={`hex${i}`}>{h.letter}: {h.hex}</span>
-          <button key={`hex-btn${i}`} onClick={(evt) => {copyText(h.hex, evt)}}>Copy</button>
+        <div key={`hexdiv${i}`} className="hex-item">
+          <span key={`hex${i}`}><b>{h.letter}:</b> {h.hex}</span>
+          <button
+            key={`hex-btn${i}`}
+            className="copy-btn"
+            onClick={(evt) => {copyText(h.hex, evt, toolTipId)}}
+          >Copy</button><span className='tool-tip' id={toolTipId}>Copied</span>
         </div>
       );
-
-      if ((i + 1) % 2 === 0) {
-        array.push(<br key={`hex-br${i}`}></br>);
-      }
     });
     return array;
   }
@@ -85,16 +85,20 @@ const PatternCoder = ({showCode, setShowCode}) => {
     let array = [];
     nodesCode.forEach((l, i) => {
       array.push(<span key={`nodeC${i}`}>{l}</span>);
-      if (i !== nodesCode.length - 1) {
-        array.push(<br key={`nodeC-br${i}`}></br>);
-      }
+      // if (i !== nodesCode.length - 1) {
+      //   array.push(<br key={`nodeC-br${i}`}></br>);
+      // }
     });
     return array;
   }
 
-  const copyText = (text, e) => {
+  const copyText = (text, e, toolTipId) => {
     navigator.clipboard.writeText(text);
-
+    let toolTip = document.getElementById(toolTipId);
+    toolTip.style.display = 'inline';
+    setTimeout( function() {
+      toolTip.style.display = "none";
+  }, 1000);
     e.target.focus();
   }
 
@@ -109,34 +113,81 @@ const PatternCoder = ({showCode, setShowCode}) => {
 
   const copyStrandString = (evt) => {
     let text = strandStringRef.current.innerText;
-    copyText(text, evt);
+    copyText(text, evt, 'strand-tip-id');
   }
 
   const copyNodesString = (evt) => {
     let text = nodesStringRef.current.innerText;
-    copyText(text, evt);
+    copyText(text, evt, 'node-tip-id');
   }
 
   //#endregion
 
   return (
     <div ref={modalRef} className='modal-container'>
-      <div className='modal'>
-        <div className="modal-header">
+      <div className='modal coder'>
+        <div className="modal-header coder">
           <span className="close" onClick={closeModal}>&times;</span>
+          <div>
+            <p>
+            These codes are provided for anyone who wishes to submit a pattern onto braceletbook.com.
+            </p>
+            {/* <p className='permission'>
+            Permission is granted as long as credit is provided in the notes so that more people may use this tool. Thank you!
+            <br></br>
+            ♥ Harlee ♥
+            </p> */}
+          </div>
         </div>
-        <div className="modal-body">
+        <div className="modal-body coder">
+          
           <div className='code-section'>
-            {hexDisplay}
+            <h4>Color Values</h4>
+            <div className='hex-values'>
+              {hexDisplay}
+            </div>
           </div>
-          <div className='code-section' ref={strandStringRef}>
+          <div className='code-section'>
+            <h4>Strand Color Order</h4>
+            <div className='strand-values'  ref={strandStringRef}>
             {strandString}
+            </div>
+
+            <div className='copy-btn-div'>
+              <button
+                className="copy-btn"
+                onClick={copyStrandString}
+              >
+                Copy
+              </button>
+              <span className='tool-tip' id="strand-tip-id">Copied</span>
+            </div>
           </div>
-          <button onClick={copyStrandString}>Copy</button>
-          <div className='code-section' ref={nodesStringRef}>
-            {nodeCodeDisplay}
+
+          <div className='code-section'>
+            <h4>Knot Setup</h4>
+            <div className='knot-values'  ref={nodesStringRef}>
+              {nodeCodeDisplay}
+            </div>
+            <div className='copy-btn-div'>
+              <button
+                className="copy-btn"
+                onClick={copyNodesString}
+              >
+                Copy
+              </button>
+              <span className='tool-tip' id="node-tip-id">Copied</span>
+            </div>
           </div>
-          <button onClick={copyNodesString}>Copy</button>
+        </div>
+        <div className='modal-footer coder'>
+        <p className='permission'>
+            Permission is granted as long as credit is provided in the notes so that more people may use this tool.
+            <br></br>
+            Thank you!
+            </p>
+            ♥ Harlee's Creation Tools ♥
+
         </div>
       </div>
       

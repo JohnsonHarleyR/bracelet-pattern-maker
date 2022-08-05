@@ -6,6 +6,7 @@ export const ContentType = {
 export const InstructionImageName = {
   SETUP_OPTIONS: 'SETUP_OPTIONS',
   ADD_REMOVE_COLORS: 'ADD_REMOVE_COLORS',
+  CHANGE_STRAND_COUNT: 'CHANGE_STRAND_COUNT',
 };
 
 export const XAlignment = {
@@ -32,11 +33,11 @@ export const MainInstructionItems = [
         type: ContentType.NAV_LIST,
         navItems: [
           {
-            title: "Basic Setup",
+            title: "Setup Basics",
             index: 1,
           },
           {
-            title: "Color Setup",
+            title: "Changing Colors",
             index: 2,
           },
           {
@@ -48,7 +49,7 @@ export const MainInstructionItems = [
     ],
   },
   {
-    title: "Setup: Basic",
+    title: "Setup Basics",
     isNav: false,
     content: [
       {
@@ -73,15 +74,25 @@ export const MainInstructionItems = [
         imageXAlign: XAlignment.RIGHT,
         imageYAlign: YAlignment.CENTER,
       },
+      {
+        type: ContentType.PARAGRAPH,
+        text: `The number of strands can be changed by selecting an option in the dropdown.`,
+        image: InstructionImageName.CHANGE_STRAND_COUNT,
+        imageXAlign: XAlignment.CENTER,
+        imageYAlign: YAlignment.BOTTOM,
+      },
     ],
   },
   {
-    title: "Setup: Counting Colors",
+    title: "Changing Colors",
     isNav: false,
     content: [
       {
         type: ContentType.PARAGRAPH,
-        text: "counting colors woo",
+        text: "Luckily, color values can be altered at any time and so can the color of specific strands.",
+        image: null,
+        imageXAlign: XAlignment.NONE,
+        imageYAlign: YAlignment.NONE,
       }
     ],
   },
