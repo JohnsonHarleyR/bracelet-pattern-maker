@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import '../resources/styling/modal.css';
 import { MakerContext } from '../../../MakerContext';
+import { createPageContentArray, findNavIndex, getNavItems, getPageContent, isNavPage } from '../resources/logic/modalLogic';
 
 
 const ModalPage = ({showModal, pages, index, setIndex, setShowModal}) => {
@@ -10,15 +11,14 @@ const ModalPage = ({showModal, pages, index, setIndex, setShowModal}) => {
   const nextRef = useRef();
   const titleRef = useRef();
 
-  const {deviceType} = useContext(MakerContext);
-
   const [title, setTitle] = useState('Title');
+  const [pageContent, setPageContent] = useState(<></>);
 
   const [showPrevNav, setShowPrevNav] = useState(true);
   const [showNextNav, setShowNextNav] = useState(true);
 
-  const [pageNumber, setPageNumber] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   //#region Effects
 
@@ -32,7 +32,8 @@ const ModalPage = ({showModal, pages, index, setIndex, setShowModal}) => {
 
   useEffect(() => {
     if (pages) {
-      setTotalPages(pages.length);
+      setTotalPages(pages.length - 1);
+      setPageContent(createPageContent());
     }
   }, [pages]);
 
@@ -44,7 +45,8 @@ const ModalPage = ({showModal, pages, index, setIndex, setShowModal}) => {
       : setTitle('no title');
 
     // set page number
-    setPageNumber(index + 1);
+    setPageNumber(index);
+    setPageContent(createPageContent());
 
     // determine whether to show navigation arrows
     determineShowPrevNav();
@@ -78,6 +80,11 @@ const ModalPage = ({showModal, pages, index, setIndex, setShowModal}) => {
   //#endregion
 
   //#region Normal Methods
+
+  const createPageContent = () => {
+    let content = getPageContent(index, pages);
+    return createPageContentArray(content, setIndex);
+  }
 
   const determineShowPrevNav = () => {
     let result = showPrevNav;
@@ -145,6 +152,10 @@ const ModalPage = ({showModal, pages, index, setIndex, setShowModal}) => {
     }
   }
 
+  const clickBackToNav = () => {
+    setIndex(findNavIndex(pages));
+  }
+
   //#endregion
 
   return (
@@ -161,11 +172,14 @@ const ModalPage = ({showModal, pages, index, setIndex, setShowModal}) => {
 
         </div>
         <div className="modal-body">
-          <p>Some text in the Modal Body</p>
-          <p>Some other text...</p>
+          {pageContent}
         </div>
         <div className="modal-footer">
-          *footer*
+          {index !== 0
+            ? <span className="modal-link" onClick={clickBackToNav}>Back to Navigation</span>
+            : <></>
+          }
+          
         </div>
       </div>
       

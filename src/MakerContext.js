@@ -1,13 +1,10 @@
 import React, {useState, createContext, useEffect} from 'react';
 import { NodeDefaults } from './components/Maker/resources/constants/nodeConstants';
 import { createAllNodesAfterSetup, createFirstRowOfNodes, updateNodeStrands } from './components/Maker/resources/logic/nodeLogic';
-import { isMobile } from 'react-device-detect';
 
 const MakerContext = createContext({});
 
 const MakerProvider = ({children}) => {
-
-  const [deviceType, setDeviceType] = useState(isMobile === true ? "Mobile" : "Desktop");
 
   const [isSetupDecided, setIsSetupDecided] = useState(false);
 
@@ -72,7 +69,6 @@ const MakerProvider = ({children}) => {
 
     return (
         <MakerContext.Provider value={{
-          deviceType, setDeviceType,
           isSetupDecided, setIsSetupDecided,
           nodesAcross, setNodesAcross,
           strandsAcross, setStrandsAcross,

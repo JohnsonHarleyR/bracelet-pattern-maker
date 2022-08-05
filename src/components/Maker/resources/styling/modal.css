@@ -41,6 +41,11 @@
   flex-direction: column;
 }
 
+.modal-body {
+  display: flex;
+  justify-content: center;
+}
+
 .title-nav-div {
   display: flex;
   justify-content: center;
@@ -97,6 +102,35 @@
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.modal-link {
+  color: var(--symbol-color);
+  cursor: pointer;
+}
+
+.modal-link:hover {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.nav-item {
+  color: var(--symbol-color);
+  cursor: pointer;
+  text-align: left;
+}
+
+.nav-item:hover {
+  text-decoration: underline;
+}
+
+.nav-list {
+  justify-content: center;
+}
+
+.nav-list>li {
+  text-align: left;
+  justify-content: flex-start;
 }
 
 /* For Pattern Coder */
