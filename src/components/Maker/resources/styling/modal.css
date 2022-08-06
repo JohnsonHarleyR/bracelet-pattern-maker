@@ -235,6 +235,10 @@
   margin-top: .5vh;
 }
 
+.copy-btn.copy-all {
+  width: 90px;
+}
+
 /* .copy-btn-div>.copy-btn {
   width: 70px;
 } */

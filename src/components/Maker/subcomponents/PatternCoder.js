@@ -121,6 +121,17 @@ const PatternCoder = ({showCode, setShowCode}) => {
     copyText(text, evt, 'node-tip-id');
   }
 
+  const copyAllHexes = (evt) => {
+    let text = '';
+    hexCodes.forEach((h, i) => {
+      text += h.hex;
+      if (i !== hexCodes.length - 1) {
+        text += ' ';
+      }
+    });
+    copyText(text, evt, 'hex-tip-id');
+  }
+
   //#endregion
 
   return (
@@ -130,7 +141,8 @@ const PatternCoder = ({showCode, setShowCode}) => {
           <span className="close" onClick={closeModal}>&times;</span>
           <div>
             <p>
-            These codes are provided for anyone who wishes to submit a pattern onto braceletbook.com.
+            ♥<br></br>
+            These codes are provided for anyone who wishes to submit a pattern onto braceletbook.com, or load a pattern again later!
             </p>
             {/* <p className='permission'>
             Permission is granted as long as credit is provided in the notes so that more people may use this tool. Thank you!
@@ -145,6 +157,16 @@ const PatternCoder = ({showCode, setShowCode}) => {
             <h4>Color Values</h4>
             <div className='hex-values'>
               {hexDisplay}
+            </div>
+
+            <div className='copy-btn-div'>
+              <button
+                className="copy-btn copy-all"
+                onClick={copyAllHexes}
+              >
+                Copy All
+              </button>
+              <span className='tool-tip' id="hex-tip-id">Copied</span>
             </div>
           </div>
           <div className='code-section'>
