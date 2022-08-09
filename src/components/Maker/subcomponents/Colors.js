@@ -44,11 +44,10 @@ const Colors = () => {
 
   useEffect(() => {
     if (colors) {
-      let newSelected = doesSelectedColorExist(colors)
-        ? getSelectedColor(colors)
-        : { letter: colors[0].letter, color: colors[0].color};
-      setSelectedColor(newSelected);
-      setColorsDisplayArray(createColorsDisplay());
+      if (!doesSelectedColorExist(colors, selectedColor)) {
+        setSelectedColor({ letter: colors[0].letter, color: colors[0].color});
+        setColorsDisplayArray(createColorsDisplay());
+      }
     }
   }, [colors]);
 
@@ -104,7 +103,7 @@ const Colors = () => {
 
   const removeColor = () => {
     let colorsCopy = [...colors];
-    let success = removeColorReturnSuccess(selectedColor.letter, colorsCopy);
+    let success = removeColorReturnSuccess(selectedColor.letter, colorsCopy, setSelectedColor);
     if (!success) {
       alert(`Could not remove color. Must have at least one.`);
     } else {
