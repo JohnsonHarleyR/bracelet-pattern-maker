@@ -70,7 +70,7 @@ const MakerProvider = ({children}) => {
   useEffect(() => {
     if (isSetupDecided) {
       setRowCount(NodeDefaults.ROWS_AFTER_SETUP);
-      setNodes(createAllNodesAfterSetup(nodes, nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
+      //setNodes(createAllNodesAfterSetup(nodes, nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
     }
   }, [isSetupDecided]);
 
