@@ -26,9 +26,9 @@ export const getSelectedColor = (colors) => {
   throw `Error finding a selected color. (getSelectedColor: controlLogic.js)`;
 }
 
-export const doesSelectedColorExist = (colors) => {
+export const doesSelectedColorExist = (selectedColor, colors) => {
   for (let i = 0; i < colors.length; i++) {
-    if (colors[i].isSelected) {
+    if (colors[i].letter === selectedColor[i].letter) {
       return true;
     }
   }
@@ -76,7 +76,7 @@ const canAddColor = (colors, strandsAcross) => {
   return true;
 }
 
-export const removeColorReturnSuccess = (id, colorsCopy) => {
+export const removeColorReturnSuccess = (id, colorsCopy, setSelectedColor) => {
   if (!canRemoveColor(colorsCopy)) {
     return false;
   }
@@ -94,7 +94,8 @@ export const removeColorReturnSuccess = (id, colorsCopy) => {
   }
 
   colorsCopy.splice(index, 1);
-  colorsCopy[0].isSelected = true;
+  setSelectedColor(colorsCopy[0]);
+  // colorsCopy[0].isSelected = true;
 
   // now change the letters according to new indexes
   colorsCopy.forEach((c, i) => {

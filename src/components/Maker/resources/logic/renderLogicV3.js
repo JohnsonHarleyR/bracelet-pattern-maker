@@ -12,6 +12,8 @@ import { renderAll } from "./renderLogicV2";
 //#region Render Array Creation
 
 export const renderEverything = (canvas, nodes, yOffset, isSetupDecided, includeBackground = true, startingArray = []) => {
+  console.log('rendering');
+  
   let oldOrNew = StageDefaults.RENDER_METHOD;
   if (oldOrNew === OldOrNew.NEW) {
     renderAllV2(canvas, nodes, yOffset, isSetupDecided, includeBackground, startingArray);
@@ -62,7 +64,12 @@ export const renderAllV2 = (canvas, nodes, yOffset, isSetupDecided, includeBackg
 
 }
 
-const renderNextV2 = (canvas, index, array) => {
+const renderNextV2 = (canvas, index, array, startTime = Date.now()) => {
+  if (index === array.length - 1) {
+    let dif = Date.now() - startTime;
+    console.log(`render next - time passed: ${dif}ms`);
+  }
+
   if (array[index] === undefined) {
     return;
   }
@@ -80,7 +87,7 @@ const renderNextV2 = (canvas, index, array) => {
 
     // if it's not the last item in the array, render next item
     if (index !== array.length - 1) {
-      renderNextV2(canvas, index + 1, array);
+      renderNextV2(canvas, index + 1, array, startTime);
     }
   } else {
     let ctx = canvas.getContext("2d");
@@ -120,7 +127,7 @@ const renderNextV2 = (canvas, index, array) => {
 
         // if it's not the last item in the array, render next item
         if (index !== array.length - 1) {
-          renderNextV2(canvas, index + 1, array);
+          renderNextV2(canvas, index + 1, array, startTime);
         }
 
       }

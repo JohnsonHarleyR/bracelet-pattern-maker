@@ -125,9 +125,9 @@ const Stage = () => {
 
   useEffect(() => {
     if (rowCount) {
-      setCanvasHeight(calculateCanvasHeight(rowCount));
+      
       if (!isSetupDecided) {
-        
+        setCanvasHeight(calculateCanvasHeight(rowCount));
         //console.log(`calculate # of bg images`);
         setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
         setTotalStrandImages(calculateNumberOfStrandImages(nodesAcross, rowCount));
@@ -274,7 +274,7 @@ const Stage = () => {
         //setTotalStrandImages(calculateNumberOfStrandImagesAfterSetup(nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
 
         // test render all
-        renderEverything(canvasRef.current, nodes, patternHeight, isSetupDecided, true);
+        //renderEverything(canvasRef.current, nodes, patternHeight, isSetupDecided, true);
         //renderAll(canvasRef.current, nodes, patternHeight, true);
       }
       
@@ -355,9 +355,9 @@ const Stage = () => {
 
   const removeRows = () => {
     let newRowCount = rowCount - NodeDefaults.ROWS_AT_TIME;
-    let copy = [...nodes];
-    copy = copy.splice(0, newRowCount);
-    setNodes(copy);
+    // let copy = [...nodes];
+    // copy = copy.splice(0, newRowCount);
+    // setNodes(copy);
     setRowCount(newRowCount);
   }
 

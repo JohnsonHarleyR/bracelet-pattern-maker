@@ -7,7 +7,10 @@ const ColorSquare = ({id}) => {
 
   const colorRef = useRef();
 
-  const {colors, setColors} = useContext(MakerContext);
+  const {
+    colors, setColors,
+    selectedColor, setSelectedColor,
+  } = useContext(MakerContext);
 
   const [index, setIndex] = useState(0);
   const [color, setColor] = useState(null);
@@ -28,11 +31,26 @@ const ColorSquare = ({id}) => {
       if (colors[ind].color !== color) {
         setColor(colors[ind].color);
       }
-      if (colors[ind].isSelected !== isSelected) {
-        setIsSelected(colors[ind].isSelected);
-      }
+
+      // if (selectedColor.id !== id) {
+      //   setIsSelected(false);
+      // } else {
+      //   setIsSelected(true);
+      // }
+      // if (colors[ind].isSelected !== isSelected) {
+      //   setIsSelected(colors[ind].isSelected);
+      // }
     }
   }, [index, colors]);
+
+  useEffect(() => {
+    //console.log(`selected color `, selectedColor);
+    if (selectedColor.letter !== id) {
+      setIsSelected(false);
+    } else {
+      setIsSelected(true);
+    }
+  }, [selectedColor]);
 
   useEffect(() => {
     if (color) {
@@ -63,15 +81,21 @@ const ColorSquare = ({id}) => {
   }
 
   const selectColor = (id) => {
-    let copy = [...colors];
-    copy.forEach(c => {
-      if (c.letter === id) {
-        c.isSelected = true;
-      } else {
-        c.isSelected = false;
+    for (let i = 0; i < colors.length; i++) {
+      if (colors[i].letter === id) {
+        setSelectedColor(colors[i]);
+        break;
       }
-    });
-    setColors(copy);
+    }
+    // let copy = [...colors];
+    // copy.forEach(c => {
+    //   if (c.letter === id) {
+    //     c.isSelected = true;
+    //   } else {
+    //     c.isSelected = false;
+    //   }
+    // });
+    // setColors(copy);
   }
 
   //#endregion
@@ -80,6 +104,7 @@ const ColorSquare = ({id}) => {
 
   // TODO change mouse when hovering over square
   const clickColor = () => {
+    //console.log(`selected color `, selectedColor);
     //console.log(`classname before: ${colorRef.current.className}`);
     selectColor(id);
     //console.log(`color ${color} clicked (id=${id})`);

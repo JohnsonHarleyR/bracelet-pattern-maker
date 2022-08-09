@@ -56,13 +56,21 @@ const MakerProvider = ({children}) => {
 
   useEffect(() => {
     if (isSetupDecided && rowCount > 1) {
-      setNodes(createAllNodesAfterSetup(nodes, nodesAcross, rowCount));
+
+      if (rowCount < nodes.length) {
+        let copy = [...nodes];
+        copy = copy.splice(0, rowCount);
+        setNodes(copy);
+      } else {
+        setNodes(createAllNodesAfterSetup(nodes, nodesAcross, rowCount));
+      }
     }
   }, [rowCount]);
 
   useEffect(() => {
     if (isSetupDecided) {
       setRowCount(NodeDefaults.ROWS_AFTER_SETUP);
+      setNodes(createAllNodesAfterSetup(nodes, nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
     }
   }, [isSetupDecided]);
 
