@@ -12,7 +12,7 @@ import { renderAll } from "./renderLogicV2";
 //#region Render Array Creation
 
 export const renderEverything = (canvas, nodes, yOffset, isSetupDecided, includeBackground = true, startingArray = []) => {
-  console.log('rendering');
+  //console.log('rendering');
   
   let oldOrNew = StageDefaults.RENDER_METHOD;
   if (oldOrNew === OldOrNew.NEW) {
@@ -67,7 +67,7 @@ export const renderAllV2 = (canvas, nodes, yOffset, isSetupDecided, includeBackg
 const renderNextV2 = (canvas, index, array, startTime = Date.now()) => {
   if (index === array.length - 1) {
     let dif = Date.now() - startTime;
-    console.log(`render next - time passed: ${dif}ms`);
+    //console.log(`render next - time passed: ${dif}ms`);
   }
 
   if (array[index] === undefined) {
