@@ -143,6 +143,8 @@ const StartModal = ({showModal, setShowModal}) => {
     setShowError(!result.isSuccessful);
 
     if (result.isSuccessful) {
+      console.log(`result content: `, result.content);
+
       closeModal();
     }
 

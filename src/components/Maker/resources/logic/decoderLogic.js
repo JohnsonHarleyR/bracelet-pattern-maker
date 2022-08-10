@@ -1,7 +1,8 @@
-import { createFirstRowOfNodes } from "./nodeLogic";
+import { createAllNodesAfterSetup, createFirstRowOfNodes } from "./nodeLogic";
 import { Alphabet } from "../constants/loadConstants";
 import { isEven } from "./calculationLogic";
 import { StageDefaults } from "../constants/stageConstants";
+import { NodeSymbol } from "../constants/nodeConstants";
 
 //#region Bringing it together
 
@@ -17,6 +18,7 @@ export const loadPatternText = (text) => {
   // stuff to store
   let colors = null;
   let strandInfos = null;
+  let nodes = null;
 
   // blank content error
   if (text.length === 0) {
@@ -29,8 +31,9 @@ export const loadPatternText = (text) => {
   let preLines = text.split('\n');
   let lines = [];
   preLines.forEach(pl => {
-    if (pl.trim() !== '') {
-      lines.push(pl);
+    let trimmed = pl.trim();
+    if (trimmed !== '') {
+      lines.push(trimmed);
     }
   });
 
@@ -61,6 +64,36 @@ export const loadPatternText = (text) => {
     return result;
   }
 
+  // now put every other line into its own array and attempt to turn it into a graph
+  // monitor results of this. After that, create nodes.
+  let nodeLines = [];
+  for (let i = 2; i < lines.length; i++) {
+    nodeLines.push(lines[i]);
+  }
+
+  if (!isEven(nodeLines.length)) {
+    result.isSuccessful = false;
+    result.error = 'There must be an even number of lines for the knot directions portion.';
+    return result;
+  }
+
+  let nodeGraphResult = breakNodeLinesIntoGraphArray(nodeLines, strandInfos.length);
+  let nodeGraph = nodeGraphResult.values;
+  if (!nodeGraphResult.isSuccessful) {
+    result.isSuccessful = false;
+    result.error = nodeGraphResult.error;
+    return result;
+  }
+
+  // create nodes now
+  console.log(`node graph: `, nodeGraph);
+  nodes = createNodesWithGraphArray(nodeGraph, strandInfos);
+
+  // add all the content
+  result.content.colors = colors;
+  result.content.strandInfos = strandInfos;
+  result.content.nodes = nodes;
+
   return result;
 };
 
@@ -71,6 +104,18 @@ const preformatText = (text) => {
 //#endregion
 
 //#region Validation
+
+const isValidNodeDirectionValue = (str) => {
+  switch (str) {
+    case 'f':
+    case 'b':
+    case 'fb':
+    case 'bf':
+      return true;
+    default:
+      return false;
+  }
+}
 
 const isAlphabetValue = (letter) => {
   if (Alphabet.lower.includes(preformatText(letter))) {
@@ -253,50 +298,90 @@ const getColorByLetter = (letter, colors) => {
 
 //#region  Node Values
 
-export const createNodesFromNodeString = (startStrandInfos, nodeString) => {
-  let graphArray = breakNodeStringIntoGraphArray(nodeString);
-
-  if (graphArray[0].length !== startStrandInfos.length / 2 ||
-    !hasCorrectCounts(graphArray)) {
-    return null;
-  }
+export const createNodesWithGraphArray = (graphArray, startStrandInfos) => {
+  let nodesAcross = graphArray[0].length;
+  console.log(`nodes across: `, nodesAcross);
+  let rowCount = graphArray.length;
+  console.log(`row count: `, rowCount);
 
   let firstRow = createFirstRowOfNodes(startStrandInfos, []);
-}
+  console.log(`first row: `, firstRow);
+  let allNodes = createAllNodesAfterSetup([firstRow], nodesAcross, rowCount);
+  console.log(`all nodes: `, allNodes);
 
-const hasCorrectCounts = (graphArray) => {
-  let longCount = graphArray[0].length;
-  let shortCount = longCount - 1;
+  // run through nodes and change directions according to the graph array
+  for (let y = 0; y < allNodes.length; y++) {
+    let nodeRow = allNodes[y];
+    let graphRow = graphArray[y];
+    for (let x = 0; x < nodeRow.length; x++) {
+      let node = nodeRow[x];
+      let dir = graphRow[x];
+      switch (dir) {
+        default:
+        case 'f':
+          node.changeNodeSymbol(NodeSymbol.RIGHT);
+          break;
+        case 'fb':
+          node.changeNodeSymbol(NodeSymbol.RIGHT_LEFT);
+          break;
+        case 'b':
+          node.changeNodeSymbol(NodeSymbol.LEFT);
+          break;
+        case 'bf':
+          node.changeNodeSymbol(NodeSymbol.LEFT_RIGHT);
 
-  for (let i = 0; i < graphArray.length; i++) {
-    let isShort = i + 1 % 2 === 0;
-    if ((!isShort && graphArray[i].length !== longCount) ||
-      (isShort && graphArray[i].length !== shortCount)) {
-        return false;
       }
+    } 
   }
-  return true;
+
+  // return
+  return allNodes;
 }
 
-const breakNodeStringIntoGraphArray = (nodeString) => {
-  // break apart by line breaks first
-  let rowLines = nodeString.split(`\n`);
-  console.log(`test - rows counted: ${rowLines.length}`);
+const breakNodeLinesIntoGraphArray = (rowLines, numberOfStrands) => {
+  let result = {
+    isSuccessful: true,
+    error: 'no error',
+    values: null,
+  }
 
+  let longLength = numberOfStrands / 2;
+  let shortLength = longLength - 1;
   let graphArray = [];
   for (let i = 0; i < rowLines.length; i++) {
     let row = rowLines[i];
     let brokenUp = row.split(',');
+    let rowItems = [];
+    brokenUp.forEach(n => {
+      let trimmed = n.trim();
+      if (trimmed !== '') {
+        if (!isValidNodeDirectionValue(trimmed)) {
+          result.isSuccessful = false;
+          result.error = "A knot direction is invalid.";
+        }
+        rowItems.push(rowItems);
+      }
+    });
+
+    if (!result.isSuccessful) {
+      return result;
+    }
+
+    let isLong = (i + 1) % 2 !== 0;
+    if ((isLong && rowItems.length !== longLength) ||
+        (!isLong && rowItems.length !== shortLength)) {
+          result.isSuccessful = false;
+          result.error = `One of the knot rows did not have the correct number of knots.`;
+          return result;
+        }
+
     graphArray.push(brokenUp);
   }
 
-  // TODO add trimming
+  //console.log(graphArray);
 
-  console.log(graphArray);
-
-
-  return graphArray;
+  result.values = graphArray;
+  return result;
 }
-
 
 //#endregion
