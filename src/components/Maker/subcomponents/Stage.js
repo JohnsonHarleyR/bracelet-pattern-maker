@@ -19,6 +19,7 @@ import { renderAll } from '../resources/logic/renderLogicV2';
 import { renderAllV2, renderEverything } from '../resources/logic/renderLogicV3';
 import { StageDefaults } from '../resources/constants/stageConstants';
 import PatternCoder from './PatternCoder';
+import StartModal from './StartModal';
 
 const Stage = () => {
 
@@ -65,6 +66,8 @@ const Stage = () => {
 
   const [doScaleCanvas, setDoScaleCanvas] = useState(false);
   const [showPatternCode, setShowPatternCode] = useState(false);
+
+  const [showStartModal, setShowStartModal] = useState(true);
 
   //#region Effect Area
 
@@ -471,6 +474,10 @@ const Stage = () => {
         <button className="get-image btn" ref={saveBtnRef} onClick={clickSave}>Get Image</button>
         <button className="get-image btn" ref={codeBtnRef} onClick={clickShowCode}>Show Code</button>
       </div>
+        <StartModal
+          showModal={showStartModal}
+          setShowModal={setShowStartModal}
+        />
         <PatternCoder
           showCode={showPatternCode}
           setShowCode={setShowPatternCode}

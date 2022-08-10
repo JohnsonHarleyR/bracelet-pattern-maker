@@ -1,7 +1,31 @@
+import { createFirstRowOfNodes } from "./nodeLogic";
 
 //#region Bringing it together
 
-import { createFirstRowOfNodes } from "./nodeLogic";
+export const loadPatternText = (text) => {
+  text = preformatText(text);
+  console.log(`text: `, `"${text}"`);
+  let result = {
+    isSuccessful: true,
+    error: 'no error',
+  };
+
+  if (text.length === 0) {
+    result.isSuccessful = false;
+    result.error = 'No text was entered.';
+  }
+
+
+  return result;
+};
+
+const preformatText = (text) => {
+  return text.toLowerCase().trim();
+}
+
+//#endregion
+
+//#region Validation
 
 //#endregion
 

@@ -4,7 +4,7 @@ import { MakerContext } from '../../../MakerContext';
 import { generateHexCodes, generateNodesCodeArray, generateStrandLetterString } from '../resources/logic/coderLogic';
 
 
-const PatternCoder = ({showCode, setShowCode}) => {
+const DecoderModal = ({showCode, setShowCode}) => {
 
   const modalRef = useRef();
   const hexStringInput = useRef();
@@ -218,4 +218,4 @@ const PatternCoder = ({showCode, setShowCode}) => {
   );
 }
 
-export default PatternCoder;
+export default DecoderModal;
