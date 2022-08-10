@@ -1,20 +1,52 @@
 import { createFirstRowOfNodes } from "./nodeLogic";
+import { Alphabet } from "../constants/loadConstants";
 
 //#region Bringing it together
 
 export const loadPatternText = (text) => {
   text = preformatText(text);
-  console.log(`text: `, `"${text}"`);
+  //console.log(`text: `, `"${text}"`);
   let result = {
     isSuccessful: true,
     error: 'no error',
+    content: {},
   };
 
+  // stuff to store
+  let colors = null;
+
+  // blank content error
   if (text.length === 0) {
     result.isSuccessful = false;
     result.error = 'No text was entered.';
+    return result;
   }
 
+  // remove blank lines.
+  let preLines = text.split('\n');
+  let lines = [];
+  preLines.forEach(pl => {
+    if (pl.trim() !== '') {
+      lines.push(pl);
+    }
+  });
+
+  // error if not 5 lines - which is important
+  if (lines.length < 5) {
+    result.isSuccessful = false;
+    result.error = 'Not enough lines were entered. Is the direction pattern at least two lines?';
+    return result;
+  }
+
+  // decode and validate hex line - which is line 1
+  let colorsResult = createColorsFromHexString(lines[0]);
+  if (colorsResult.isSuccessful) {
+    colors = colorsResult.values;
+  } else {
+    result.isSuccessful = false;
+    result.error = colorsResult.error;
+    return result;
+  }
 
   return result;
 };
@@ -27,16 +59,59 @@ const preformatText = (text) => {
 
 //#region Validation
 
+const isAlphabetValue = (letter) => {
+  if (Alphabet.lower.includes(preformatText(letter))) {
+    return true;
+  }
+  return false;
+}
+
+const isNumberValue = (value) => {
+  let nums = [1,2,3,4,5,6,7,8,9,0];
+  for (let i = 0; i < nums.length; i++) {
+    if (`${nums[i]}` === `${value}`) {
+      return true;
+    }
+  }
+  return false;
+}
+
+const areHexCharactersValid = (hex) => {
+  for (let i = 1; i < hex.length; i++) {
+    let character = hex.substring(i, i + 1);
+    if (!isAlphabetValue(character) && !isNumberValue(character)) {
+      //console.log('a character was not valid');
+      return false;
+    }
+  }
+  //console.log('characters were valid');
+  return true;
+}
+
 //#endregion
 
 //#region Hex Values
 
 export const createColorsFromHexString = (hexString) => {
+  let result = {
+    isSuccessful: true,
+    error: 'no error',
+    values: null,
+  };
+
   let alphabet =
     ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 
     'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 
     'U', 'V', 'W', 'X', 'Y', 'Z'];
-  let hexValues = decodeHexStringIntoValues(hexString);
+  let hexResult = decodeHexStringIntoValues(hexString);
+  if (!hexResult.isSuccessful) {
+    //console.log(`hex result not valid`);
+    result.isSuccessful = false;
+    result.error = hexResult.error;
+    return result;
+  }
+
+  let hexValues = hexResult.values;
   let newColors = [];
   hexValues.forEach((hex, i) => {
     let isSelected = i === 0;
@@ -46,17 +121,50 @@ export const createColorsFromHexString = (hexString) => {
       isSelected: isSelected,
     });
   });
-  return newColors;
+
+  result.values = newColors;
+  return result;
 }
 
 const decodeHexStringIntoValues = (hexString) => {
+  let result = {
+    isSuccessful: true,
+    error: 'no error',
+    values: null,
+  }
   let hexValues = [];
   let values = hexString.split(' ');
-  values.forEach(v => {
-    hexValues.push(`#${v}`);
-  });
+  for (let i = 0; i < values.length; i++) {
+    let value = preformatText(values[i]);
+    let newValue = value;
+    if (value.length !== 0 && value.substring(0, 1) !== '#') {
+      newValue = `#${value}`;
+    }
+    if (newValue.length !== 7) {
+      result.isSuccessful = false;
+      result.error = "A hex value did not have enough characters.";
+      return result;
+    }
+    
+    if (areHexCharactersValid(newValue)) {
+      hexValues.push(newValue);
+    } else {
+      result.isSuccessful = false;
+      result.error = "A hex value was not valid.";
+      return result;
+    }
+    
+  }
 
-  return hexValues;
+  if (hexValues.length === 0) {
+    result.isSuccessful = false;
+    result.error = "No valid hex values were entered.";
+    return result;
+  }
+
+  result.values = hexValues;
+
+  return result;
 }
 
 //#endregion
