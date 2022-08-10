@@ -17,6 +17,8 @@ export const StageDefaults = {
   COPYRIGHT_Y_OFFSET: 14,
   CANVAS_END_EXTRA: 15,
   CANVAS_END_BG_EXTRA: 15,
+  MIN_STRANDS: 4,
+  MAX_STRANDS: 24,
 }
 
 export const ImageName = {

@@ -1,5 +1,7 @@
 import { createFirstRowOfNodes } from "./nodeLogic";
 import { Alphabet } from "../constants/loadConstants";
+import { isEven } from "./calculationLogic";
+import { StageDefaults } from "../constants/stageConstants";
 
 //#region Bringing it together
 
@@ -14,6 +16,7 @@ export const loadPatternText = (text) => {
 
   // stuff to store
   let colors = null;
+  let strandInfos = null;
 
   // blank content error
   if (text.length === 0) {
@@ -32,19 +35,29 @@ export const loadPatternText = (text) => {
   });
 
   // error if not 5 lines - which is important
-  if (lines.length < 5) {
+  if (lines.length < 4) {
     result.isSuccessful = false;
     result.error = 'Not enough lines were entered. Is the direction pattern at least two lines?';
     return result;
   }
 
-  // decode and validate hex line - which is line 1
+  // decode and validate hex line - which is line 0
   let colorsResult = createColorsFromHexString(lines[0]);
   if (colorsResult.isSuccessful) {
     colors = colorsResult.values;
   } else {
     result.isSuccessful = false;
     result.error = colorsResult.error;
+    return result;
+  }
+
+  // decode and validate strandinfos line - which is line 1
+  let strandsResult = createStrandInfosFromString(lines[1].trim(), colors);
+  if (strandsResult.isSuccessful) {
+    strandInfos = strandsResult.values;
+  } else {
+    result.isSuccessful = false;
+    result.error = strandsResult.error;
     return result;
   }
 
@@ -172,12 +185,24 @@ const decodeHexStringIntoValues = (hexString) => {
 //#region Strand Values
 
 export const createStrandInfosFromString = (strandString, colors) => {
+  let result = {
+    isSuccessful: true,
+    error: 'no error',
+    values: null,
+  };
+
+
   let infos = [];
   for (let i = 0; i < strandString.length; i++) {
-    let letter = strandString.substring(i, 1).toUpperCase();
+    let letter = strandString.substring(i, i + 1).toUpperCase();
+    if (letter.trim() === '') {
+      continue;
+    }
     let color = getColorByLetter(letter, colors);
     if (color === null) {
-      return null;
+      result.isSuccessful = false;
+      result.error = "One of the strand letters did not match any provided hex value.";
+      return result;
     }
     infos.push({
       index: i,
@@ -185,11 +210,38 @@ export const createStrandInfosFromString = (strandString, colors) => {
       color: color.color,
     });
   }
-  return infos;
+
+  if (!isEven(infos.length)) {
+    result.isSuccessful = false;
+    result.error = 'The number of strands must be even.';
+    return result;
+  }
+
+  if (infos.length === 0) {
+    result.isSuccessful = false;
+    result.error = "No valid letters in strand values line.";
+    return result;
+  }
+
+  if (infos.length < StageDefaults.MIN_STRANDS) {
+    result.isSuccessful = false;
+    result.error = `There must be at least ${StageDefaults.MIN_STRANDS} strands.`;
+    return result;
+  }
+
+  if (infos.length > StageDefaults.MAX_STRANDS) {
+    result.isSuccessful = false;
+    result.error = `The max number of strands is ${StageDefaults.MAX_STRANDS}.`;
+    return result;
+  }
+
+  result.values = infos;
+  return result;
 }
 
 const getColorByLetter = (letter, colors) => {
   for (let i = 0; i < colors.length; i++) {
+    //console.log(`letter: ${letter}, color letter: ${colors[i].letter}`);
     if (colors[i].letter === letter) {
       return colors[i];
     }
