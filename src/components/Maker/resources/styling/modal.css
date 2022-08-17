@@ -240,6 +240,13 @@
   width: 90px;
 }
 
+.copy-btn.copy-everything {
+  width: 150px;
+  height: 4.5vh;
+  font-size: large;
+  margin-bottom: 3vh;
+}
+
 /* .copy-btn-div>.copy-btn {
   width: 70px;
 } */
@@ -263,6 +270,10 @@
 .copy-btn-div>.tool-tip {
   right: 0;
   left: 0;
+}
+
+.tool-tip#everything-tip-id {
+  margin-top: -3vh;
 }
 
 .knot-values {
@@ -289,6 +300,8 @@
 .modal-body.coder {
   margin: 10px;
   max-width: 95%;
+  padding-left: 21.5px;
+  padding-right: 0px;
 }
 
 .hex-values, .strand-values, .knot-values {

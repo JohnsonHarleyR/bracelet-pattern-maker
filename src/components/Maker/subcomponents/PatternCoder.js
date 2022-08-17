@@ -101,7 +101,17 @@ const PatternCoder = ({showCode, setShowCode}) => {
   }, 1000);
     e.target.focus();
   }
-
+  
+  const getStringOfAllHexes = () => {
+    let text = '';
+    hexCodes.forEach((h, i) => {
+      text += h.hex;
+      if (i !== hexCodes.length - 1) {
+        text += ' ';
+      }
+    });
+    return text;
+  }
 
   //#endregion
 
@@ -109,6 +119,13 @@ const PatternCoder = ({showCode, setShowCode}) => {
 
   const closeModal = () => {
     setShowCode(false);
+  }
+
+  const copyEverything = (evt) => {
+    let text = getStringOfAllHexes() + '\n';
+    text += strandStringRef.current.innerText + '\n';
+    text += nodesStringRef.current.innerText;
+    copyText(text, evt, 'everything-tip-id');
   }
 
   const copyStrandString = (evt) => {
@@ -122,15 +139,12 @@ const PatternCoder = ({showCode, setShowCode}) => {
   }
 
   const copyAllHexes = (evt) => {
-    let text = '';
-    hexCodes.forEach((h, i) => {
-      text += h.hex;
-      if (i !== hexCodes.length - 1) {
-        text += ' ';
-      }
-    });
+    let text = getStringOfAllHexes();
     copyText(text, evt, 'hex-tip-id');
   }
+
+
+
 
   //#endregion
 
@@ -152,6 +166,16 @@ const PatternCoder = ({showCode, setShowCode}) => {
           </div>
         </div>
         <div className="modal-body coder">
+
+          <div className='copy-btn-div'>
+            <button
+              className="copy-btn copy-everything"
+              onClick={copyEverything}
+            >
+              Copy Everything
+            </button>
+            <span className='tool-tip' id="everything-tip-id">Copied</span>
+          </div>
           
           <div className='code-section'>
             <h4>Color Values</h4>
