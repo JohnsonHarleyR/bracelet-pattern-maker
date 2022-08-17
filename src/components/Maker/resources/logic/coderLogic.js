@@ -24,6 +24,7 @@ export const generateHexCodes = (colors) => {
 //#region Strands
 
 export const generateStrandLetterString = (strandInfos) => {
+  console.log(`strand infos count: `, strandInfos.length);
   let str = '';
   strandInfos.forEach(s => {
     str += s.letter.toLowerCase();

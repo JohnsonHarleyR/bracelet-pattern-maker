@@ -114,11 +114,11 @@ const renderNextV2 = (canvas, index, array, startTime = Date.now()) => {
         // check for any fill
         if (item.color !== null) {
           if (item.category === RenderCategory.STRAND) {
-            console.log(`strand pos: `, `x: ${item.cX}, y: ${item.cY}`);
+            //console.log(`strand pos: `, `x: ${item.cX}, y: ${item.cY}`);
             renderSquareFill(canvas, item.color, item.cX, item.cY, item.cW, item.cH);
             //renderSquareFill(canvas, item.color, item.x, item.y, item.width, item.height);
           } else if (item.category === RenderCategory.CIRCLE) {
-            console.log(`node pos: `, `x: ${item.cX}, y: ${item.cY}`);
+            //console.log(`node pos: `, `x: ${item.cX}, y: ${item.cY}`);
             renderCircleFill(canvas, item.color, item.cX, item.cY);
           }
         }

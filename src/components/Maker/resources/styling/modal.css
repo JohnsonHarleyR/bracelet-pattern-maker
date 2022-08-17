@@ -10,6 +10,7 @@
 
   --modal-body-scroll-width: .8vw;
   --modal-coder-width: 30vw;
+  --modal-body-coder-margin: .5vw;
 }
 
 
@@ -38,6 +39,7 @@
   display: flex;
   flex-direction: column;
   color: var(--text-color);
+  box-sizing: border-box;
 }
 
 /* For tilting phone sideways */
@@ -67,6 +69,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  /* margin: var(--modal-body-coder-margin); */
 }
 
 .modal-body {
@@ -77,6 +80,7 @@
   overflow: scroll;
   padding-left: 1vw;
   padding-right: 1vw;
+  /* margin: var(--modal-body-coder-margin); */
 }
 
 .title-nav-div {
@@ -241,6 +245,7 @@
 
 .copy-btn.copy-all {
   width: 90px;
+  margin-top: 10px;
 }
 
 .copy-btn.copy-everything {
@@ -284,6 +289,10 @@
   flex-direction: column;
 }
 
+/* .modal-footer {
+  margin: var(--modal-body-coder-margin);
+} */
+
 .modal-footer.coder {
   display: flex;
   flex-direction: column;
@@ -301,8 +310,8 @@
   /* scrollbar-width: 20px; */
 }
 
-.modal-body.coder {
-  margin: var(--modal-body-coder-margin);
+.modal-body {
+  margin-right: var(--modal-body-coder-margin);
   margin-left: calc(var(--modal-body-coder-margin) + var(--modal-body-scroll-width));
   /* max-width: 95%; */
   /* padding-right: var(--modal-body-coder-margin);; */
@@ -333,6 +342,11 @@
 
 .modal-header.coder {
   font-size: smaller;
+}
+
+.modal-header.coder div {
+  padding-left: var(--modal-body-coder-margin);
+  padding-right: var(--modal-body-coder-margin);
 }
 
 .permission {

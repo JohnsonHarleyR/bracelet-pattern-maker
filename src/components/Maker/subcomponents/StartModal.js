@@ -34,6 +34,7 @@ const StartModal = ({showModal, setShowModal}) => {
   const {
     setColors,
     setSelectedColor,
+    setStrandsAcross,
     setStartStrandInfos,
     setNodes,
     setIsSetupDecided,
@@ -41,6 +42,7 @@ const StartModal = ({showModal, setShowModal}) => {
     setRowCount,
     setPatternHeight,
     setPatternWasLoaded,
+    isLoadingPattern, setIsLoadingPattern,
   } = useContext(MakerContext);
 
   //#region Effects
@@ -81,9 +83,15 @@ const StartModal = ({showModal, setShowModal}) => {
       default:
         break;
       case PageType.WELCOME:
+        if (isLoadingPattern) {
+          setIsLoadingPattern(false);
+        }
         content = createWelcomeContent();
         break;
       case PageType.LOAD:
+        if (!isLoadingPattern) {
+          setIsLoadingPattern(true);
+        }
         content = createLoadContent();
     }
 
@@ -168,15 +176,23 @@ const StartModal = ({showModal, setShowModal}) => {
         letter: newColors[0].letter,
         color: newColors[0].color,
       });
+
+      setStrandsAcross(newStrandInfos.length);
       setStartStrandInfos(newStrandInfos);
-      setNodes([newNodes[0]]);
-      setIsSetupDecided(true);
-      setPatternHeight(calculatePatternThickness(newNodes));
+      // setTimeout(() => {
+      //   console.log(`Giving everything a chance to set.`);
+      // }, [100]);
       setNodesAcross(newNodes[0].length);
+      setNodes([newNodes[0]]);
+      setPatternHeight(calculatePatternThickness(newNodes));
       setRowCount(newNodes.length);
       setNodes(newNodes);
+      setIsSetupDecided(true);
 
-
+      // setTimeout(() => {
+      //   console.log(`Giving everything a chance to set.`);
+      // }, [100]);
+      setIsLoadingPattern(false);
       closeModal();
     }
 

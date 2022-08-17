@@ -17,6 +17,7 @@ const MakerProvider = ({children}) => {
 
   const [pattern, setPattern] = useState([]);
   const [patternHeight, setPatternHeight] = useState(0);
+  const [isLoadingPattern, setIsLoadingPattern] = useState(false);
   const [patternWasLoaded, setPatternWasLoaded] = useState(false);
 
   const [selectedColor, setSelectedColor] = useState({
@@ -90,6 +91,7 @@ const MakerProvider = ({children}) => {
           pattern, setPattern,
           patternHeight, setPatternHeight,
           patternWasLoaded, setPatternWasLoaded,
+          isLoadingPattern, setIsLoadingPattern,
         }}>
             {children}
         </MakerContext.Provider>
