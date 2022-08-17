@@ -7,6 +7,9 @@
   --symbol-color-hide: rgba(25, 146, 146, 0.0);
   --border-width: 3px; 
   --default-font: monospace;
+
+  --modal-body-scroll-width: .8vw;
+  --modal-coder-width: 30vw;
 }
 
 
@@ -294,14 +297,34 @@
 }
 
 .modal.coder {
-  width: 30vw;
+  width: var(--modal-coder-width);
+  /* scrollbar-width: 20px; */
 }
 
 .modal-body.coder {
-  margin: 10px;
-  max-width: 95%;
-  padding-left: 21.5px;
-  padding-right: 0px;
+  margin: var(--modal-body-coder-margin);
+  margin-left: calc(var(--modal-body-coder-margin) + var(--modal-body-scroll-width));
+  /* max-width: 95%; */
+  /* padding-right: var(--modal-body-coder-margin);; */
+  /* padding-right: calc(-1 * var(--modal-body-coder-margin)); */
+  
+  box-sizing: border-box;
+  overflow-x: hidden;
+
+}
+
+.modal-body::-webkit-scrollbar {
+  width: var(--modal-body-scroll-width);
+}
+
+.modal-body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
 }
 
 .hex-values, .strand-values, .knot-values {
