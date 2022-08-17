@@ -36,7 +36,7 @@ const Stage = () => {
   const [canvasWidth, setCanvasWidth] = useState(0);
   const [canvasHeight, setCanvasHeight] = useState(0);
   const {
-    isSetupDecided,
+    isSetupDecided, setIsSetupDecided,
     nodesAcross,
     rowCount, setRowCount,
     startStrandInfos, setStartStrandInfos,
@@ -45,6 +45,8 @@ const Stage = () => {
     colors,
     pattern, setPattern,
     patternHeight, setPatternHeight,
+    wasPatternLoaded,
+    isLoadingPattern, setIsLoadingPattern
   } = useContext(MakerContext);
 
   const [isBgLoaded, setIsBgLoaded] = useState(false);
@@ -71,6 +73,11 @@ const Stage = () => {
 
   //#region Effect Area
 
+  // useEffect(() => {
+  //   if (wasPatternLoaded && !isLoadingPattern) {
+  //     setIsSetupDecided(true);
+  //   }
+  // }, [isLoadingPattern, isSetupDecided]);
 
   useEffect(() => {
     if (isSetupDecided) {
@@ -79,6 +86,10 @@ const Stage = () => {
       rowsAreaRef.current.style.display = "flex";
       saveBtnRef.current.style.display = "block";
       codeBtnRef.current.style.display = "block";
+
+      // if (wasPatternLoaded && !isLoadingPattern) {
+      //   renderEverything
+      // }
     } else {
       alignRef.current.style.display = "none";
 
