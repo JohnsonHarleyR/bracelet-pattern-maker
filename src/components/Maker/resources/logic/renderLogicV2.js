@@ -43,12 +43,13 @@ export const renderAll = (canvas, nodes, yOffset, includeBackground = true, star
 
   // bg images first
   if (includeBackground) {
+    console.log(`including background (renderLogicV2)`);
     let calculatedHeight = calculateCanvasHeight(nodes.length);
     canvas.width = calculateCanvasWidth(nodes[0].length);
     canvas.height = calculatedHeight + yOffset;
     addBgImagesToArray(canvas, calculatedHeight, nodes, yOffset, renderArray);
   } else {
-
+    console.log(`NOT including background (renderLogicV2)`);
     if (startingArray.length === 0) {
       let info = getTileInfo(ImageName.TILE_START);
       renderArray.push(createImageInfoItem(null, info.leftName, 0, yOffset, info.leftWidth, info.leftHeight, false, null, null, LeftOrRight.LEFT));

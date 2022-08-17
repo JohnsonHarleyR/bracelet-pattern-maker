@@ -29,6 +29,7 @@ export const renderAllV2 = (canvas, nodes, yOffset, isSetupDecided, includeBackg
 
   // bg images first
   if (includeBackground) {
+    console.log(`including background (renderLogicV3)`);
     //console.log('rendering bg');
     let calculatedHeight = calculateCanvasHeight(nodes.length);
     canvas.width = calculateCanvasWidth(nodes[0].length);
@@ -39,18 +40,19 @@ export const renderAllV2 = (canvas, nodes, yOffset, isSetupDecided, includeBackg
     }
     addBgImagesToArrayV2(canvas, nodes, yOffset, isSetupDecided, renderArray);
   } else {
-
+    console.log(`NOT including background (renderLogicV3)`);
     if (startingArray.length === 0) {
       renderArray.push(createRenderArrayItem(ImageType.TILE_START_LEFT, 0, 0, nodes, canvas, isSetupDecided, yOffset));
       renderArray.push(createRenderArrayItem(ImageType.TILE_START_RIGHT, 0, nodes[0].length * 2 -1, nodes, canvas, isSetupDecided, yOffset));
-      if (StageDefaults.SHOW_COPYRIGHT) {
-        renderArray.push(createRenderArrayItem(ImageType.OVER_TEXT_BG, null, null, nodes, canvas, isSetupDecided, yOffset));
-      }
       // let info = getTileInfo(ImageName.TILE_START);
       // renderArray.push(createImageInfoItem(null, info.leftName, 0, yOffset, info.leftWidth, info.leftHeight, false, null, null, LeftOrRight.LEFT));
       // renderArray.push(createImageInfoItem(null, info.rightName, canvas.width - info.rightWidth, yOffset, info.rightWidth, info.rightHeight, false, null, null, LeftOrRight.RIGHT));
     }
     
+  }
+
+  if (StageDefaults.SHOW_COPYRIGHT) {
+    renderArray.push(createRenderArrayItem(ImageType.OVER_TEXT_BG, null, null, nodes, canvas, isSetupDecided, yOffset));
   }
 
   // now nodes - including their strands
