@@ -673,12 +673,15 @@ const hasUnsetNodes = (nodes) => {
 export const createImageOfCanvas = (nodeCanvas) => {
 
 
-    let image = nodeCanvas.toDataURL("image/png");
-    console.log(image);
-    //return image;
+    let dataUrl = nodeCanvas.toDataURL("image/png");
+    console.log(dataUrl);
+    let image = new Image();
+    image.src = dataUrl;
+    image.onload = () => {
+      let win = window.open('about:blank');
+      win.document.write(image.outerHTML);
+    }
 
-    var win = window.open();
-    win.document.write('<iframe src="' +image  + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen> </iframe>');
 }
 
 //#endregion 
