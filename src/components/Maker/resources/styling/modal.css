@@ -289,9 +289,9 @@
   flex-direction: column;
 }
 
-/* .modal-footer {
+.modal-footer {
   margin: var(--modal-body-coder-margin);
-} */
+}
 
 .modal-footer.coder {
   display: flex;

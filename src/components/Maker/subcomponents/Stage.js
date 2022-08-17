@@ -45,8 +45,6 @@ const Stage = () => {
     colors,
     pattern, setPattern,
     patternHeight, setPatternHeight,
-    wasPatternLoaded,
-    isLoadingPattern, setIsLoadingPattern
   } = useContext(MakerContext);
 
   const [isBgLoaded, setIsBgLoaded] = useState(false);
@@ -73,12 +71,6 @@ const Stage = () => {
 
   //#region Effect Area
 
-  // useEffect(() => {
-  //   if (wasPatternLoaded && !isLoadingPattern) {
-  //     setIsSetupDecided(true);
-  //   }
-  // }, [isLoadingPattern, isSetupDecided]);
-
   useEffect(() => {
     if (isSetupDecided) {
       alignRef.current.style.display = "flex";
@@ -87,9 +79,6 @@ const Stage = () => {
       saveBtnRef.current.style.display = "block";
       codeBtnRef.current.style.display = "block";
 
-      // if (wasPatternLoaded && !isLoadingPattern) {
-      //   renderEverything
-      // }
     } else {
       alignRef.current.style.display = "none";
 

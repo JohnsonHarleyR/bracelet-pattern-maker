@@ -42,7 +42,6 @@ const StartModal = ({showModal, setShowModal}) => {
     setRowCount,
     setPatternHeight,
     setPatternWasLoaded,
-    isLoadingPattern, setIsLoadingPattern,
   } = useContext(MakerContext);
 
   //#region Effects
@@ -83,15 +82,12 @@ const StartModal = ({showModal, setShowModal}) => {
       default:
         break;
       case PageType.WELCOME:
-        if (isLoadingPattern) {
-          setIsLoadingPattern(false);
-        }
         content = createWelcomeContent();
+        if (showError) {
+          setShowError(false);
+        }
         break;
       case PageType.LOAD:
-        if (!isLoadingPattern) {
-          setIsLoadingPattern(true);
-        }
         content = createLoadContent();
     }
 
@@ -189,10 +185,6 @@ const StartModal = ({showModal, setShowModal}) => {
       setNodes(newNodes);
       setIsSetupDecided(true);
 
-      // setTimeout(() => {
-      //   console.log(`Giving everything a chance to set.`);
-      // }, [100]);
-      setIsLoadingPattern(false);
       closeModal();
     }
 
