@@ -1,6 +1,12 @@
+import WelcomeScreen from '../images/instructions/welcome-screen.png';
+import LoadPrevious from '../images/instructions/load-previous.gif';
+import LoadError from '../images/instructions/load-error.gif';
 import AddRemoveColors from '../images/instructions/add-remove-colors.gif';
 import SetupOptions from '../images/instructions/setup-options.png';
 import ChangeStrandCount from '../images/instructions/change-strand-count.gif';
+import PresetColors from '../images/instructions/preset-colors.gif';
+import ChangeColor from '../images/instructions/change-color.gif';
+import ChangeStrandColor from '../images/instructions/change-strand-color.gif';
 
 import { XAlignment, ContentType, InstructionImageName, YAlignment } from "../constants/instructionConstants";
 
@@ -137,12 +143,24 @@ const getImageByType = (type) => {
   switch (type) {
     default:
       return null;
+    case InstructionImageName.WELCOME_SCREEN:
+      return WelcomeScreen;
+    case InstructionImageName.LOAD_PREVIOUS:
+      return LoadPrevious;
+    case InstructionImageName.LOAD_ERROR:
+      return LoadError;
     case InstructionImageName.SETUP_OPTIONS:
       return SetupOptions;
     case InstructionImageName.ADD_REMOVE_COLORS:
       return AddRemoveColors;
     case InstructionImageName.CHANGE_STRAND_COUNT:
       return ChangeStrandCount;
+    case InstructionImageName.PRESET_COLORS:
+      return PresetColors;
+    case InstructionImageName.CHANGE_COLOR:
+      return ChangeColor;
+    case InstructionImageName.CHANGE_STRAND_COLOR:
+      return ChangeStrandColor;
   }
 }
 
