@@ -236,12 +236,14 @@ export const getNodeImageName = (node, isColorCloserToBlack = false) => {
 //#endregion
 
 //#region Rendering Text
-export const drawText = (canvas, text, x, y, color = TextDefaults.COLOR) => {
+export const drawText = (canvas, text, x, y, color = TextDefaults.COLOR, textAlign = 'start') => {
   let ctx = canvas.getContext("2d");
   ctx.beginPath();
   ctx.fillStyle = color;
   ctx.font = TextDefaults.FONT;
   ctx.closePath();
+  console.log(`text aligned: `, ctx.textAlign);
+  ctx.textAlign = textAlign;
   ctx.fillText(text, x, y);
   ctx.fillText(text, x, y);
 }
@@ -272,6 +274,7 @@ export const drawNumberOnTile = ({canvas, xTileStart, yTileStart, number, leftOr
 export const renderLeftTopStrandText = (canvas, strandLetter, strandX, strandY) => {
   let x = strandX + TextDefaults.X_LEFT_TOP_OFFSET;
   let y = strandY + TextDefaults.Y_LEFT_TOP_OFFSET;
+  console.log(`top left letter: `, `x: ${x}, y: ${y}`);
 
   drawText(canvas, strandLetter, x, y);
 }
@@ -279,6 +282,7 @@ export const renderLeftTopStrandText = (canvas, strandLetter, strandX, strandY) 
 export const renderRightTopStrandText = (canvas, strandLetter, strandX, strandY) => {
   let x = strandX + TextDefaults.X_RIGHT_TOP_OFFSET;
   let y = strandY + TextDefaults.Y_RIGHT_TOP_OFFSET;
+  console.log(`top right letter: `, `x: ${x}, y: ${y}`);
 
   drawText(canvas, strandLetter, x, y);
 }
@@ -574,6 +578,7 @@ const renderFirstStrandRow = (canvas, firstNodeRow, rowCount, addToLoadedCount) 
   let rXOffset = 0;
   let rYOffset = 0;
   firstNodeRow.forEach((n, i) => {
+    console.log(`node pos: `, `x: ${n.xStart}, y: ${n.yStart}`);
     let lPos = renderStartOrEndStrand(canvas, i * 2, n.topLeftStrand, 0, rowCount, LeftOrRight.LEFT, addToLoadedCount);
     let prevLXOffset = lXOffset;
     let prevLYOffset = lYOffset;
@@ -609,6 +614,10 @@ const renderStartOrEndStrand = (canvas, strandIndex, strandInfo, rowIndex, rowCo
   let xy = calculateStrandImageRenderingPosition(strandIndex, rowIndex, canvas.height, !isStart);
   let color = strandInfo !== null ? strandInfo.color : NodeDefaults.EMPTY_COLOR;
   let imageName = getStrandImageName(strandIndex, rowIndex, rowCount, isStart);
+
+  if (rowIndex === 0) {
+    console.log(`${leftOrRight} top strand pos: `, xy);
+  }
 
   let rowType = getRowType(rowIndex);
   if (rowType === RowType.SHORT) {

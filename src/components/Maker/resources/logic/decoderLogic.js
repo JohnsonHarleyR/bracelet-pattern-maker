@@ -1,6 +1,6 @@
 import { createAllNodesAfterSetup, createFirstRowOfNodes } from "./nodeLogic";
 import { Alphabet } from "../constants/loadConstants";
-import { isEven } from "./calculationLogic";
+import { calculateStrandImageRenderingPosition, isEven } from "./calculationLogic";
 import { StageDefaults } from "../constants/stageConstants";
 import { NodeSymbol } from "../constants/nodeConstants";
 
@@ -249,11 +249,15 @@ export const createStrandInfosFromString = (strandString, colors) => {
       result.error = "One of the strand letters did not match any provided hex value.";
       return result;
     }
-    infos.push({
+    let newInfo = {
       index: i,
       letter: letter,
       color: color.color,
-    });
+    };
+    let xy = calculateStrandImageRenderingPosition(i, 0);
+    newInfo.xStart = xy.x;
+    newInfo.yStart = xy.y;
+    infos.push(newInfo);
   }
 
   if (!isEven(infos.length)) {
@@ -319,16 +323,16 @@ export const createNodesWithGraphArray = (graphArray, startStrandInfos) => {
       switch (dir) {
         default:
         case 'f':
-          node.changeNodeSymbol(NodeSymbol.RIGHT);
+          node.changeNodeSymbol(NodeSymbol.RIGHT, true);
           break;
         case 'fb':
-          node.changeNodeSymbol(NodeSymbol.RIGHT_LEFT);
+          node.changeNodeSymbol(NodeSymbol.RIGHT_LEFT, true);
           break;
         case 'b':
-          node.changeNodeSymbol(NodeSymbol.LEFT);
+          node.changeNodeSymbol(NodeSymbol.LEFT, true);
           break;
         case 'bf':
-          node.changeNodeSymbol(NodeSymbol.LEFT_RIGHT);
+          node.changeNodeSymbol(NodeSymbol.LEFT_RIGHT, true);
 
       }
     } 

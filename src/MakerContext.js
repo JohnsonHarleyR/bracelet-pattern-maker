@@ -16,6 +16,8 @@ const MakerProvider = ({children}) => {
   const [nodes, setNodes] = useState([]);
 
   const [pattern, setPattern] = useState([]);
+  const [patternHeight, setPatternHeight] = useState(0);
+  const [patternWasLoaded, setPatternWasLoaded] = useState(false);
 
   const [selectedColor, setSelectedColor] = useState({
     letter: "A",
@@ -68,7 +70,7 @@ const MakerProvider = ({children}) => {
   }, [rowCount]);
 
   useEffect(() => {
-    if (isSetupDecided) {
+    if (isSetupDecided && !patternWasLoaded) {
       setRowCount(NodeDefaults.ROWS_AFTER_SETUP);
       //setNodes(createAllNodesAfterSetup(nodes, nodesAcross, NodeDefaults.ROWS_AFTER_SETUP));
     }
@@ -86,6 +88,8 @@ const MakerProvider = ({children}) => {
           selectedColor, setSelectedColor,
           colors, setColors,
           pattern, setPattern,
+          patternHeight, setPatternHeight,
+          patternWasLoaded, setPatternWasLoaded,
         }}>
             {children}
         </MakerContext.Provider>

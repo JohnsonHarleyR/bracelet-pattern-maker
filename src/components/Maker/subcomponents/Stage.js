@@ -44,6 +44,7 @@ const Stage = () => {
     nodes, setNodes,
     colors,
     pattern, setPattern,
+    patternHeight, setPatternHeight,
   } = useContext(MakerContext);
 
   const [isBgLoaded, setIsBgLoaded] = useState(false);
@@ -62,7 +63,6 @@ const Stage = () => {
   const [prevNodeCount, setPrevNodeCount] = useState(0);
 
   const [doesPatternAlign, setDoesPatternAlign] = useState(false);
-  const [patternHeight, setPatternHeight] = useState(0);
 
   const [doScaleCanvas, setDoScaleCanvas] = useState(false);
   const [showPatternCode, setShowPatternCode] = useState(false);
@@ -110,11 +110,14 @@ const Stage = () => {
   },[isBgLoaded]);
 
   useEffect(() => {
+    if (nodesAcross) {
+      setCanvasWidth(calculateCanvasWidth(nodesAcross));
+
+    }
     if (!isSetupDecided && nodesAcross) {
 
       setDoScaleCanvas(true); // start with it as true in order to determine whether to keep it that way
 
-      setCanvasWidth(calculateCanvasWidth(nodesAcross));
       //console.log(`calculate # of bg images`);
       setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
       if (!isSetupDecided) {
@@ -128,9 +131,10 @@ const Stage = () => {
 
   useEffect(() => {
     if (rowCount) {
+      setCanvasHeight(calculateCanvasHeight(rowCount));
+
       
       if (!isSetupDecided) {
-        setCanvasHeight(calculateCanvasHeight(rowCount));
         //console.log(`calculate # of bg images`);
         setTotalBgImages(calculateNumberOfBackgroundImages(nodesAcross, rowCount));
         setTotalStrandImages(calculateNumberOfStrandImages(nodesAcross, rowCount));

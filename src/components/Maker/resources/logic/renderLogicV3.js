@@ -25,9 +25,11 @@ export const renderEverything = (canvas, nodes, yOffset, isSetupDecided, include
 export const renderAllV2 = (canvas, nodes, yOffset, isSetupDecided, includeBackground = true, startingArray = []) => {
   // add all image items to array
   let renderArray = [...startingArray];
+  //console.log('rendering');
 
   // bg images first
   if (includeBackground) {
+    //console.log('rendering bg');
     let calculatedHeight = calculateCanvasHeight(nodes.length);
     canvas.width = calculateCanvasWidth(nodes[0].length);
     if (StageDefaults.SHOW_COPYRIGHT) {
@@ -59,16 +61,26 @@ export const renderAllV2 = (canvas, nodes, yOffset, isSetupDecided, includeBackg
     renderArray.push(createRenderArrayItemFromInfo(RenderInfo.OVER_TEXT, null, null, nodes, canvas, isSetupDecided, yOffset));
   }
 
+  // HACK fill background at bottom
+  // let startX = 0;
+  // let startY = canvas.height - 18;
+  // let width = canvas.width;
+  // let height = 18;
+  // let color = StageDefaults.BG_COLOR;
+  // let ctx = canvas.getContext("2d");
+  // ctx.fillStyle = color;
+  // ctx.fillRect(startX, startY, width, height);
+
   // now render everything in the array
   renderNextV2(canvas, 0, renderArray);
 
 }
 
 const renderNextV2 = (canvas, index, array, startTime = Date.now()) => {
-  if (index === array.length - 1) {
-    let dif = Date.now() - startTime;
-    //console.log(`render next - time passed: ${dif}ms`);
-  }
+  // if (index === array.length - 1) {
+  //   let dif = Date.now() - startTime;
+  //   //console.log(`render next - time passed: ${dif}ms`);
+  // }
 
   if (array[index] === undefined) {
     return;
@@ -100,9 +112,11 @@ const renderNextV2 = (canvas, index, array, startTime = Date.now()) => {
         // check for any fill
         if (item.color !== null) {
           if (item.category === RenderCategory.STRAND) {
+            console.log(`strand pos: `, `x: ${item.cX}, y: ${item.cY}`);
             renderSquareFill(canvas, item.color, item.cX, item.cY, item.cW, item.cH);
             //renderSquareFill(canvas, item.color, item.x, item.y, item.width, item.height);
           } else if (item.category === RenderCategory.CIRCLE) {
+            console.log(`node pos: `, `x: ${item.cX}, y: ${item.cY}`);
             renderCircleFill(canvas, item.color, item.cX, item.cY);
           }
         }
@@ -114,6 +128,7 @@ const renderNextV2 = (canvas, index, array, startTime = Date.now()) => {
         if (item.text !== null) {
           if (item.category === RenderCategory.STRAND) {
             if (item.leftOrRight === LeftOrRight.LEFT) {
+
               renderLeftTopStrandText(canvas, item.text, item.cX, item.cY);
             } else {
               renderRightTopStrandText(canvas, item.text, item.cX, item.cY);
@@ -154,6 +169,7 @@ const renderNextV2 = (canvas, index, array, startTime = Date.now()) => {
 
 export const addNodeStrandImagesToArray = (yIndex, xIndex, nodes, yOffset, isSetupDecided = true, array=[]) => {
   if (doRenderStartStrands(yIndex)) {
+    //console.log(`rendering start strands`);
     array.push(createRenderArrayItem(ImageType.STRAND_START_LEFT, yIndex, xIndex, nodes, null, isSetupDecided, yOffset));
     array.push(createRenderArrayItem(ImageType.STRAND_START_RIGHT, yIndex, xIndex, nodes, null, isSetupDecided, yOffset));
   }

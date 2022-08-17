@@ -37,7 +37,34 @@ export default class NodeModel {
     }
   }
 
+  refreshSymbolInfoAfterLoad = () => {
+    switch (this.nodeSymbol) {
+      default:
+        this.nodeSymbolShape = NodeSymbolShape.NONE;
+        this.prevClickType = ClickType.NONE;
+        break;
+      case NodeSymbol.LEFT:
+        this.nodeSymbolShape = NodeSymbolShape.POINT;
+        this.prevClickType = ClickType.LEFT;
+        break;
+      case NodeSymbol.LEFT_RIGHT:
+        this.nodeSymbolShape = NodeSymbolShape.CURVE;
+        this.prevClickType = ClickType.LEFT;
+        break;
+      case NodeSymbol.RIGHT:
+        this.nodeSymbolShape = NodeSymbolShape.POINT;
+        this.prevClickType = ClickType.RIGHT;
+        break;
+      case NodeSymbol.RIGHT_LEFT:
+        this.nodeSymbolShape = NodeSymbolShape.CURVE;
+        this.prevClickType = ClickType.RIGHT;
+        break;
+    }
+  }
+
   clickNode = (clickType) => {
+
+    console.log(`is mobile? `, isMobile);
 
     if (!isMobile) {
       this.checkForNullStrands();
@@ -74,6 +101,7 @@ export default class NodeModel {
   }
 
   changeNodeSymbolMobile = () => {
+    console.log(`is mobile? `, isMobile);
     this.prevClickType = ClickType.LEFT;
 
     if (this.nodeSymbol === NodeSymbol.NONE) {
@@ -189,10 +217,13 @@ export default class NodeModel {
     return false;
   }
 
-  changeNodeSymbol = (newSymbol) => {
+  changeNodeSymbol = (newSymbol, doRefresh = false) => {
     this.nodeSymbol = newSymbol;
     this.refreshStrands();
     this.changeBottomStrands();
+    if (!isMobile && doRefresh) {
+      this.refreshSymbolInfoAfterLoad();
+    }
     // this.nodeColor = this.getNodeColor();
   }
 

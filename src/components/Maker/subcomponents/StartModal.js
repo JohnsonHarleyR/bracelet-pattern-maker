@@ -3,6 +3,7 @@ import '../resources/styling/modal.css';
 import { MakerContext } from '../../../MakerContext';
 import { createPageContentArray, findNavIndex, getNavItems, getPageContent, isNavPage } from '../resources/logic/modalLogic';
 import { loadPatternText } from '../resources/logic/decoderLogic';
+import { calculatePatternThickness } from '../resources/logic/patternLogic';
 
 
 const StartModal = ({showModal, setShowModal}) => {
@@ -29,6 +30,18 @@ const StartModal = ({showModal, setShowModal}) => {
 
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("Error message here");
+
+  const {
+    setColors,
+    setSelectedColor,
+    setStartStrandInfos,
+    setNodes,
+    setIsSetupDecided,
+    setNodesAcross,
+    setRowCount,
+    setPatternHeight,
+    setPatternWasLoaded,
+  } = useContext(MakerContext);
 
   //#region Effects
 
@@ -144,6 +157,25 @@ const StartModal = ({showModal, setShowModal}) => {
 
     if (result.isSuccessful) {
       console.log(`result content: `, result.content);
+
+      let newColors = result.content.colors;
+      let newStrandInfos = result.content.strandInfos;
+      let newNodes = result.content.nodes;
+
+      setPatternWasLoaded(true);
+      setColors(newColors);
+      setSelectedColor({
+        letter: newColors[0].letter,
+        color: newColors[0].color,
+      });
+      setStartStrandInfos(newStrandInfos);
+      setNodes([newNodes[0]]);
+      setIsSetupDecided(true);
+      setPatternHeight(calculatePatternThickness(newNodes));
+      setNodesAcross(newNodes[0].length);
+      setRowCount(newNodes.length);
+      setNodes(newNodes);
+
 
       closeModal();
     }
